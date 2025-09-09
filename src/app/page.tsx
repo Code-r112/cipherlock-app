@@ -1,9 +1,7 @@
 import { EncryptPanel } from '@/components/feature/encrypt-panel';
 import { DecryptPanel } from '@/components/feature/decrypt-panel';
-import { SecureNotes } from '@/components/feature/secure-notes';
-import { PasswordTools } from '@/components/feature/password-tools';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Lock, Unlock, ShieldCheck, KeyRound, Sparkles, WifiOff, Server, Globe, FileLock, FileText, Bot } from 'lucide-react';
+import { Lock, Unlock, ShieldCheck, KeyRound, Server, FileLock, Bot } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
@@ -17,16 +15,6 @@ const features = [
       icon: <FileLock className="h-10 w-10 text-primary" />,
       title: 'Batch Processing',
       description: 'Encrypt or decrypt multiple files at once, streamlining your workflow.',
-    },
-    {
-      icon: <Bot className="h-10 w-10 text-primary" />,
-      title: 'AI-Powered Security',
-      description: 'Leverage AI for secure password generation and strength analysis.',
-    },
-    {
-      icon: <FileText className="h-10 w-10 text-primary" />,
-      title: 'Secure Notes',
-      description: 'Encrypt and store text snippets securely in your browser.',
     },
     {
       icon: <ShieldCheck className="h-10 w-10 text-primary" />,
@@ -49,7 +37,7 @@ const faqItems = [
     {
         value: "item-1",
         question: "What is CipherLock?",
-        answer: "CipherLock is a suite of tools for client-side encryption. It allows you to securely encrypt files, create secure notes, and generate strong passwords, all directly in your browser."
+        answer: "CipherLock is a tool for client-side file encryption. It allows you to securely encrypt and decrypt files directly in your browser."
     },
     {
         value: "item-2",
@@ -59,7 +47,7 @@ const faqItems = [
     {
         value: "item-3",
         question: "What happens if I forget my secret key?",
-        answer: "Your secret key is the only way to decrypt your files or notes. If you forget it, there is no recovery process. Please store your keys securely."
+        answer: "Your secret key is the only way to decrypt your files. If you forget it, there is no recovery process. Please store your keys securely."
     },
     {
         value: "item-4",
@@ -84,20 +72,14 @@ export default function Home() {
           </p>
         </div>
         
-        <div className="w-full mx-auto mb-16">
+        <div className="w-full max-w-4xl mx-auto mb-16">
             <Tabs defaultValue="encrypt" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 h-12">
+            <TabsList className="grid w-full grid-cols-2 h-12">
                 <TabsTrigger value="encrypt" className="text-base">
                   <Lock className="mr-2 h-5 w-5" />Encrypt Files
                 </TabsTrigger>
                 <TabsTrigger value="decrypt" className="text-base">
                   <Unlock className="mr-2 h-5 w-5" />Decrypt Files
-                </TabsTrigger>
-                <TabsTrigger value="notes" className="text-base">
-                  <FileText className="mr-2 h-5 w-5" />Secure Notes
-                </TabsTrigger>
-                 <TabsTrigger value="password" className="text-base">
-                  <Sparkles className="mr-2 h-5 w-5" />Password Tools
                 </TabsTrigger>
             </TabsList>
             <TabsContent value="encrypt" className="mt-6">
@@ -106,18 +88,12 @@ export default function Home() {
             <TabsContent value="decrypt" className="mt-6">
                 <DecryptPanel />
             </TabsContent>
-            <TabsContent value="notes" className="mt-6">
-                <SecureNotes />
-            </TabsContent>
-            <TabsContent value="password" className="mt-6">
-                <PasswordTools />
-            </TabsContent>
             </Tabs>
         </div>
 
         <section id="features" className="mb-16">
             <h2 className="text-3xl font-bold text-center mb-8">Features</h2>
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-4 gap-8">
                 {features.map((feature, index) => (
                     <Card key={index} className="bg-card border-border/60 text-center">
                         <CardContent className="p-6 flex flex-col items-center">
