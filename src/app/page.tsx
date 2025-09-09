@@ -3,7 +3,7 @@ import { DecryptPanel } from '@/components/feature/decrypt-panel';
 import { SecureNotes } from '@/components/feature/secure-notes';
 import { PasswordTools } from '@/components/feature/password-tools';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Lock, Unlock, ShieldCheck, KeyRound, FastForward, WifiOff, Server, Globe, FileLock, FileText, Bot } from 'lucide-react';
+import { Lock, Unlock, ShieldCheck, KeyRound, Sparkles, WifiOff, Server, Globe, FileLock, FileText, Bot } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
@@ -86,7 +86,7 @@ export default function Home() {
         
         <div className="w-full mx-auto mb-16">
             <Tabs defaultValue="encrypt" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 h-12">
+            <TabsList className="grid w-full grid-cols-4 h-12">
                 <TabsTrigger value="encrypt" className="text-base">
                   <Lock className="mr-2 h-5 w-5" />Encrypt Files
                 </TabsTrigger>
@@ -95,6 +95,9 @@ export default function Home() {
                 </TabsTrigger>
                 <TabsTrigger value="notes" className="text-base">
                   <FileText className="mr-2 h-5 w-5" />Secure Notes
+                </TabsTrigger>
+                 <TabsTrigger value="password" className="text-base">
+                  <Sparkles className="mr-2 h-5 w-5" />Password Tools
                 </TabsTrigger>
             </TabsList>
             <TabsContent value="encrypt" className="mt-6">
@@ -106,13 +109,11 @@ export default function Home() {
             <TabsContent value="notes" className="mt-6">
                 <SecureNotes />
             </TabsContent>
+            <TabsContent value="password" className="mt-6">
+                <PasswordTools />
+            </TabsContent>
             </Tabs>
         </div>
-
-        <section id="password-tools" className="mb-16">
-            <h2 className="text-3xl font-bold text-center mb-8">AI-Powered Password Tools</h2>
-            <PasswordTools />
-        </section>
 
         <section id="features" className="mb-16">
             <h2 className="text-3xl font-bold text-center mb-8">Features</h2>
