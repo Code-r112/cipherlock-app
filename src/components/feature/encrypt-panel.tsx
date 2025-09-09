@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Lock } from "lucide-react";
+import { Loader2, Lock, FileUp, KeyRound, Download } from "lucide-react";
 import CryptoJS from 'crypto-js';
 
 export function EncryptPanel() {
@@ -83,18 +83,48 @@ export function EncryptPanel() {
         <CardDescription>Select a file and provide a key to create an encrypted copy.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="space-y-2">
-          <Label htmlFor="file-encrypt">File to Encrypt</Label>
-          <Input id="file-encrypt" type="file" onChange={handleFileChange} className="file:text-foreground" />
+
+        <div className="flex items-start space-x-4">
+          <div className="flex flex-col items-center">
+            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-foreground">
+              <FileUp className="w-5 h-5" />
+            </div>
+            <div className="h-10 w-px bg-border my-1"></div>
+          </div>
+          <div className="flex-1 space-y-2 pb-10">
+            <Label htmlFor="file-encrypt" className="text-base font-semibold">Step 1: Upload File</Label>
+            <Input id="file-encrypt" type="file" onChange={handleFileChange} className="file:text-foreground" />
+          </div>
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="key-encrypt">Secret Key</Label>
-          <Input id="key-encrypt" type="password" value={key} onChange={(e) => setKey(e.target.value)} placeholder="Enter your secret key" />
+
+        <div className="flex items-start space-x-4">
+          <div className="flex flex-col items-center">
+            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-foreground">
+              <KeyRound className="w-5 h-5" />
+            </div>
+            <div className="h-10 w-px bg-border my-1"></div>
+          </div>
+          <div className="flex-1 space-y-2 pb-10">
+            <Label htmlFor="key-encrypt" className="text-base font-semibold">Step 2: Set Secret Key</Label>
+            <Input id="key-encrypt" type="password" value={key} onChange={(e) => setKey(e.target.value)} placeholder="Enter your secret key" />
+          </div>
         </div>
-        <Button onClick={handleEncrypt} disabled={loading || !file || !key} className="w-full h-11 text-base">
-          {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Lock className="mr-2 h-5 w-5" />}
-          Encrypt & Download
-        </Button>
+
+        <div className="flex items-start space-x-4">
+          <div className="flex flex-col items-center">
+            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-foreground">
+              <Download className="w-5 h-5" />
+            </div>
+          </div>
+          <div className="flex-1 space-y-2">
+            <Label className="text-base font-semibold">Step 3: Encrypt & Download</Label>
+            <Button onClick={handleEncrypt} disabled={loading || !file || !key} className="w-full h-11 text-base">
+              {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Lock className="mr-2 h-5 w-5" />}
+              Encrypt & Download
+            </Button>
+          </div>
+        </div>
+
       </CardContent>
     </Card>
   );

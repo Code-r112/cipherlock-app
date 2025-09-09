@@ -5,8 +5,8 @@ import { Lock, Unlock } from 'lucide-react';
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-background p-4 sm:p-8">
-      <div className="w-full max-w-lg">
+    <div className="flex flex-col items-center justify-center bg-background p-4 sm:p-8">
+      <div className="w-full max-w-2xl">
         <div className="text-center mb-8">
           <h1 className="text-5xl font-bold text-primary tracking-wider">CipherLock</h1>
           <p className="text-muted-foreground mt-2 text-lg">
@@ -30,6 +30,6 @@ export default function Home() {
           </TabsContent>
         </Tabs>
       </div>
-    </main>
+    </div>
   );
 }
