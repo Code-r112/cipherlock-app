@@ -9,7 +9,7 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-export const GeneratePasswordInputSchema = z.object({
+const GeneratePasswordInputSchema = z.object({
   length: z.number().min(8).max(128).default(16),
   includeUppercase: z.boolean().default(true),
   includeNumbers: z.boolean().default(true),

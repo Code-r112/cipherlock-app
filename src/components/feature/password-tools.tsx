@@ -1,10 +1,10 @@
 "use client"
 
-import { useState, useTransition, useCallback } from 'react';
+import { useState, useTransition, useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { generatePassword } from '@/ai/flows/generate-password-flow';
+import { generatePassword, type GeneratePasswordInput } from '@/ai/flows/generate-password-flow';
 import { analyzePassword, type AnalyzePasswordOutput } from '@/ai/flows/analyze-password-flow';
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
@@ -235,6 +235,3 @@ export function PasswordTools() {
     </div>
   );
 }
-
-// Add useEffect to the top imports
-import { useEffect } from 'react';
