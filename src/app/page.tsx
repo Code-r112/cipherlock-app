@@ -61,22 +61,7 @@ export default function Home() {
             AES file encryption and decryption. Simple &amp; Secure.
           </p>
         </div>
-
-        <section id="features" className="mb-16">
-            <h2 className="text-3xl font-bold text-center mb-8">Features</h2>
-            <div className="grid md:grid-cols-3 gap-8">
-                {features.map((feature, index) => (
-                    <Card key={index} className="bg-card border-border/60 text-center">
-                        <CardContent className="p-6">
-                            <div className="mb-4 inline-block ">{feature.icon}</div>
-                            <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                            <p className="text-muted-foreground">{feature.description}</p>
-                        </CardContent>
-                    </Card>
-                ))}
-            </div>
-        </section>
-
+        
         <div className="w-full max-w-2xl mx-auto mb-16">
             <Tabs defaultValue="encrypt" className="w-full">
             <TabsList className="grid w-full grid-cols-2 h-12">
@@ -95,6 +80,21 @@ export default function Home() {
             </TabsContent>
             </Tabs>
         </div>
+
+        <section id="features" className="mb-16">
+            <h2 className="text-3xl font-bold text-center mb-8">Features</h2>
+            <div className="grid md:grid-cols-3 gap-8">
+                {features.map((feature, index) => (
+                    <Card key={index} className="bg-card border-border/60 text-center">
+                        <CardContent className="p-6">
+                            <div className="mb-4 inline-block ">{feature.icon}</div>
+                            <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+                            <p className="text-muted-foreground">{feature.description}</p>
+                        </CardContent>
+                    </Card>
+                ))}
+            </div>
+        </section>
 
         <section id="faq" className="w-full max-w-2xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-8">Frequently Asked Questions</h2>
