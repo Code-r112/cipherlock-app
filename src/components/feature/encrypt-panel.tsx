@@ -6,120 +6,134 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Lock, FileUp, KeyRound, Download, CheckCircle, Circle } from "lucide-react";
+import { Loader2, Lock, FileUp, KeyRound, Download, CheckCircle, Circle, Files } from "lucide-react";
 import CryptoJS from 'crypto-js';
 
 export function EncryptPanel() {
-  const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
   const [key, setKey] = useState('');
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setFile(e.target.files[0]);
+      setFiles(Array.from(e.target.files));
     }
   };
 
   const handleEncrypt = () => {
-    if (!file || !key) {
+    if (files.length === 0 || !key) {
       toast({
         variant: "destructive",
         title: "Missing Information",
-        description: "Please select a file and enter a secret key.",
+        description: "Please select one or more files and enter a secret key.",
       });
       return;
     }
 
     setLoading(true);
-    const reader = new FileReader();
-
-    reader.onload = (e) => {
-      try {
-        const dataUrl = e.target?.result as string;
-        const encrypted = CryptoJS.AES.encrypt(JSON.stringify({ data: dataUrl, name: file.name }), key).toString();
-
-        const blob = new Blob([encrypted], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `${file.name}.ciph`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-
-        toast({
-          title: "Encryption Successful",
-          description: "Your file has been encrypted and downloaded.",
-        });
-      } catch (error) {
-        toast({
-          variant: "destructive",
-          title: "Encryption Failed",
-          description: "An error occurred during encryption. Please try again.",
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
     
-    reader.onerror = () => {
-        toast({
-            variant: "destructive",
-            title: "File Read Error",
-            description: "Could not read the selected file.",
-        });
-        setLoading(false);
-    }
+    let processedCount = 0;
 
-    reader.readAsDataURL(file);
+    files.forEach(file => {
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        try {
+          const dataUrl = e.target?.result as string;
+          const encrypted = CryptoJS.AES.encrypt(JSON.stringify({ data: dataUrl, name: file.name }), key).toString();
+
+          const blob = new Blob([encrypted], { type: 'text/plain' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${file.name}.ciph`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+
+        } catch (error) {
+          toast({
+            variant: "destructive",
+            title: `Encryption Failed for ${file.name}`,
+            description: "An error occurred during encryption.",
+          });
+        } finally {
+          processedCount++;
+          if (processedCount === files.length) {
+            setLoading(false);
+            toast({
+              title: "Encryption Complete",
+              description: `${files.length} file(s) have been encrypted and downloaded.`,
+            });
+          }
+        }
+      };
+      
+      reader.onerror = () => {
+          toast({
+              variant: "destructive",
+              title: `File Read Error for ${file.name}`,
+              description: "Could not read the selected file.",
+          });
+          processedCount++;
+          if (processedCount === files.length) {
+            setLoading(false);
+          }
+      }
+
+      reader.readAsDataURL(file);
+    });
   };
+
+  const step1Completed = files.length > 0;
+  const step2Completed = key.length > 0;
 
   return (
     <Card className="border-border/60">
       <CardHeader>
-        <CardTitle>Encrypt File</CardTitle>
-        <CardDescription>Select a file and provide a key to create an encrypted copy.</CardDescription>
+        <CardTitle>Encrypt File(s)</CardTitle>
+        <CardDescription>Select one or more files and provide a key to create encrypted copies.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
 
         <div className="flex items-start space-x-4">
             <div className="flex flex-col items-center">
-                <div className={`flex items-center justify-center w-10 h-10 rounded-full ${file ? 'bg-green-500' : 'bg-primary'} text-primary-foreground`}>
-                {file ? <CheckCircle className="w-5 h-5" /> : <FileUp className="w-5 h-5" />}
+                <div className={`flex items-center justify-center w-10 h-10 rounded-full ${step1Completed ? 'bg-green-500' : 'bg-primary'} text-primary-foreground`}>
+                {step1Completed ? <CheckCircle className="w-5 h-5" /> : <Files className="w-5 h-5" />}
                 </div>
                 <div className="h-10 w-px bg-border my-1"></div>
             </div>
-            <div className={`flex-1 space-y-2 pb-10 ${file ? 'opacity-100' : 'opacity-60'}`}>
-                <Label htmlFor="file-encrypt" className="text-base font-semibold">Step 1: Upload File</Label>
-                <Input id="file-encrypt" type="file" onChange={handleFileChange} className="file:text-foreground" disabled={!!file}/>
-                {file && <p className="text-sm text-muted-foreground pt-2">Selected: {file.name}</p>}
+            <div className="flex-1 space-y-2 pb-10">
+                <Label htmlFor="file-encrypt" className="text-base font-semibold">Step 1: Upload File(s)</Label>
+                <Input id="file-encrypt" type="file" onChange={handleFileChange} className="file:text-foreground" multiple disabled={step1Completed} />
+                {step1Completed && <p className="text-sm text-muted-foreground pt-2">Selected: {files.length} file(s)</p>}
             </div>
         </div>
 
         <div className="flex items-start space-x-4">
           <div className="flex flex-col items-center">
-              <div className={`flex items-center justify-center w-10 h-10 rounded-full ${key ? 'bg-green-500' : !file ? 'bg-muted' : 'bg-primary'} ${!file ? 'text-muted-foreground' : 'text-primary-foreground'}`}>
-                  {key ? <CheckCircle className="w-5 h-5" /> : !file ? <Circle className="w-5 h-5" /> : <KeyRound className="w-5 h-5" />}
+              <div className={`flex items-center justify-center w-10 h-10 rounded-full ${step2Completed ? 'bg-green-500' : !step1Completed ? 'bg-muted' : 'bg-primary'} ${!step1Completed ? 'text-muted-foreground' : 'text-primary-foreground'}`}>
+                  {step2Completed ? <CheckCircle className="w-5 h-5" /> : <KeyRound className="w-5 h-5" />}
               </div>
             <div className="h-10 w-px bg-border my-1"></div>
           </div>
-          <div className={`flex-1 space-y-2 pb-10 ${file ? 'opacity-100' : 'opacity-60'}`}>
+          <div className={`flex-1 space-y-2 pb-10 transition-opacity ${step1Completed ? 'opacity-100' : 'opacity-60'}`}>
             <Label htmlFor="key-encrypt" className="text-base font-semibold">Step 2: Set Secret Key</Label>
-            <Input id="key-encrypt" type="password" value={key} onChange={(e) => setKey(e.target.value)} placeholder="Enter your secret key" disabled={!file} />
+            <Input id="key-encrypt" type="password" value={key} onChange={(e) => setKey(e.target.value)} placeholder="Enter your secret key" disabled={!step1Completed} />
           </div>
         </div>
 
         <div className="flex items-start space-x-4">
           <div className="flex flex-col items-center">
-            <div className={`flex items-center justify-center w-10 h-10 rounded-full ${!file || !key ? 'bg-muted' : 'bg-primary'} ${!file || !key ? 'text-muted-foreground' : 'text-primary-foreground'}`}>
-              {!file || !key ? <Circle className="w-5 h-5" /> : <Download className="w-5 h-5" />}
+            <div className={`flex items-center justify-center w-10 h-10 rounded-full ${!step1Completed || !step2Completed ? 'bg-muted' : 'bg-primary'} ${!step1Completed || !step2Completed ? 'text-muted-foreground' : 'text-primary-foreground'}`}>
+              <Download className="w-5 h-5" />
             </div>
           </div>
-          <div className={`flex-1 space-y-2 ${file && key ? 'opacity-100' : 'opacity-60'}`}>
+          <div className={`flex-1 space-y-2 transition-opacity ${step1Completed && step2Completed ? 'opacity-100' : 'opacity-60'}`}>
             <Label className="text-base font-semibold">Step 3: Encrypt & Download</Label>
-            <Button onClick={handleEncrypt} disabled={loading || !file || !key} className="w-full h-11 text-base">
+            <Button onClick={handleEncrypt} disabled={loading || !step1Completed || !step2Completed} className="w-full h-11 text-base">
               {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Lock className="mr-2 h-5 w-5" />}
               Encrypt & Download
             </Button>
