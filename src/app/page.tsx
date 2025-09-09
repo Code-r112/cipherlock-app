@@ -1,7 +1,7 @@
 import { EncryptPanel } from '@/components/feature/encrypt-panel';
 import { DecryptPanel } from '@/components/feature/decrypt-panel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Lock, Unlock, ShieldCheck, KeyRound, FastForward } from 'lucide-react';
+import { Lock, Unlock, ShieldCheck, KeyRound, FastForward, WifiOff, Server, Globe } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
@@ -14,17 +14,32 @@ const features = [
   {
     icon: <ShieldCheck className="h-10 w-10 text-primary" />,
     title: 'Strong Encryption',
-    description: 'Utilizes AES (Advanced Encryption Standard) for robust and secure file protection.',
+    description: 'Utilizes AES-256 for robust, industry-standard file protection.',
   },
   {
     icon: <KeyRound className="h-10 w-10 text-primary" />,
-    title: 'Password Protection',
-    description: 'Your files are encrypted with a secret key, ensuring only you can access them.',
+    title: 'Secret Key Control',
+    description: 'You control the secret key, ensuring only you can access your files.',
   },
   {
     icon: <FastForward className="h-10 w-10 text-primary" />,
     title: 'Simple & Fast',
-    description: 'A user-friendly interface for quick encryption and decryption right in your browser.',
+    description: 'A user-friendly interface for quick encryption and decryption.',
+  },
+    {
+    icon: <Server className="h-10 w-10 text-primary" />,
+    title: 'No Server Upload',
+    description: 'All operations happen in your browser. Your files never leave your computer.',
+  },
+  {
+    icon: <WifiOff className="h-10 w-10 text-primary" />,
+    title: 'Offline Functionality',
+    description: 'Works entirely offline once the page is loaded. No internet connection needed.',
+  },
+    {
+    icon: <Globe className="h-10 w-10 text-primary" />,
+    title: 'Cross-Browser',
+    description: 'Compatible with all modern web browsers on desktop and mobile.',
   },
 ];
 

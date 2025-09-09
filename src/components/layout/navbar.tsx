@@ -1,5 +1,6 @@
 import { ShieldCheck } from 'lucide-react';
 import React from 'react';
+import { ThemeToggle } from './theme-toggle';
 
 export function Navbar() {
   return (
@@ -9,6 +10,7 @@ export function Navbar() {
           <ShieldCheck className="h-8 w-8 text-primary" />
           <span className="ml-2 text-xl font-bold text-primary">CipherLock</span>
         </div>
+        <ThemeToggle />
       </nav>
     </header>
   );
