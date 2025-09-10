@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Loader2, ShieldCheck, AlertTriangle, Info } from 'lucide-react';
-import { analyzeSecurity, SecurityAnalysisInput, SecurityAnalysisOutput } from '@/ai/flows/security-audit-flow';
+import { analyzeSecurity, type SecurityAnalysisInput, type SecurityAnalysisOutput } from '@/ai/flows/security-audit-flow';
 
 interface ActivityLogFromFirestore {
     action: 'encrypt' | 'decrypt';

@@ -9,7 +9,6 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, Unlock, KeyRound, Download, CheckCircle, Files, Sparkles, Copy, Save } from "lucide-react";
 import CryptoJS from 'crypto-js';
-import { Progress } from '@/components/ui/progress';
 import { useAuth } from '@/hooks/use-auth';
 import { db } from '@/lib/firebase';
 import { collection, addDoc, serverTimestamp, getDocs, query } from 'firebase/firestore';
@@ -31,20 +30,6 @@ function dataUriToBlob(dataURI: string) {
     }
     return new Blob([ab]);
 }
-
-const checkKeyStrength = (key: string) => {
-    let score = 0;
-    if (key.length >= 8) score++;
-    if (key.length >= 12) score++;
-    if (/[A-Z]/.test(key)) score++;
-    if (/[a-z]/.test(key)) score++;
-    if (/[0-9]/.test(key)) score++;
-    if (/[^A-Za-z0-9]/.test(key)) score++;
-
-    if (score < 3) return { level: "Weak", value: (score / 6) * 100, color: "bg-red-500" };
-    if (score < 5) return { level: "Medium", value: (score / 6) * 100, color: "bg-yellow-500" };
-    return { level: "Strong", value: (score / 6) * 100, color: "bg-green-500" };
-};
 
 export function DecryptPanel() {
   const { user } = useAuth();
@@ -209,7 +194,6 @@ export function DecryptPanel() {
 
   const step1Completed = files.length > 0;
   const step2Completed = key.length > 0;
-  const keyStrength = checkKeyStrength(key);
   
   return (
     <Card className="border-none shadow-none">
@@ -280,12 +264,6 @@ export function DecryptPanel() {
                   </Dialog>
                 )}
               </div>
-              {key && (
-                <div className="pt-2 space-y-1">
-                  <Progress value={keyStrength.value} className={`h-2 ${keyStrength.color}`} />
-                  <p className="text-sm font-medium" style={{ color: keyStrength.color.replace('bg-', '').replace('-500', '')}}>{keyStrength.level}</p>
-                </div>
-              )}
             </div>
         </div>
         
