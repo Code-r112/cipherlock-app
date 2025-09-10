@@ -47,7 +47,7 @@ export function WordRotator({ words, className }: TypewriterProps) {
         className
     )}>
       <span className="min-h-[1em]">{text}</span>
-      <span className="animate-pulse">|</span>
+      <span className="animate-pulse ml-1 w-[2px] h-full bg-foreground inline-block"></span>
     </span>
   );
 }
