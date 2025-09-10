@@ -98,11 +98,11 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center bg-background p-4 sm:p-8">
       <div className="w-full max-w-5xl">
-        <div className="text-center py-16 sm:py-24 animate-fade-in-down">
+        <div className="text-center pt-8 pb-16 sm:pt-12 sm:pb-24 animate-fade-in-down">
           {user && firstName ? (
             <p className="text-2xl sm:text-3xl text-muted-foreground mb-4">Hello, {firstName}!</p>
           ) : !user && (
-            <Button asChild variant="secondary" className="mb-4 rounded-full">
+            <Button asChild variant="secondary" className="mb-4 rounded-full border-2 border-black">
                 <Link href="/auth">Unlock all features by signing in</Link>
             </Button>
           )}
@@ -117,10 +117,10 @@ export default function Home() {
         <div className="w-full max-w-lg mx-auto mb-16 sm:mb-24 animate-fade-in-up">
             <Tabs defaultValue="encrypt" className="w-full">
             <TabsList className="grid w-full grid-cols-2 h-14 sm:h-16 gap-2 bg-transparent p-0">
-                <TabsTrigger value="encrypt" className="text-lg sm:text-xl h-full rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-muted">
+                <TabsTrigger value="encrypt" className="text-lg sm:text-xl h-full rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-muted border-2 border-black">
                   <Lock className="mr-2 h-6 w-6 sm:h-7 sm:w-7" />Encrypt Files
                 </TabsTrigger>
-                <TabsTrigger value="decrypt" className="text-lg sm:text-xl h-full rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-muted">
+                <TabsTrigger value="decrypt" className="text-lg sm:text-xl h-full rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-muted border-2 border-black">
                   <Unlock className="mr-2 h-6 w-6 sm:h-7 sm:w-7" />Decrypt Files
                 </TabsTrigger>
             </TabsList>
@@ -204,7 +204,7 @@ export default function Home() {
             </div>
         </section>
 
-        <section id="faq" className="w-full max-w-3xl mx-auto animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
+        <section id="faq" className="w-full max-w-3xl mx-auto animate-fade-in-up pb-12" style={{ animationDelay: '0.5s' }}>
             <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold text-center mb-12 sm:mb-16">Frequently Asked Questions</h2>
             <Accordion type="single" collapsible className="w-full">
                 {faqItems.map(item => (
