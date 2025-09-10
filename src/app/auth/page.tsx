@@ -29,7 +29,7 @@ export default function AuthPage() {
                 <CardContent>
                 <Button 
                     onClick={signInWithGoogle} 
-                    className="w-full h-16 text-xl border-2 border-black" 
+                    className="w-full h-16 text-xl" 
                     disabled={loading}
                     size="lg"
                 >
