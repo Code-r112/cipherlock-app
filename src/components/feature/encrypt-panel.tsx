@@ -177,7 +177,9 @@ export function EncryptPanel() {
       reader.onload = (e) => {
         try {
           const dataUrl = e.target?.result as string;
-          const encrypted = CryptoJS.AES.encrypt(JSON.stringify({ data: dataUrl, name: file.name }), key).toString();
+          const contentHash = CryptoJS.SHA256(dataUrl).toString();
+
+          const encrypted = CryptoJS.AES.encrypt(JSON.stringify({ data: dataUrl, name: file.name, hash: contentHash }), key).toString();
 
           const blob = new Blob([encrypted], { type: 'text/plain' });
           const url = URL.createObjectURL(blob);

@@ -152,7 +152,15 @@ export function DecryptPanel() {
                 throw new Error("Decryption failed. Wrong key or corrupted file.");
             }
 
-            const { data, name } = JSON.parse(decryptedData);
+            const payload = JSON.parse(decryptedData);
+            const { data, name, hash: originalHash } = payload;
+            
+            // Anomaly detection: Verify file integrity
+            const decryptedContentHash = CryptoJS.SHA256(data).toString();
+
+            if (originalHash && decryptedContentHash !== originalHash) {
+                throw new Error("File integrity check failed. The file may have been tampered with or is corrupted.");
+            }
 
             const blob = dataUriToBlob(data);
             const url = URL.createObjectURL(blob);
@@ -166,11 +174,11 @@ export function DecryptPanel() {
             successCount++;
             logActivity(file.name, key);
 
-          } catch (error) {
+          } catch (error: any) {
             toast({
               variant: "destructive",
               title: `Decryption Failed for ${file.name}`,
-              description: "Please check your key and the file.",
+              description: error.message || "Please check your key and the file.",
             });
           } finally {
             processedCount++;
@@ -178,7 +186,7 @@ export function DecryptPanel() {
               setLoading(false);
               toast({
                 title: "Decryption Complete",
-                description: `${successCount} of ${files.length} file(s) decrypted.`,
+                description: `${successCount} of ${files.length} file(s) decrypted successfully.`,
               });
             }
           }
@@ -259,7 +267,7 @@ export function DecryptPanel() {
                       <DialogHeader>
                         <DialogTitle>Save Secret Key</DialogTitle>
                         <DialogDescription>Give this key a recognizable name to save it for later use.</DialogDescription>
-                      </DialogHeader>
+                      </Header>
                       <div className="space-y-2">
                         <Label htmlFor="key-name">Key Name</Label>
                         <Input id="key-name" value={keyName} onChange={(e) => setKeyName(e.target.value)} placeholder="e.g., 'Work Documents Key'"/>
