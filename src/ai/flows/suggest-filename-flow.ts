@@ -11,7 +11,7 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-export const SuggestFilenameInputSchema = z.object({
+const SuggestFilenameInputSchema = z.object({
   fileDataUri: z
     .string()
     .describe(
@@ -21,7 +21,7 @@ export const SuggestFilenameInputSchema = z.object({
 });
 export type SuggestFilenameInput = z.infer<typeof SuggestFilenameInputSchema>;
 
-export const SuggestFilenameOutputSchema = z.object({
+const SuggestFilenameOutputSchema = z.object({
   suggestedName: z.string().describe('The suggested new filename.'),
 });
 export type SuggestFilenameOutput = z.infer<typeof SuggestFilenameOutputSchema>;
