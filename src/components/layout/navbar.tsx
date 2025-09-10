@@ -35,7 +35,7 @@ export function Navbar() {
   }, []);
 
   return (
-    <header className={cn("bg-background sticky top-0 z-50 transition-all", isScrolled && "border-b border-border")}>
+    <header className={cn("bg-background sticky top-0 z-50 transition-all", isScrolled && "border-b border-border/40")}>
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20">
         <Link href="/" className="flex items-center">
             <ShieldCheck className="h-8 w-8 text-black dark:text-white" />
@@ -102,7 +102,7 @@ export function Navbar() {
           ) : (
             <>
               <ThemeToggle />
-              <Button asChild size="lg">
+              <Button asChild size="lg" className="h-12 text-base">
                   <Link href="/auth">Sign In</Link>
               </Button>
             </>
