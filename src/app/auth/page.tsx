@@ -66,7 +66,7 @@ export default function AuthPage() {
                     disabled={loading}
                     size="lg"
                 >
-                    <GoogleIcon className="mr-2 h-7 w-7" />
+                    <GoogleIcon className="mr-2 h-8 w-8" />
                     Continue with Google
                 </Button>
                 <div className="w-full max-w-4xl grid md:grid-cols-2 gap-8 text-left pt-8">
