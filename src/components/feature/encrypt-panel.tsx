@@ -1,19 +1,21 @@
 
 "use client";
 
-import { useState, type ChangeEvent, useEffect } from 'react';
+import { useState, type ChangeEvent, useEffect, useMemo } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Lock, KeyRound, Download, CheckCircle, Files, Bot, Sparkles, Copy, Save } from "lucide-react";
+import { Loader2, Lock, KeyRound, Download, CheckCircle, Files, Bot, Sparkles, Copy, Save, Lightbulb } from "lucide-react";
 import CryptoJS from 'crypto-js';
 import { useAuth } from '@/hooks/use-auth';
 import { suggestFilename } from '@/ai/flows/suggest-filename-flow';
+import { summarizeFile } from '@/ai/flows/summarize-file-flow';
+import { suggestKey } from '@/ai/flows/suggest-key-flow';
 import { Progress } from '@/components/ui/progress';
 import { db } from '@/lib/firebase';
-import { collection, addDoc, serverTimestamp, getDocs, query, where, deleteDoc, doc } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, getDocs, query } from 'firebase/firestore';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
@@ -42,9 +44,10 @@ export function EncryptPanel() {
   const [files, setFiles] = useState<File[]>([]);
   const [key, setKey] = useState('');
   const [loading, setLoading] = useState(false);
-  const [loadingSuggestion, setLoadingSuggestion] = useState(false);
-  const [suggestedName, setSuggestedName] = useState('');
+  const [loadingAi, setLoadingAi] = useState(false);
   const [finalFilename, setFinalFilename] = useState('');
+  const [summary, setSummary] = useState('');
+  const [suggestedKeyId, setSuggestedKeyId] = useState('');
   const [savedKeys, setSavedKeys] = useState<SavedKey[]>([]);
   const [keyName, setKeyName] = useState('');
   const [isSaveKeyDialogOpen, setSaveKeyDialogOpen] = useState(false);
@@ -64,31 +67,43 @@ export function EncryptPanel() {
 
   useEffect(() => {
     if (files.length > 0 && user) {
-      setLoadingSuggestion(true);
+      setLoadingAi(true);
       const file = files[0];
       const reader = new FileReader();
       reader.onload = async (e) => {
         const dataUrl = e.target?.result as string;
         try {
-          const result = await suggestFilename({
-            fileDataUri: dataUrl,
-            originalName: file.name,
-          });
-          const newName = result.suggestedName.replace(/\.[^/.]+$/, ""); // Remove extension
-          setSuggestedName(newName);
+          // Run AI suggestions in parallel
+          const [filenameResult, summaryResult, keyResult] = await Promise.all([
+            suggestFilename({ fileDataUri: dataUrl, originalName: file.name }),
+            summarizeFile({ fileDataUri: dataUrl }),
+            suggestKey({ fileDataUri: dataUrl, savedKeys: savedKeys }),
+          ]);
+          
+          const newName = filenameResult.suggestedName.replace(/\.[^/.]+$/, ""); // Remove extension
           setFinalFilename(newName);
+          setSummary(summaryResult.summary);
+          if (keyResult.suggestedKeyId) {
+              setSuggestedKeyId(keyResult.suggestedKeyId);
+              const suggested = savedKeys.find(k => k.id === keyResult.suggestedKeyId);
+              if (suggested) {
+                  setKey(suggested.key);
+              }
+          }
+
         } catch (error) {
-          console.error("AI filename suggestion failed:", error);
+          console.error("AI features failed:", error);
+          toast({ variant: 'destructive', title: 'AI Features Failed', description: 'Could not generate AI suggestions.' });
           setFinalFilename(file.name.replace(/\.[^/.]+$/, ""));
         } finally {
-          setLoadingSuggestion(false);
+          setLoadingAi(false);
         }
       };
       reader.readAsDataURL(file);
     } else if (files.length > 0) {
       setFinalFilename(files[0].name.replace(/\.[^/.]+$/, ""));
     }
-  }, [files, user]);
+  }, [files, user, savedKeys, toast]);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -98,7 +113,7 @@ export function EncryptPanel() {
           toast({
               variant: "destructive",
               title: "Feature Limit",
-              description: "With AI naming enabled, you can only encrypt one file at a time.",
+              description: "With AI features enabled, you can only encrypt one file at a time.",
           });
       }
     }
@@ -139,7 +154,7 @@ export function EncryptPanel() {
       }
   };
 
-  const logActivity = async (filename: string, keyUsed: string) => {
+  const logActivity = async (filename: string, keyUsed: string, fileSummary?: string) => {
       if (user) {
           const keyHash = CryptoJS.SHA256(keyUsed).toString();
           try {
@@ -147,7 +162,8 @@ export function EncryptPanel() {
                   action: 'encrypt',
                   filename: filename,
                   keyHash: keyHash,
-                  timestamp: serverTimestamp()
+                  timestamp: serverTimestamp(),
+                  summary: fileSummary || '',
               });
           } catch (error) {
               console.error("Error logging activity: ", error);
@@ -191,7 +207,7 @@ export function EncryptPanel() {
           a.click();
           document.body.removeChild(a);
           URL.revokeObjectURL(url);
-          logActivity(encryptedFilename, key);
+          logActivity(encryptedFilename, key, summary);
 
         } catch (error) {
           toast({
@@ -231,6 +247,10 @@ export function EncryptPanel() {
   const step2Completed = key.length > 0;
   const step3Completed = user ? finalFilename.length > 0 : true;
   const keyStrength = checkKeyStrength(key);
+  const suggestedKeyName = useMemo(() => {
+      if (!suggestedKeyId) return null;
+      return savedKeys.find(k => k.id === suggestedKeyId)?.name;
+  }, [suggestedKeyId, savedKeys]);
 
   return (
     <Card className="border-none shadow-none">
@@ -264,10 +284,10 @@ export function EncryptPanel() {
             </div>
             <div className="flex-1 space-y-2 pb-10">
                 <Label htmlFor="ai-name" className="text-lg font-semibold flex items-center">AI Suggested Filename</Label>
-                {loadingSuggestion ? (
+                {loadingAi ? (
                     <div className="flex items-center space-x-2 text-muted-foreground">
                         <Loader2 className="h-5 w-5 animate-spin" />
-                        <span>Generating suggestion...</span>
+                        <span>Generating AI suggestions...</span>
                     </div>
                 ) : (
                     <Input id="ai-name" value={finalFilename} onChange={(e) => setFinalFilename(e.target.value)} placeholder="AI Suggested name" className="h-12 text-base" />
@@ -287,7 +307,7 @@ export function EncryptPanel() {
           <div className={`flex-1 space-y-2 pb-10 transition-opacity ${step1Completed ? 'opacity-100' : 'opacity-60'}`}>
             <Label htmlFor="key-encrypt" className="text-lg font-semibold">Step 2: Set Secret Key</Label>
             {user && savedKeys.length > 0 && (
-                <Select onValueChange={(value) => setKey(value)}>
+                <Select onValueChange={(value) => setKey(value)} value={key}>
                     <SelectTrigger className="h-12 text-base">
                         <SelectValue placeholder="Or select a saved key" />
                     </SelectTrigger>
@@ -297,6 +317,12 @@ export function EncryptPanel() {
                         ))}
                     </SelectContent>
                 </Select>
+            )}
+            {suggestedKeyName && !loadingAi && (
+                <div className="flex items-center gap-2 p-2 bg-primary/10 text-primary-foreground rounded-md text-sm">
+                    <Lightbulb className="h-5 w-5 text-primary flex-shrink-0" />
+                    <p className="text-primary">AI Suggestion: Use key <span className="font-bold">{suggestedKeyName}</span> for this file.</p>
+                </div>
             )}
             <div className="flex items-center gap-2">
                 <Input id="key-encrypt" type="password" value={key} onChange={(e) => setKey(e.target.value)} placeholder="Enter your secret key" disabled={!step1Completed} className="h-12 text-base"/>
@@ -341,8 +367,8 @@ export function EncryptPanel() {
           </div>
           <div className={`flex-1 space-y-2 transition-opacity ${step1Completed && step2Completed && step3Completed ? 'opacity-100' : 'opacity-60'}`}>
             <Label className="text-lg font-semibold">Step 3: Encrypt & Download</Label>
-            <Button onClick={handleEncrypt} disabled={loading || loadingSuggestion || !step1Completed || !step2Completed || !step3Completed} className="w-full h-14 text-lg rounded-full">
-              {loading ? <Loader2 className="mr-2 h-6 w-6 animate-spin" /> : <Lock className="mr-2 h-6 w-6" />}
+            <Button onClick={handleEncrypt} disabled={loading || loadingAi || !step1Completed || !step2Completed || !step3Completed} className="w-full h-14 text-lg rounded-full">
+              {loading || loadingAi ? <Loader2 className="mr-2 h-6 w-6 animate-spin" /> : <Lock className="mr-2 h-6 w-6" />}
               Encrypt & Download
             </Button>
           </div>

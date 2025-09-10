@@ -7,13 +7,14 @@ import { collection, query, orderBy, onSnapshot, Timestamp } from 'firebase/fire
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Lock, Unlock, History, Loader2 } from 'lucide-react';
+import { Lock, Unlock, History, Loader2, FileText } from 'lucide-react';
 
 interface ActivityLog {
     id: string;
     action: 'encrypt' | 'decrypt';
     filename: string;
     timestamp: Timestamp;
+    summary?: string;
 }
 
 export default function ActivityPage() {
@@ -72,15 +73,21 @@ export default function ActivityPage() {
                         ) : (
                             <ul className="space-y-4">
                                 {activities.map(activity => (
-                                    <li key={activity.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-secondary rounded-lg gap-4">
-                                        <div className="flex items-center">
-                                            {activity.action === 'encrypt' ? <Lock className="h-6 w-6 mr-4 text-primary" /> : <Unlock className="h-6 w-6 mr-4 text-primary" />}
-                                            <div>
+                                    <li key={activity.id} className="flex flex-col sm:flex-row items-start justify-between p-4 bg-secondary rounded-lg gap-4">
+                                        <div className="flex items-start flex-1">
+                                            {activity.action === 'encrypt' ? <Lock className="h-6 w-6 mr-4 text-primary flex-shrink-0 mt-1" /> : <Unlock className="h-6 w-6 mr-4 text-primary flex-shrink-0 mt-1" />}
+                                            <div className="flex-1">
                                                 <p className="font-semibold text-base sm:text-lg capitalize">{activity.action}ed File</p>
                                                 <p className="text-sm sm:text-base text-muted-foreground break-all">{activity.filename}</p>
+                                                {activity.summary && (
+                                                    <div className="flex items-start text-xs sm:text-sm text-muted-foreground mt-2 bg-background/50 p-2 rounded-md">
+                                                        <FileText className="h-4 w-4 mr-2 flex-shrink-0 mt-0.5"/>
+                                                        <p><span className="font-semibold">AI Summary:</span> {activity.summary}</p>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
-                                        <p className="text-xs sm:text-sm text-muted-foreground text-left sm:text-right w-full sm:w-auto">
+                                        <p className="text-xs sm:text-sm text-muted-foreground text-left sm:text-right w-full sm:w-auto flex-shrink-0 mt-2 sm:mt-0">
                                             {activity.timestamp.toDate().toLocaleString()}
                                         </p>
                                     </li>
