@@ -66,7 +66,7 @@ export default function Home() {
     <div className="flex flex-col items-center justify-center bg-background p-4 sm:p-8">
       <div className="w-full max-w-6xl">
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-primary tracking-wider">CipherLock</h1>
+          <h1 className="text-5xl font-bold tracking-wider">CipherLock</h1>
           <p className="text-muted-foreground mt-2 text-lg">
             A suite of tools for client-side encryption. Simple &amp; Secure.
           </p>
@@ -74,12 +74,12 @@ export default function Home() {
         
         <div className="w-full max-w-4xl mx-auto mb-16">
             <Tabs defaultValue="encrypt" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 h-12">
-                <TabsTrigger value="encrypt" className="text-base">
-                  <Lock className="mr-2 h-5 w-5" />Encrypt Files
+            <TabsList className="grid w-full grid-cols-2 h-14">
+                <TabsTrigger value="encrypt" className="text-lg">
+                  <Lock className="mr-2 h-6 w-6" />Encrypt Files
                 </TabsTrigger>
-                <TabsTrigger value="decrypt" className="text-base">
-                  <Unlock className="mr-2 h-5 w-5" />Decrypt Files
+                <TabsTrigger value="decrypt" className="text-lg">
+                  <Unlock className="mr-2 h-6 w-6" />Decrypt Files
                 </TabsTrigger>
             </TabsList>
             <TabsContent value="encrypt" className="mt-6">
@@ -95,7 +95,7 @@ export default function Home() {
             <h2 className="text-3xl font-bold text-center mb-8">Features</h2>
             <div className="grid md:grid-cols-4 gap-8">
                 {features.map((feature, index) => (
-                    <Card key={index} className="bg-card border-border/60 text-center">
+                    <Card key={index} className="bg-card border-border/60 text-center shadow-lg">
                         <CardContent className="p-6 flex flex-col items-center">
                             <div className="mb-4 inline-block ">{feature.icon}</div>
                             <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>

@@ -25,14 +25,14 @@ export function Navbar() {
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
         <Link href="/" className="flex items-center">
             <ShieldCheck className="h-8 w-8 text-primary" />
-            <span className="ml-2 text-xl font-bold text-primary">CipherLock</span>
+            <span className="ml-2 text-xl font-bold">CipherLock</span>
         </Link>
         <div className="flex items-center gap-4">
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                  <Avatar className="h-8 w-8">
+                <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                  <Avatar className="h-10 w-10">
                     <AvatarImage src={user.photoURL || ''} alt={user.displayName || 'User'} />
                     <AvatarFallback>
                         <UserIcon />
@@ -58,7 +58,7 @@ export function Navbar() {
             </DropdownMenu>
           ) : (
             <Button asChild>
-                <Link href="/auth">Access All Features</Link>
+                <Link href="/auth">Sign In</Link>
             </Button>
           )}
           <ThemeToggle />

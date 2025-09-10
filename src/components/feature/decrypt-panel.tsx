@@ -109,50 +109,50 @@ export function DecryptPanel() {
   const step2Completed = key.length > 0;
   
   return (
-    <Card className="border-border/60">
+    <Card className="border-border/60 shadow-lg">
       <CardHeader>
-        <CardTitle>Decrypt File(s)</CardTitle>
+        <CardTitle className="text-2xl">Decrypt File(s)</CardTitle>
         <CardDescription>Select one or more .ciph files and provide the key to decrypt them.</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-6 pt-6">
         
         <div className="flex items-start space-x-4">
             <div className="flex flex-col items-center">
                 <div className={`flex items-center justify-center w-10 h-10 rounded-full ${step1Completed ? 'bg-green-500' : 'bg-primary'} text-primary-foreground`}>
-                {step1Completed ? <CheckCircle className="w-5 h-5" /> : <Files className="w-5 h-5" />}
+                {step1Completed ? <CheckCircle className="w-6 h-6" /> : <Files className="w-6 h-6" />}
                 </div>
                 <div className="h-10 w-px bg-border my-1"></div>
             </div>
             <div className="flex-1 space-y-2 pb-10">
-                <Label htmlFor="file-decrypt" className="text-base font-semibold">Step 1: Upload .ciph File(s)</Label>
-                <Input id="file-decrypt" type="file" accept=".ciph" onChange={handleFileChange} className="file:text-foreground" multiple disabled={step1Completed}/>
-                 {step1Completed && <p className="text-sm text-muted-foreground pt-2">Selected: {files.length} file(s)</p>}
+                <Label htmlFor="file-decrypt" className="text-lg font-semibold">Step 1: Upload .ciph File(s)</Label>
+                <Input id="file-decrypt" type="file" accept=".ciph" onChange={handleFileChange} className="file:text-foreground h-12 text-base" multiple disabled={step1Completed}/>
+                 {step1Completed && <p className="text-base text-muted-foreground pt-2">Selected: {files.length} file(s)</p>}
             </div>
         </div>
 
         <div className="flex items-start space-x-4">
             <div className="flex flex-col items-center">
                 <div className={`flex items-center justify-center w-10 h-10 rounded-full ${step2Completed ? 'bg-green-500' : !step1Completed ? 'bg-muted' : 'bg-primary'} ${!step1Completed ? 'text-muted-foreground' : 'text-primary-foreground'}`}>
-                    {step2Completed ? <CheckCircle className="w-5 h-5" /> : <KeyRound className="w-5 h-5" />}
+                    {step2Completed ? <CheckCircle className="w-6 h-6" /> : <KeyRound className="w-6 h-6" />}
                 </div>
               <div className="h-10 w-px bg-border my-1"></div>
             </div>
             <div className={`flex-1 space-y-2 pb-10 transition-opacity ${step1Completed ? 'opacity-100' : 'opacity-60'}`}>
-              <Label htmlFor="key-decrypt" className="text-base font-semibold">Step 2: Enter Secret Key</Label>
-              <Input id="key-decrypt" type="password" value={key} onChange={(e) => setKey(e.target.value)} placeholder="Enter your secret key" disabled={!step1Completed} />
+              <Label htmlFor="key-decrypt" className="text-lg font-semibold">Step 2: Enter Secret Key</Label>
+              <Input id="key-decrypt" type="password" value={key} onChange={(e) => setKey(e.target.value)} placeholder="Enter your secret key" disabled={!step1Completed} className="h-12 text-base" />
             </div>
         </div>
         
         <div className="flex items-start space-x-4">
             <div className="flex flex-col items-center">
               <div className={`flex items-center justify-center w-10 h-10 rounded-full ${!step1Completed || !step2Completed ? 'bg-muted' : 'bg-primary'} ${!step1Completed || !step2Completed ? 'text-muted-foreground' : 'text-primary-foreground'}`}>
-                 <Download className="w-5 h-5" />
+                 <Download className="w-6 h-6" />
               </div>
             </div>
             <div className={`flex-1 space-y-2 transition-opacity ${step1Completed && step2Completed ? 'opacity-100' : 'opacity-60'}`}>
-              <Label className="text-base font-semibold">Step 3: Decrypt & Download</Label>
-              <Button onClick={handleDecrypt} disabled={loading || !step1Completed || !step2Completed} className="w-full h-11 text-base">
-                {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Unlock className="mr-2 h-5 w-5" />}
+              <Label className="text-lg font-semibold">Step 3: Decrypt & Download</Label>
+              <Button onClick={handleDecrypt} disabled={loading || !step1Completed || !step2Completed} className="w-full h-14 text-lg">
+                {loading ? <Loader2 className="mr-2 h-6 w-6 animate-spin" /> : <Unlock className="mr-2 h-6 w-6" />}
                 Decrypt & Download
               </Button>
             </div>

@@ -19,19 +19,20 @@ export default function AuthPage() {
   }, [user, router]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background">
-      <Card className="w-full max-w-md">
+    <div className="flex items-center justify-center min-h-screen bg-background p-4">
+      <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Access All Features</CardTitle>
-          <CardDescription>Sign in to unlock the full potential of CipherLock.</CardDescription>
+          <CardTitle className="text-3xl font-bold">Access All Features</CardTitle>
+          <CardDescription className="text-lg">Sign in to unlock the full potential of CipherLock.</CardDescription>
         </CardHeader>
         <CardContent>
           <Button 
             onClick={signInWithGoogle} 
-            className="w-full" 
+            className="w-full h-14 text-lg" 
             disabled={loading}
+            size="lg"
           >
-            <Chrome className="mr-2 h-5 w-5" />
+            <Chrome className="mr-2 h-6 w-6" />
             Continue with Google
           </Button>
         </CardContent>
