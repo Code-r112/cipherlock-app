@@ -2,7 +2,7 @@
 import { EncryptPanel } from '@/components/feature/encrypt-panel';
 import { DecryptPanel } from '@/components/feature/decrypt-panel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Lock, Unlock, Files, ShieldCheck, KeyRound, ServerOff } from 'lucide-react';
+import { Lock, Unlock, Files, ShieldCheck, KeyRound, ServerOff, MonitorSmartphone, KeySquare, CloudOff } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
@@ -105,6 +105,35 @@ export default function Home() {
                     </Card>
                 ))}
             </div>
+        </section>
+
+        <section id="security-process" className="mb-24 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+            <h2 className="text-7xl font-bold text-center mb-16">How We Keep You Safe</h2>
+            <Card className="p-8 lg:p-12 bg-secondary border-none">
+                <div className="grid md:grid-cols-3 gap-8 text-center">
+                    <div className="flex flex-col items-center">
+                        <div className="bg-primary/10 text-primary p-4 rounded-full mb-4">
+                            <MonitorSmartphone className="h-10 w-10" />
+                        </div>
+                        <h3 className="text-2xl font-semibold mb-2">1. On Your Device</h3>
+                        <p className="text-muted-foreground">All encryption and decryption happens directly in your browser. Your files are never uploaded to any server.</p>
+                    </div>
+                     <div className="flex flex-col items-center">
+                        <div className="bg-primary/10 text-primary p-4 rounded-full mb-4">
+                            <KeySquare className="h-10 w-10" />
+                        </div>
+                        <h3 className="text-2xl font-semibold mb-2">2. You Hold the Key</h3>
+                        <p className="text-muted-foreground">You provide the secret key for every operation. We don't store, transmit, or have any access to your keys.</p>
+                    </div>
+                     <div className="flex flex-col items-center">
+                        <div className="bg-primary/10 text-primary p-4 rounded-full mb-4">
+                           <CloudOff className="h-10 w-10" />
+                        </div>
+                        <h3 className="text-2xl font-semibold mb-2">3. Zero Data Storage</h3>
+                        <p className="text-muted-foreground">Your original files and their encrypted versions are never stored by us. They are processed in memory and then downloaded by you.</p>
+                    </div>
+                </div>
+            </Card>
         </section>
 
         <section id="faq" className="w-full max-w-3xl mx-auto animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
