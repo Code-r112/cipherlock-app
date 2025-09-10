@@ -101,7 +101,7 @@ export default function Home() {
             <p className="text-2xl sm:text-3xl text-muted-foreground mb-4">Hello, {firstName}!</p>
           )}
           <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-wider">
-            <WordRotator words={["Encrypt", "Protect", "Secure", "Cipher"]} />
+            <WordRotator words={["Encrypt", "Secure", "Protect"]} />
           </h1>
           <p className="text-muted-foreground mt-4 text-lg sm:text-2xl">
             A suite of tools for client-side encryption. Simple &amp; Secure.
