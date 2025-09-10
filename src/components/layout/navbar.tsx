@@ -2,7 +2,7 @@
 "use client";
 
 import { ShieldCheck, User as UserIcon, LogOut, History, KeyRound, ShieldAlert } from 'lucide-react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
 import { ThemeToggle } from './theme-toggle';
@@ -17,12 +17,22 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
+import { cn } from '@/lib/utils';
 
 export function Navbar() {
   const { user, signOut } = useAuth();
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <header className="bg-background border-b border-border sticky top-0 z-50">
+    <header className={cn("bg-background sticky top-0 z-50 transition-shadow", scrolled && "shadow-md border-b-2 border-black dark:border-white")}>
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20">
         <Link href="/" className="flex items-center">
             <ShieldCheck className="h-8 w-8 text-black dark:text-white" />
@@ -89,7 +99,7 @@ export function Navbar() {
           ) : (
             <>
               <ThemeToggle />
-              <Button asChild size="lg">
+              <Button asChild size="lg" className="border-2 border-black">
                   <Link href="/auth">Sign In</Link>
               </Button>
             </>
