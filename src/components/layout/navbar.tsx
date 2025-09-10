@@ -25,7 +25,7 @@ export function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0);
+      setIsScrolled(window.scrollY > 10);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -35,7 +35,7 @@ export function Navbar() {
   }, []);
 
   return (
-    <header className={cn("bg-background sticky top-0 z-50 transition-all", isScrolled && "border-b border-border/50")}>
+    <header className={cn("bg-background sticky top-0 z-50 transition-all", isScrolled && "border-b border-border")}>
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20">
         <Link href="/" className="flex items-center">
             <ShieldCheck className="h-8 w-8 text-black dark:text-white" />

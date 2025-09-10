@@ -24,7 +24,7 @@ export default function AuthPage() {
             <Card className="w-full max-w-md border-none">
                 <CardHeader className="text-center">
                 <CardTitle className="text-5xl font-bold">Access All Features</CardTitle>
-                <CardDescription className="text-xl pt-2">Sign in to unlock AI-powered features and more.</CardDescription>
+                <CardDescription className="text-xl pt-2">Sign in to access your secure key vault, AI-powered tools, activity history, and more.</CardDescription>
                 </CardHeader>
                 <CardContent>
                 <Button 
