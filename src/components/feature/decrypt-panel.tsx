@@ -267,7 +267,7 @@ export function DecryptPanel() {
                       <DialogHeader>
                         <DialogTitle>Save Secret Key</DialogTitle>
                         <DialogDescription>Give this key a recognizable name to save it for later use.</DialogDescription>
-                      </Header>
+                      </DialogHeader>
                       <div className="space-y-2">
                         <Label htmlFor="key-name">Key Name</Label>
                         <Input id="key-name" value={keyName} onChange={(e) => setKeyName(e.target.value)} placeholder="e.g., 'Work Documents Key'"/>
