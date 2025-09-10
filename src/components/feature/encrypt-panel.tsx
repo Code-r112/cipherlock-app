@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Lock, KeyRound, Download, CheckCircle, Files, Bot, Sparkles, Copy, Save, Lightbulb } from "lucide-react";
+import { Loader2, Lock, KeyRound, Download, CheckCircle, Files, Bot, Sparkles, Copy, Save, Lightbulb, Share2, ClipboardCopy } from "lucide-react";
 import CryptoJS from 'crypto-js';
 import { useAuth } from '@/hooks/use-auth';
 import { suggestFilename } from '@/ai/flows/suggest-filename-flow';
@@ -18,11 +18,19 @@ import { db } from '@/lib/firebase';
 import { collection, addDoc, serverTimestamp, getDocs, query } from 'firebase/firestore';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { createShareableFile } from '@/services/share-service';
+import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 
 interface SavedKey {
     id: string;
     name: string;
     key: string;
+}
+
+interface EncryptedResult {
+    filename: string;
+    blob: Blob;
+    content: string;
 }
 
 const checkKeyStrength = (key: string) => {
@@ -51,6 +59,10 @@ export function EncryptPanel() {
   const [savedKeys, setSavedKeys] = useState<SavedKey[]>([]);
   const [keyName, setKeyName] = useState('');
   const [isSaveKeyDialogOpen, setSaveKeyDialogOpen] = useState(false);
+  const [encryptedResult, setEncryptedResult] = useState<EncryptedResult | null>(null);
+  const [shareLink, setShareLink] = useState<string | null>(null);
+  const [isSharing, setIsSharing] = useState(false);
+
   const { toast } = useToast();
 
   useEffect(() => {
@@ -67,20 +79,21 @@ export function EncryptPanel() {
 
   useEffect(() => {
     if (files.length > 0 && user) {
+      setEncryptedResult(null);
+      setShareLink(null);
       setLoadingAi(true);
       const file = files[0];
       const reader = new FileReader();
       reader.onload = async (e) => {
         const dataUrl = e.target?.result as string;
         try {
-          // Run AI suggestions in parallel
           const [filenameResult, summaryResult, keyResult] = await Promise.all([
             suggestFilename({ fileDataUri: dataUrl, originalName: file.name }),
             summarizeFile({ fileDataUri: dataUrl }),
             suggestKey({ fileDataUri: dataUrl, savedKeys: savedKeys }),
           ]);
           
-          const newName = filenameResult.suggestedName.replace(/\.[^/.]+$/, ""); // Remove extension
+          const newName = filenameResult.suggestedName.replace(/\.[^/.]+$/, "");
           setFinalFilename(newName);
           setSummary(summaryResult.summary);
           if (keyResult.suggestedKeyId) {
@@ -101,6 +114,8 @@ export function EncryptPanel() {
       };
       reader.readAsDataURL(file);
     } else if (files.length > 0) {
+      setEncryptedResult(null);
+      setShareLink(null);
       setFinalFilename(files[0].name.replace(/\.[^/.]+$/, ""));
     }
   }, [files, user, savedKeys, toast]);
@@ -108,6 +123,13 @@ export function EncryptPanel() {
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const selectedFiles = Array.from(e.target.files);
+      if (selectedFiles.some(f => f.size > 1024 * 1024) && user) {
+           toast({
+              variant: "destructive",
+              title: "File Too Large for Sharing",
+              description: "Files over 1MB cannot be shared. You can still encrypt and download it.",
+          });
+      }
       setFiles(user ? selectedFiles.slice(0, 1) : selectedFiles);
       if (user && selectedFiles.length > 1) {
           toast({
@@ -171,7 +193,46 @@ export function EncryptPanel() {
       }
   }
 
-  const handleEncrypt = () => {
+  const handleEncryptAndDownload = () => {
+      handleEncrypt(true);
+  }
+
+  const handleEncryptAndShare = () => {
+      handleEncrypt(false);
+  }
+
+  const handleCreateShareLink = async () => {
+      if (!encryptedResult || !user) return;
+      
+      setIsSharing(true);
+      try {
+          const fileId = await createShareableFile({
+              encryptedContent: encryptedResult.content,
+              creatorId: user.uid
+          });
+          const link = `${window.location.origin}/share/${fileId}`;
+          setShareLink(link);
+      } catch (error) {
+           toast({
+            variant: "destructive",
+            title: "Sharing Failed",
+            description: "Could not create a shareable link. Please try again.",
+          });
+      } finally {
+          setIsSharing(false);
+      }
+  }
+
+  const handleCopyShareLink = () => {
+    if (!shareLink) return;
+    navigator.clipboard.writeText(shareLink);
+    toast({
+      title: "Link Copied",
+      description: "The shareable link has been copied to your clipboard.",
+    });
+  }
+
+  const handleEncrypt = (shouldDownload: boolean) => {
     if (files.length === 0 || !key) {
       toast({
         variant: "destructive",
@@ -182,6 +243,8 @@ export function EncryptPanel() {
     }
 
     setLoading(true);
+    setEncryptedResult(null);
+    setShareLink(null);
     
     let processedCount = 0;
 
@@ -198,15 +261,20 @@ export function EncryptPanel() {
           const encrypted = CryptoJS.AES.encrypt(JSON.stringify({ data: dataUrl, name: file.name, hash: contentHash }), key).toString();
 
           const blob = new Blob([encrypted], { type: 'text/plain' });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
           const encryptedFilename = `${filename}.ciph`;
-          a.download = encryptedFilename;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
+
+          setEncryptedResult({filename: encryptedFilename, blob, content: encrypted});
+          
+          if (shouldDownload) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = encryptedFilename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          }
           logActivity(encryptedFilename, key, summary);
 
         } catch (error) {
@@ -219,10 +287,17 @@ export function EncryptPanel() {
           processedCount++;
           if (processedCount === files.length) {
             setLoading(false);
-            toast({
-              title: "Encryption Complete",
-              description: `${files.length} file(s) have been encrypted and downloaded.`,
-            });
+            if (shouldDownload) {
+                toast({
+                  title: "Encryption Complete",
+                  description: `${files.length} file(s) have been encrypted and downloaded.`,
+                });
+            } else {
+                 toast({
+                  title: "Encryption Complete",
+                  description: `File encrypted. You can now share it.`,
+                });
+            }
           }
         }
       };
@@ -251,12 +326,18 @@ export function EncryptPanel() {
       if (!suggestedKeyId) return null;
       return savedKeys.find(k => k.id === suggestedKeyId)?.name;
   }, [suggestedKeyId, savedKeys]);
+  
+  const canShare = useMemo(() => {
+      if (!user || files.length === 0) return false;
+      return files[0].size <= 1024 * 1024;
+  }, [user, files]);
+
 
   return (
     <Card className="border-none shadow-none">
       <CardHeader>
         <CardTitle className="text-2xl">Encrypt File(s)</CardTitle>
-        <CardDescription>Select files, set a key, and get encrypted copies. {user && <strong>Logged-in users get AI-powered naming and key saving!</strong>}</CardDescription>
+        <CardDescription>Select files, set a key, and get encrypted copies. {user && <strong>Logged-in users get AI-powered naming and secure sharing!</strong>}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6 pt-6">
 
@@ -365,14 +446,60 @@ export function EncryptPanel() {
               <Download className="w-6 h-6" />
             </div>
           </div>
-          <div className={`flex-1 space-y-2 transition-opacity ${step1Completed && step2Completed && step3Completed ? 'opacity-100' : 'opacity-60'}`}>
-            <Label className="text-lg font-semibold">Step 3: Encrypt & Download</Label>
-            <Button onClick={handleEncrypt} disabled={loading || loadingAi || !step1Completed || !step2Completed || !step3Completed} className="w-full h-14 text-lg rounded-full">
-              {loading || loadingAi ? <Loader2 className="mr-2 h-6 w-6 animate-spin" /> : <Lock className="mr-2 h-6 w-6" />}
-              Encrypt & Download
-            </Button>
+          <div className={`flex-1 space-y-4 transition-opacity ${step1Completed && step2Completed && step3Completed ? 'opacity-100' : 'opacity-60'}`}>
+            <Label className="text-lg font-semibold">Step 3: Encrypt & Download or Share</Label>
+            <div className="flex flex-col sm:flex-row gap-4">
+                 <Button onClick={handleEncryptAndDownload} disabled={loading || loadingAi || !step1Completed || !step2Completed || !step3Completed} className="w-full h-14 text-lg rounded-full">
+                    {loading ? <Loader2 className="mr-2 h-6 w-6 animate-spin" /> : <Lock className="mr-2 h-6 w-6" />}
+                    Encrypt & Download
+                </Button>
+                {user && (
+                     <Button onClick={handleEncryptAndShare} disabled={!canShare || loading || loadingAi || !step1Completed || !step2Completed || !step3Completed} className="w-full h-14 text-lg rounded-full" variant="secondary">
+                        <Share2 className="mr-2 h-6 w-6" />
+                        Encrypt for Sharing
+                    </Button>
+                )}
+            </div>
+            {!canShare && user && step1Completed && (
+                <p className='text-sm text-muted-foreground'>Sharing is disabled for files larger than 1MB.</p>
+            )}
           </div>
         </div>
+
+        {encryptedResult && !shareLink && (
+            <div className='space-y-4 pt-6 border-t'>
+                <Alert>
+                    <Share2 className="h-4 w-4" />
+                    <AlertTitle>Ready to Share!</AlertTitle>
+                    <AlertDescription>
+                        Your file is encrypted and ready. Click the button below to generate a secure, one-time share link.
+                    </AlertDescription>
+                </Alert>
+                <Button onClick={handleCreateShareLink} disabled={isSharing} className="w-full h-12 text-lg">
+                    {isSharing ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <Share2 className="mr-2 h-5 w-5" />}
+                    Generate Secure Link
+                </Button>
+            </div>
+        )}
+
+        {shareLink && (
+             <div className='space-y-4 pt-6 border-t'>
+                 <Alert variant="default" className="bg-primary/10 border-primary/20">
+                    <CheckCircle className="h-4 w-4 text-primary" />
+                    <AlertTitle className="text-primary">Share Link Generated!</AlertTitle>
+                    <AlertDescription>
+                        Copy the link below and send it to your recipient. <strong>Remember to share the decryption key separately and securely!</strong> This link will be invalid after the first download.
+                    </AlertDescription>
+                </Alert>
+                <div className="flex items-center gap-2">
+                    <Input readOnly value={shareLink} className="h-12 text-base"/>
+                    <Button size="icon" onClick={handleCopyShareLink}>
+                        <ClipboardCopy className="h-6 w-6" />
+                    </Button>
+                </div>
+            </div>
+        )}
+
 
       </CardContent>
     </Card>
