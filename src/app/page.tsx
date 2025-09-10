@@ -1,8 +1,8 @@
+
 import { EncryptPanel } from '@/components/feature/encrypt-panel';
 import { DecryptPanel } from '@/components/feature/decrypt-panel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Lock, Unlock } from 'lucide-react';
-import Image from 'next/image';
+import { Lock, Unlock, Files, ShieldCheck, KeyRound, ServerOff } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
@@ -10,26 +10,25 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Card, CardContent } from '@/components/ui/card';
-import placeholderImages from '@/lib/placeholder-images.json';
 
 const features = [
     {
-      image: placeholderImages.batchProcessing,
+      icon: <Files className="h-12 w-12 mb-6 text-primary" />,
       title: 'Batch Processing',
       description: 'Encrypt or decrypt multiple files at once, streamlining your workflow.',
     },
     {
-      image: placeholderImages.strongEncryption,
+      icon: <ShieldCheck className="h-12 w-12 mb-6 text-primary" />,
       title: 'Strong Encryption',
       description: 'Utilizes AES-256 for robust, industry-standard file protection.',
     },
     {
-      image: placeholderImages.secretKey,
+      icon: <KeyRound className="h-12 w-12 mb-6 text-primary" />,
       title: 'Secret Key Control',
       description: 'You control the secret key, ensuring only you can access your files.',
     },
     {
-      image: placeholderImages.noServer,
+      icon: <ServerOff className="h-12 w-12 mb-6 text-primary" />,
       title: 'No Server Upload',
       description: 'All operations happen in your browser. Your files never leave your computer.',
     },
@@ -64,37 +63,24 @@ const faqItems = [
 ]
 
 export default function Home() {
-  const { hero } = placeholderImages;
   return (
     <div className="flex flex-col items-center justify-center bg-background p-4 sm:p-8">
-      <div className="w-full max-w-6xl">
-        <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-12 mb-24">
-            <div className="text-center md:text-left">
-              <h1 className="text-8xl font-bold tracking-wider">CipherLock</h1>
-              <p className="text-muted-foreground mt-4 text-xl">
-                A suite of tools for client-side encryption. Simple &amp; Secure.
-              </p>
-            </div>
-            <div className="flex justify-center">
-                <Image 
-                    src={hero.src}
-                    alt={hero.alt}
-                    width={hero.width}
-                    height={hero.height}
-                    data-ai-hint={hero.hint}
-                    className="rounded-lg"
-                />
-            </div>
+      <div className="w-full max-w-5xl">
+        <div className="text-center py-24 animate-fade-in-down">
+          <h1 className="text-9xl font-bold tracking-wider">CipherLock</h1>
+          <p className="text-muted-foreground mt-4 text-2xl">
+            A suite of tools for client-side encryption. Simple &amp; Secure.
+          </p>
         </div>
         
-        <div className="w-full max-w-md mx-auto mb-24">
+        <div className="w-full max-w-lg mx-auto mb-24 animate-fade-in-up">
             <Tabs defaultValue="encrypt" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 h-14">
-                <TabsTrigger value="encrypt" className="text-lg">
-                  <Lock className="mr-2 h-6 w-6" />Encrypt Files
+            <TabsList className="grid w-full grid-cols-2 h-16">
+                <TabsTrigger value="encrypt" className="text-xl">
+                  <Lock className="mr-2 h-7 w-7" />Encrypt Files
                 </TabsTrigger>
-                <TabsTrigger value="decrypt" className="text-lg">
-                  <Unlock className="mr-2 h-6 w-6" />Decrypt Files
+                <TabsTrigger value="decrypt" className="text-xl">
+                  <Unlock className="mr-2 h-7 w-7" />Decrypt Files
                 </TabsTrigger>
             </TabsList>
             <TabsContent value="encrypt" className="mt-6">
@@ -106,21 +92,14 @@ export default function Home() {
             </Tabs>
         </div>
 
-        <section id="features" className="mb-24">
-            <h2 className="text-6xl font-bold text-center mb-12">Features</h2>
+        <section id="features" className="mb-24 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+            <h2 className="text-7xl font-bold text-center mb-16">Features</h2>
             <div className="grid md:grid-cols-4 gap-8">
                 {features.map((feature, index) => (
                     <Card key={index} className="bg-card border-none text-center">
                         <CardContent className="p-6 flex flex-col items-center">
-                            <Image 
-                                src={feature.image.src}
-                                alt={feature.image.alt}
-                                width={feature.image.width}
-                                height={feature.image.height}
-                                data-ai-hint={feature.image.hint}
-                                className="mb-6 rounded-lg"
-                            />
-                            <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+                            {feature.icon}
+                            <h3 className="text-2xl font-semibold mb-2">{feature.title}</h3>
                             <p className="text-muted-foreground">{feature.description}</p>
                         </CardContent>
                     </Card>
@@ -128,13 +107,13 @@ export default function Home() {
             </div>
         </section>
 
-        <section id="faq" className="w-full max-w-3xl mx-auto">
-            <h2 className="text-6xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+        <section id="faq" className="w-full max-w-3xl mx-auto animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+            <h2 className="text-7xl font-bold text-center mb-16">Frequently Asked Questions</h2>
             <Accordion type="single" collapsible className="w-full">
                 {faqItems.map(item => (
                     <AccordionItem value={item.value} key={item.value}>
-                        <AccordionTrigger className="text-lg text-left">{item.question}</AccordionTrigger>
-                        <AccordionContent className="text-base text-muted-foreground">
+                        <AccordionTrigger className="text-xl text-left">{item.question}</AccordionTrigger>
+                        <AccordionContent className="text-lg text-muted-foreground">
                             {item.answer}
                         </AccordionContent>
                     </AccordionItem>
