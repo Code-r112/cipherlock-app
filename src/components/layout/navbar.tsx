@@ -34,7 +34,7 @@ export function Navbar() {
               <TooltipProvider>
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <Button asChild variant="ghost" size="icon">
+                        <Button asChild variant="outline" size="icon">
                             <Link href="/activity"><History /></Link>
                         </Button>
                     </TooltipTrigger>

@@ -5,6 +5,8 @@ import { Navbar } from '@/components/layout/navbar';
 import { Footer } from '@/components/layout/footer';
 import { ThemeProvider } from '@/components/layout/theme-provider';
 import { AuthProvider } from '@/hooks/use-auth';
+import { Suspense } from 'react';
+import Loading from './loading';
 
 export const metadata: Metadata = {
   title: 'CipherLock',
@@ -33,7 +35,9 @@ export default function RootLayout({
             >
                 <Navbar />
                 <main className="flex-grow">
-                {children}
+                  <Suspense fallback={<Loading />}>
+                    {children}
+                  </Suspense>
                 </main>
                 <Footer />
                 <Toaster />
