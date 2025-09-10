@@ -4,7 +4,7 @@
 import { EncryptPanel } from '@/components/feature/encrypt-panel';
 import { DecryptPanel } from '@/components/feature/decrypt-panel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Lock, Unlock, Files, ShieldCheck, KeyRound, ServerOff, MonitorSmartphone, KeySquare, CloudOff, Bot, Activity, UserPlus } from 'lucide-react';
+import { Lock, Unlock, Files, ShieldCheck, KeyRound, ServerOff, MonitorSmartphone, KeySquare, CloudOff, Bot, Activity } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
@@ -14,6 +14,8 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/hooks/use-auth';
 import { WordRotator } from '@/components/ui/word-rotator';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 const features = [
     {
@@ -97,8 +99,12 @@ export default function Home() {
     <div className="flex flex-col items-center justify-center bg-background p-4 sm:p-8">
       <div className="w-full max-w-5xl">
         <div className="text-center py-16 sm:py-24 animate-fade-in-down">
-          {user && firstName && (
+          {user && firstName ? (
             <p className="text-2xl sm:text-3xl text-muted-foreground mb-4">Hello, {firstName}!</p>
+          ) : !user && (
+            <Button asChild variant="secondary" className="mb-4 rounded-full border border-primary/50 hover:border-primary">
+                <Link href="/auth">Unlock all features by signing in</Link>
+            </Button>
           )}
           <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-wider h-20 sm:h-24 md:h-28 flex items-center justify-center gap-x-3">
             Data <WordRotator words={["Encrypt", "Secure", "Protect"]} />
@@ -178,9 +184,8 @@ export default function Home() {
             </div>
         </section>
 
-        <section id="premium-features" className="mb-16 sm:mb-24 animate-fade-in-up bg-secondary rounded-2xl py-12 sm:py-16 px-6" style={{ animationDelay: '0.4s' }}>
+        <section id="premium-features" className="mb-16 sm:mb-24 animate-fade-in-up bg-secondary rounded-2xl py-12 sm:py-16 px-6 border border-black dark:border-white" style={{ animationDelay: '0.4s' }}>
             <div className="text-center max-w-3xl mx-auto">
-                 <UserPlus className="h-16 w-16 mx-auto mb-6 text-primary" />
                  <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">Unlock More with an Account</h2>
                  <p className="text-lg sm:text-xl text-muted-foreground mb-12">Signing up is free and gives you access to a powerful suite of features designed for convenience and enhanced security.</p>
             </div>
@@ -217,5 +222,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
