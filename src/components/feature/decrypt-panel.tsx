@@ -7,8 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Unlock, KeyRound, Download, CheckCircle, Files } from "lucide-react";
+import { Loader2, Unlock, KeyRound, Download, CheckCircle, Files, Sparkles, Copy } from "lucide-react";
 import CryptoJS from 'crypto-js';
+import { Progress } from '@/components/ui/progress';
 
 function dataUriToBlob(dataURI: string) {
     const byteString = atob(dataURI.split(',')[1]);
@@ -20,6 +21,19 @@ function dataUriToBlob(dataURI: string) {
     return new Blob([ab]);
 }
 
+const checkKeyStrength = (key: string) => {
+    let score = 0;
+    if (key.length >= 8) score++;
+    if (key.length >= 12) score++;
+    if (/[A-Z]/.test(key)) score++;
+    if (/[a-z]/.test(key)) score++;
+    if (/[0-9]/.test(key)) score++;
+    if (/[^A-Za-z0-9]/.test(key)) score++;
+
+    if (score < 3) return { level: "Weak", value: (score / 6) * 100, color: "bg-red-500" };
+    if (score < 5) return { level: "Medium", value: (score / 6) * 100, color: "bg-yellow-500" };
+    return { level: "Strong", value: (score / 6) * 100, color: "bg-green-500" };
+};
 
 export function DecryptPanel() {
   const [files, setFiles] = useState<File[]>([]);
@@ -31,6 +45,23 @@ export function DecryptPanel() {
     if (e.target.files) {
       setFiles(Array.from(e.target.files));
     }
+  };
+
+  const handleGenerateKey = () => {
+    const randomKey = Array.from(window.crypto.getRandomValues(new Uint8Array(32)))
+      .map((b) => String.fromCharCode(b))
+      .join('')
+      .replace(/[^a-zA-Z0-9!@#$%^&*()_+-=[]{}|;:,.<>?]/g, '')
+      .slice(0, 32);
+    setKey(randomKey);
+  };
+  
+  const handleCopyKey = () => {
+    navigator.clipboard.writeText(key);
+    toast({
+      title: "Key Copied",
+      description: "The secret key has been copied to your clipboard.",
+    });
   };
 
   const handleDecrypt = () => {
@@ -108,9 +139,10 @@ export function DecryptPanel() {
 
   const step1Completed = files.length > 0;
   const step2Completed = key.length > 0;
+  const keyStrength = checkKeyStrength(key);
   
   return (
-    <Card>
+    <Card className="border-none">
       <CardHeader>
         <CardTitle className="text-2xl">Decrypt File(s)</CardTitle>
         <CardDescription>Select .ciph files and provide the key to decrypt them.</CardDescription>
@@ -119,7 +151,7 @@ export function DecryptPanel() {
         
         <div className="flex items-start space-x-4">
             <div className="flex flex-col items-center">
-                <div className={`flex items-center justify-center w-10 h-10 rounded-full ${step1Completed ? 'bg-green-500' : 'bg-primary'} text-primary-foreground`}>
+                <div className={`flex items-center justify-center w-10 h-10 rounded-full ${step1Completed ? 'bg-primary/80' : 'bg-primary'} text-primary-foreground`}>
                 {step1Completed ? <CheckCircle className="w-6 h-6" /> : <Files className="w-6 h-6" />}
                 </div>
                 <div className="h-10 w-px bg-border my-1"></div>
@@ -133,14 +165,24 @@ export function DecryptPanel() {
 
         <div className="flex items-start space-x-4">
             <div className="flex flex-col items-center">
-                <div className={`flex items-center justify-center w-10 h-10 rounded-full ${step2Completed ? 'bg-green-500' : !step1Completed ? 'bg-muted' : 'bg-primary'} ${!step1Completed ? 'text-muted-foreground' : 'text-primary-foreground'}`}>
+                <div className={`flex items-center justify-center w-10 h-10 rounded-full ${step2Completed ? 'bg-primary/80' : !step1Completed ? 'bg-muted' : 'bg-primary'} ${!step1Completed ? 'text-muted-foreground' : 'text-primary-foreground'}`}>
                     {step2Completed ? <CheckCircle className="w-6 h-6" /> : <KeyRound className="w-6 h-6" />}
                 </div>
               <div className="h-10 w-px bg-border my-1"></div>
             </div>
             <div className={`flex-1 space-y-2 pb-10 transition-opacity ${step1Completed ? 'opacity-100' : 'opacity-60'}`}>
               <Label htmlFor="key-decrypt" className="text-lg font-semibold">Step 2: Enter Secret Key</Label>
-              <Input id="key-decrypt" type="password" value={key} onChange={(e) => setKey(e.target.value)} placeholder="Enter your secret key" disabled={!step1Completed} className="h-12 text-base" />
+              <div className="flex items-center gap-2">
+                <Input id="key-decrypt" type="password" value={key} onChange={(e) => setKey(e.target.value)} placeholder="Enter your secret key" disabled={!step1Completed} className="h-12 text-base" />
+                <Button variant="outline" size="icon" onClick={handleGenerateKey} disabled={!step1Completed}><Sparkles className="w-5 h-5"/></Button>
+                <Button variant="outline" size="icon" onClick={handleCopyKey} disabled={!key}><Copy className="w-5 h-5"/></Button>
+              </div>
+              {key && (
+                <div className="pt-2 space-y-1">
+                  <Progress value={keyStrength.value} className={`h-2 ${keyStrength.color}`} />
+                  <p className="text-sm font-medium" style={{ color: keyStrength.color.replace('bg-', '').replace('-500', '')}}>{keyStrength.level}</p>
+                </div>
+              )}
             </div>
         </div>
         
