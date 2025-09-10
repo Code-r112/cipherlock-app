@@ -3,13 +3,20 @@
 
 import { useAuth } from '@/hooks/use-auth';
 import { db } from '@/lib/firebase';
-import { collection, query, getDocs } from 'firebase/firestore';
+import { collection, query, getDocs, Timestamp } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Loader2, ShieldCheck, AlertTriangle, Info } from 'lucide-react';
 import { analyzeSecurity, SecurityAnalysisInput, SecurityAnalysisOutput } from '@/ai/flows/security-audit-flow';
+
+interface ActivityLogFromFirestore {
+    action: 'encrypt' | 'decrypt';
+    filename: string;
+    keyHash: string;
+    timestamp: Timestamp;
+}
 
 export default function SecurityCenterPage() {
     const { user, loading: authLoading } = useAuth();
@@ -41,9 +48,9 @@ export default function SecurityCenterPage() {
             // 1. Fetch activity data from Firestore
             const activityQuery = query(collection(db, 'users', user.uid, 'activity'));
             const querySnapshot = await getDocs(activityQuery);
-            const activities = querySnapshot.docs.map(doc => doc.data() as SecurityAnalysisInput['activityLogs'][0]);
+            const activitiesFromFirestore = querySnapshot.docs.map(doc => doc.data() as ActivityLogFromFirestore);
 
-            if (activities.length === 0) {
+            if (activitiesFromFirestore.length === 0) {
                 setAnalysis({
                     overallScore: 100,
                     recommendations: [{
@@ -55,6 +62,12 @@ export default function SecurityCenterPage() {
                 setLoading(false);
                 return;
             }
+
+            // Convert Timestamps to serializable strings
+            const activities: SecurityAnalysisInput['activityLogs'] = activitiesFromFirestore.map(log => ({
+                ...log,
+                timestamp: log.timestamp.toDate().toISOString(),
+            }));
 
             // 2. Call the Genkit flow
             const result = await analyzeSecurity({ activityLogs: activities });

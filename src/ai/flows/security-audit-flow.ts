@@ -10,14 +10,13 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import { Timestamp } from 'firebase/firestore';
 
 // Define the schema for a single activity log entry
 const ActivityLogSchema = z.object({
   action: z.enum(['encrypt', 'decrypt']),
   filename: z.string(),
   keyHash: z.string().describe("The SHA-256 hash of the key used for the operation."),
-  timestamp: z.custom<Timestamp>()
+  timestamp: z.string().describe("The ISO 8601 timestamp of the activity."),
 });
 
 // Define the input schema for the security analysis flow
@@ -50,7 +49,7 @@ const prompt = ai.definePrompt({
   name: 'securityAuditPrompt',
   input: {schema: SecurityAnalysisInputSchema},
   output: {schema: SecurityAnalysisOutputSchema},
-  prompt: `You are a cybersecurity expert specializing in encryption best practices. Analyze the following user activity logs from the CipherLock application.
+  prompt: `You are a cybersecurity expert specializing in encryption best practices. Analyze the following user activity logs from the CipherLock application. The current date is ${new Date().toISOString()}.
 
 Your task is to provide a security score and a list of actionable recommendations.
 
