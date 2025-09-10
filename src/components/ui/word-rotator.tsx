@@ -1,41 +1,53 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
+import { useState, useEffect } from 'react';
+import { cn } from '@/lib/utils';
 
-interface WordRotatorProps {
+interface TypewriterProps {
   words: string[];
   className?: string;
 }
 
-export function WordRotator({ words, className }: WordRotatorProps) {
-  const [index, setIndex] = useState(0);
+export function WordRotator({ words, className }: TypewriterProps) {
+  const [wordIndex, setWordIndex] = useState(0);
+  const [text, setText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((prevIndex) => (prevIndex + 1) % words.length);
-    }, 2000);
+    const currentWord = words[wordIndex];
+    const typeSpeed = isDeleting ? 75 : 150;
 
-    return () => clearInterval(interval);
-  }, [words.length]);
+    const handleTyping = () => {
+      if (isDeleting) {
+        if (text.length > 0) {
+          setText((prev) => prev.substring(0, prev.length - 1));
+        } else {
+          setIsDeleting(false);
+          setWordIndex((prev) => (prev + 1) % words.length);
+        }
+      } else {
+        if (text.length < currentWord.length) {
+          setText((prev) => currentWord.substring(0, prev.length + 1));
+        } else {
+          // Pause at end of word
+          setTimeout(() => setIsDeleting(true), 2000);
+        }
+      }
+    };
+
+    const typingTimeout = setTimeout(handleTyping, typeSpeed);
+
+    return () => clearTimeout(typingTimeout);
+  }, [text, isDeleting, wordIndex, words]);
 
   return (
-    <div className={cn("relative inline-grid h-20 sm:h-28 md:h-32 lg:h-36 overflow-hidden align-bottom", className)}>
-        {words.map((word, i) => (
-            <span
-                key={word}
-                className={cn(
-                    "col-start-1 row-start-1 transition-all duration-300",
-                    i === index
-                        ? "opacity-100 translate-y-0"
-                        : "opacity-0 -translate-y-2",
-                    "[&>span]:whitespace-nowrap"
-                )}
-            >
-               {word}
-            </span>
-        ))}
-    </div>
+    <span className={cn(
+        "relative",
+        className
+    )}>
+      <span className="min-h-[1em]">{text}</span>
+      <span className="animate-pulse">|</span>
+    </span>
   );
 }
