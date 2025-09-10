@@ -100,7 +100,7 @@ export default function Home() {
           {user && firstName && (
             <p className="text-2xl sm:text-3xl text-muted-foreground mb-4">Hello, {firstName}!</p>
           )}
-          <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-wider h-24 sm:h-32 md:h-36 lg:h-40 flex items-center justify-center gap-x-4">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-wider h-20 sm:h-24 md:h-28 flex items-center justify-center gap-x-3">
             Data <WordRotator words={["Encrypt", "Secure", "Protect"]} />
           </h1>
           <p className="text-muted-foreground mt-4 text-lg sm:text-2xl">
@@ -217,3 +217,5 @@ export default function Home() {
     </div>
   );
 }
+
+    

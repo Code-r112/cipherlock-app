@@ -43,8 +43,10 @@ export function WordRotator({ words, className }: TypewriterProps) {
 
   return (
     <span className={cn("inline-flex items-center", className)}>
-      <span className="min-h-[1em]">{text}</span>
-      <span className="animate-pulse ml-1 w-[2px] h-full bg-foreground inline-block"></span>
+      <span className="min-w-[1ch] min-h-[1em]">{text}</span>
+      <span className="animate-pulse w-[2px] h-[1em] bg-foreground inline-block"></span>
     </span>
   );
 }
+
+    
