@@ -38,7 +38,10 @@ export async function suggestKey(input: SuggestKeyInput): Promise<SuggestKeyOutp
 
 const prompt = ai.definePrompt({
   name: 'suggestKeyPrompt',
-  input: {schema: SuggestKeyInputSchema},
+  input: {schema: z.object({
+    fileDataUri: SuggestKeyInputSchema.shape.fileDataUri,
+    savedKeysJson: z.string(),
+  })},
   output: {schema: SuggestKeyOutputSchema},
   prompt: `You are an expert at security and organization. Your task is to recommend one of the user's saved encryption keys for the given file.
 
@@ -47,7 +50,7 @@ Analyze the file's content and the names of the user's saved keys. Choose the ke
 If no key seems appropriate, return an empty string for the 'suggestedKeyId'.
 
 User's Saved Keys (JSON):
-{{{jsonStringify savedKeys}}}
+{{{savedKeysJson}}}
 
 File content to analyze:
 {{media url=fileDataUri}}
@@ -65,7 +68,10 @@ const suggestKeyFlow = ai.defineFlow(
     if (input.savedKeys.length === 0) {
         return { suggestedKeyId: '' };
     }
-    const {output} = await prompt(input);
+    const {output} = await prompt({
+      fileDataUri: input.fileDataUri,
+      savedKeysJson: JSON.stringify(input.savedKeys),
+    });
     return output!;
   }
 );

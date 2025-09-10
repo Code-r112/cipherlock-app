@@ -47,7 +47,7 @@ export async function analyzeSecurity(input: SecurityAnalysisInput): Promise<Sec
 // Define the Genkit prompt
 const prompt = ai.definePrompt({
   name: 'securityAuditPrompt',
-  input: {schema: SecurityAnalysisInputSchema},
+  input: {schema: z.object({ activityLogsJson: z.string() }) },
   output: {schema: SecurityAnalysisOutputSchema},
   prompt: `You are a cybersecurity expert specializing in encryption best practices. Analyze the following user activity logs from the CipherLock application. The current date is ${new Date().toISOString()}.
 
@@ -68,7 +68,7 @@ Your task is to provide a security score and a list of actionable recommendation
 
 **Input Data (JSON format):**
 \`\`\`json
-{{{jsonStringify activityLogs}}}
+{{{activityLogsJson}}}
 \`\`\`
 
 Provide your analysis in the required JSON output format.
@@ -84,8 +84,7 @@ const securityAuditFlow = ai.defineFlow(
   },
   async (input) => {
     // Genkit prompts work best with string inputs, so we serialize the input object.
-    // The handlebars helper `jsonStringify` will be used in the prompt.
-    const {output} = await prompt(input);
+    const {output} = await prompt({ activityLogsJson: JSON.stringify(input.activityLogs) });
     return output!;
   }
 );
