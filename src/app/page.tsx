@@ -1,7 +1,8 @@
 import { EncryptPanel } from '@/components/feature/encrypt-panel';
 import { DecryptPanel } from '@/components/feature/decrypt-panel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Lock, Unlock, ShieldCheck, KeyRound, Server, FileLock } from 'lucide-react';
+import { Lock, Unlock } from 'lucide-react';
+import Image from 'next/image';
 import {
   Accordion,
   AccordionContent,
@@ -9,25 +10,26 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Card, CardContent } from '@/components/ui/card';
+import placeholderImages from '@/lib/placeholder-images.json';
 
 const features = [
     {
-      icon: <FileLock className="h-10 w-10 text-primary" />,
+      image: placeholderImages.batchProcessing,
       title: 'Batch Processing',
       description: 'Encrypt or decrypt multiple files at once, streamlining your workflow.',
     },
     {
-      icon: <ShieldCheck className="h-10 w-10 text-primary" />,
+      image: placeholderImages.strongEncryption,
       title: 'Strong Encryption',
       description: 'Utilizes AES-256 for robust, industry-standard file protection.',
     },
     {
-      icon: <KeyRound className="h-10 w-10 text-primary" />,
+      image: placeholderImages.secretKey,
       title: 'Secret Key Control',
       description: 'You control the secret key, ensuring only you can access your files.',
     },
     {
-      icon: <Server className="h-10 w-10 text-primary" />,
+      image: placeholderImages.noServer,
       title: 'No Server Upload',
       description: 'All operations happen in your browser. Your files never leave your computer.',
     },
@@ -62,17 +64,30 @@ const faqItems = [
 ]
 
 export default function Home() {
+  const { hero } = placeholderImages;
   return (
     <div className="flex flex-col items-center justify-center bg-background p-4 sm:p-8">
       <div className="w-full max-w-6xl">
-        <div className="text-center mb-12">
-          <h1 className="text-8xl font-bold tracking-wider">CipherLock</h1>
-          <p className="text-muted-foreground mt-2 text-lg">
-            A suite of tools for client-side encryption. Simple &amp; Secure.
-          </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-12 mb-24">
+            <div className="text-center md:text-left">
+              <h1 className="text-8xl font-bold tracking-wider">CipherLock</h1>
+              <p className="text-muted-foreground mt-4 text-xl">
+                A suite of tools for client-side encryption. Simple &amp; Secure.
+              </p>
+            </div>
+            <div className="flex justify-center">
+                <Image 
+                    src={hero.src}
+                    alt={hero.alt}
+                    width={hero.width}
+                    height={hero.height}
+                    data-ai-hint={hero.hint}
+                    className="rounded-lg"
+                />
+            </div>
         </div>
         
-        <div className="w-full max-w-xl mx-auto mb-16">
+        <div className="w-full max-w-md mx-auto mb-24">
             <Tabs defaultValue="encrypt" className="w-full">
             <TabsList className="grid w-full grid-cols-2 h-14">
                 <TabsTrigger value="encrypt" className="text-lg">
@@ -91,13 +106,20 @@ export default function Home() {
             </Tabs>
         </div>
 
-        <section id="features" className="mb-16">
-            <h2 className="text-5xl font-bold text-center mb-8">Features</h2>
+        <section id="features" className="mb-24">
+            <h2 className="text-6xl font-bold text-center mb-12">Features</h2>
             <div className="grid md:grid-cols-4 gap-8">
                 {features.map((feature, index) => (
-                    <Card key={index} className="bg-card border-border/60 text-center shadow-none">
+                    <Card key={index} className="bg-card border-none text-center">
                         <CardContent className="p-6 flex flex-col items-center">
-                            <div className="mb-4 inline-block ">{feature.icon}</div>
+                            <Image 
+                                src={feature.image.src}
+                                alt={feature.image.alt}
+                                width={feature.image.width}
+                                height={feature.image.height}
+                                data-ai-hint={feature.image.hint}
+                                className="mb-6 rounded-lg"
+                            />
                             <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
                             <p className="text-muted-foreground">{feature.description}</p>
                         </CardContent>
@@ -107,7 +129,7 @@ export default function Home() {
         </section>
 
         <section id="faq" className="w-full max-w-3xl mx-auto">
-            <h2 className="text-5xl font-bold text-center mb-8">Frequently Asked Questions</h2>
+            <h2 className="text-6xl font-bold text-center mb-12">Frequently Asked Questions</h2>
             <Accordion type="single" collapsible className="w-full">
                 {faqItems.map(item => (
                     <AccordionItem value={item.value} key={item.value}>
