@@ -10,6 +10,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Loader2, Unlock, KeyRound, Download, CheckCircle, Files, Sparkles, Copy } from "lucide-react";
 import CryptoJS from 'crypto-js';
 import { Progress } from '@/components/ui/progress';
+import { useAuth } from '@/hooks/use-auth';
+import { db } from '@/lib/firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 function dataUriToBlob(dataURI: string) {
     const byteString = atob(dataURI.split(',')[1]);
@@ -36,6 +39,7 @@ const checkKeyStrength = (key: string) => {
 };
 
 export function DecryptPanel() {
+  const { user } = useAuth();
   const [files, setFiles] = useState<File[]>([]);
   const [key, setKey] = useState('');
   const [loading, setLoading] = useState(false);
@@ -63,6 +67,20 @@ export function DecryptPanel() {
       description: "The secret key has been copied to your clipboard.",
     });
   };
+
+  const logActivity = async (filename: string) => {
+    if (user) {
+        try {
+            await addDoc(collection(db, 'users', user.uid, 'activity'), {
+                action: 'decrypt',
+                filename: filename,
+                timestamp: serverTimestamp()
+            });
+        } catch (error) {
+            console.error("Error logging activity: ", error);
+        }
+    }
+  }
 
   const handleDecrypt = () => {
     if (files.length === 0 || !key) {
@@ -103,6 +121,7 @@ export function DecryptPanel() {
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             successCount++;
+            logActivity(file.name);
 
           } catch (error) {
             toast({
@@ -142,7 +161,7 @@ export function DecryptPanel() {
   const keyStrength = checkKeyStrength(key);
   
   return (
-    <Card className="border-none">
+    <Card className="border-none shadow-none">
       <CardHeader>
         <CardTitle className="text-2xl">Decrypt File(s)</CardTitle>
         <CardDescription>Select .ciph files and provide the key to decrypt them.</CardDescription>
@@ -151,10 +170,10 @@ export function DecryptPanel() {
         
         <div className="flex items-start space-x-4">
             <div className="flex flex-col items-center">
-                <div className={`flex items-center justify-center w-10 h-10 rounded-full ${step1Completed ? 'bg-primary/80' : 'bg-primary'} text-primary-foreground`}>
+                <div className={`flex items-center justify-center w-10 h-10 rounded-full ${step1Completed ? 'bg-primary/80' : 'bg-primary'} text-primary-foreground transition-all`}>
                 {step1Completed ? <CheckCircle className="w-6 h-6" /> : <Files className="w-6 h-6" />}
                 </div>
-                <div className="h-10 w-px bg-border my-1"></div>
+                <div className={`h-10 w-px bg-border my-1 transition-all duration-300 ${step1Completed ? 'h-24' : 'h-10'}`}></div>
             </div>
             <div className="flex-1 space-y-2 pb-10">
                 <Label htmlFor="file-decrypt" className="text-lg font-semibold">Step 1: Upload .ciph File(s)</Label>
@@ -165,7 +184,7 @@ export function DecryptPanel() {
 
         <div className="flex items-start space-x-4">
             <div className="flex flex-col items-center">
-                <div className={`flex items-center justify-center w-10 h-10 rounded-full ${step2Completed ? 'bg-primary/80' : !step1Completed ? 'bg-muted' : 'bg-primary'} ${!step1Completed ? 'text-muted-foreground' : 'text-primary-foreground'}`}>
+                <div className={`flex items-center justify-center w-10 h-10 rounded-full ${step2Completed ? 'bg-primary/80' : !step1Completed ? 'bg-muted' : 'bg-primary'} ${!step1Completed ? 'text-muted-foreground' : 'text-primary-foreground'} transition-all`}>
                     {step2Completed ? <CheckCircle className="w-6 h-6" /> : <KeyRound className="w-6 h-6" />}
                 </div>
               <div className="h-10 w-px bg-border my-1"></div>
@@ -188,13 +207,13 @@ export function DecryptPanel() {
         
         <div className="flex items-start space-x-4">
             <div className="flex flex-col items-center">
-              <div className={`flex items-center justify-center w-10 h-10 rounded-full ${!step1Completed || !step2Completed ? 'bg-muted' : 'bg-primary'} ${!step1Completed || !step2Completed ? 'text-muted-foreground' : 'text-primary-foreground'}`}>
+              <div className={`flex items-center justify-center w-10 h-10 rounded-full ${!step1Completed || !step2Completed ? 'bg-muted' : 'bg-primary'} ${!step1Completed || !step2Completed ? 'text-muted-foreground' : 'text-primary-foreground'} transition-all`}>
                  <Download className="w-6 h-6" />
               </div>
             </div>
             <div className={`flex-1 space-y-2 transition-opacity ${step1Completed && step2Completed ? 'opacity-100' : 'opacity-60'}`}>
               <Label className="text-lg font-semibold">Step 3: Decrypt & Download</Label>
-              <Button onClick={handleDecrypt} disabled={loading || !step1Completed || !step2Completed} className="w-full h-14 text-lg">
+              <Button onClick={handleDecrypt} disabled={loading || !step1Completed || !step2Completed} className="w-full h-14 text-lg rounded-full">
                 {loading ? <Loader2 className="mr-2 h-6 w-6 animate-spin" /> : <Unlock className="mr-2 h-6 w-6" />}
                 Decrypt & Download
               </Button>

@@ -12,6 +12,8 @@ import CryptoJS from 'crypto-js';
 import { useAuth } from '@/hooks/use-auth';
 import { suggestFilename } from '@/ai/flows/suggest-filename-flow';
 import { Progress } from '@/components/ui/progress';
+import { db } from '@/lib/firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 const checkKeyStrength = (key: string) => {
     let score = 0;
@@ -97,6 +99,20 @@ export function EncryptPanel() {
     });
   };
 
+  const logActivity = async (filename: string) => {
+      if (user) {
+          try {
+              await addDoc(collection(db, 'users', user.uid, 'activity'), {
+                  action: 'encrypt',
+                  filename: filename,
+                  timestamp: serverTimestamp()
+              });
+          } catch (error) {
+              console.error("Error logging activity: ", error);
+          }
+      }
+  }
+
   const handleEncrypt = () => {
     if (files.length === 0 || !key) {
       toast({
@@ -125,11 +141,13 @@ export function EncryptPanel() {
           const url = URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = `${filename}.ciph`;
+          const encryptedFilename = `${filename}.ciph`;
+          a.download = encryptedFilename;
           document.body.appendChild(a);
-a.click();
+          a.click();
           document.body.removeChild(a);
           URL.revokeObjectURL(url);
+          logActivity(encryptedFilename);
 
         } catch (error) {
           toast({
@@ -171,7 +189,7 @@ a.click();
   const keyStrength = checkKeyStrength(key);
 
   return (
-    <Card className="border-none">
+    <Card className="border-none shadow-none">
       <CardHeader>
         <CardTitle className="text-2xl">Encrypt File(s)</CardTitle>
         <CardDescription>Select files, set a key, and get encrypted copies. {user && <strong>Logged-in users get AI-powered naming!</strong>}</CardDescription>
@@ -180,10 +198,10 @@ a.click();
 
         <div className="flex items-start space-x-4">
             <div className="flex flex-col items-center">
-                <div className={`flex items-center justify-center w-10 h-10 rounded-full ${step1Completed ? 'bg-primary/80' : 'bg-primary'} text-primary-foreground`}>
+                <div className={`flex items-center justify-center w-10 h-10 rounded-full ${step1Completed ? 'bg-primary/80' : 'bg-primary'} text-primary-foreground transition-all`}>
                 {step1Completed ? <CheckCircle className="w-6 h-6" /> : <Files className="w-6 h-6" />}
                 </div>
-                <div className="h-10 w-px bg-border my-1"></div>
+                <div className={`h-10 w-px bg-border my-1 transition-all duration-300 ${step1Completed ? 'h-16' : 'h-10'}`}></div>
             </div>
             <div className="flex-1 space-y-2 pb-10">
                 <Label htmlFor="file-encrypt" className="text-lg font-semibold">Step 1: Upload File(s)</Label>
@@ -195,7 +213,7 @@ a.click();
         {user && step1Completed && (
           <div className="flex items-start space-x-4">
             <div className="flex flex-col items-center">
-                <div className={`flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-foreground`}>
+                <div className={`flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-foreground transition-all`}>
                    <Bot className="w-6 h-6" />
                 </div>
                 <div className="h-10 w-px bg-border my-1"></div>
@@ -217,10 +235,10 @@ a.click();
 
         <div className="flex items-start space-x-4">
           <div className="flex flex-col items-center">
-              <div className={`flex items-center justify-center w-10 h-10 rounded-full ${step2Completed ? 'bg-primary/80' : !step1Completed ? 'bg-muted' : 'bg-primary'} ${!step1Completed ? 'text-muted-foreground' : 'text-primary-foreground'}`}>
+              <div className={`flex items-center justify-center w-10 h-10 rounded-full ${step2Completed ? 'bg-primary/80' : !step1Completed ? 'bg-muted' : 'bg-primary'} ${!step1Completed ? 'text-muted-foreground' : 'text-primary-foreground'} transition-all`}>
                   {step2Completed ? <CheckCircle className="w-6 h-6" /> : <KeyRound className="w-6 h-6" />}
               </div>
-            <div className="h-10 w-px bg-border my-1"></div>
+            <div className={`h-10 w-px bg-border my-1 transition-all duration-300 ${step2Completed ? 'h-24' : 'h-10'}`}></div>
           </div>
           <div className={`flex-1 space-y-2 pb-10 transition-opacity ${step1Completed ? 'opacity-100' : 'opacity-60'}`}>
             <Label htmlFor="key-encrypt" className="text-lg font-semibold">Step 2: Set Secret Key</Label>
@@ -240,13 +258,13 @@ a.click();
 
         <div className="flex items-start space-x-4">
           <div className="flex flex-col items-center">
-            <div className={`flex items-center justify-center w-10 h-10 rounded-full ${!step1Completed || !step2Completed || !step3Completed ? 'bg-muted' : 'bg-primary'} ${!step1Completed || !step2Completed || !step3Completed ? 'text-muted-foreground' : 'text-primary-foreground'}`}>
+            <div className={`flex items-center justify-center w-10 h-10 rounded-full ${!step1Completed || !step2Completed || !step3Completed ? 'bg-muted' : 'bg-primary'} ${!step1Completed || !step2Completed || !step3Completed ? 'text-muted-foreground' : 'text-primary-foreground'} transition-all`}>
               <Download className="w-6 h-6" />
             </div>
           </div>
           <div className={`flex-1 space-y-2 transition-opacity ${step1Completed && step2Completed && step3Completed ? 'opacity-100' : 'opacity-60'}`}>
             <Label className="text-lg font-semibold">Step 3: Encrypt & Download</Label>
-            <Button onClick={handleEncrypt} disabled={loading || loadingSuggestion || !step1Completed || !step2Completed || !step3Completed} className="w-full h-14 text-lg">
+            <Button onClick={handleEncrypt} disabled={loading || loadingSuggestion || !step1Completed || !step2Completed || !step3Completed} className="w-full h-14 text-lg rounded-full">
               {loading ? <Loader2 className="mr-2 h-6 w-6 animate-spin" /> : <Lock className="mr-2 h-6 w-6" />}
               Encrypt & Download
             </Button>
