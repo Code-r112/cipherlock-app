@@ -21,7 +21,7 @@ const ActivityLogSchema = z.object({
 });
 
 // Define the input schema for the security analysis flow
-export const SecurityAnalysisInputSchema = z.object({
+const SecurityAnalysisInputSchema = z.object({
   activityLogs: z.array(ActivityLogSchema),
 });
 export type SecurityAnalysisInput = z.infer<typeof SecurityAnalysisInputSchema>;
@@ -34,7 +34,7 @@ const RecommendationSchema = z.object({
 });
 
 // Define the overall output schema for the security analysis
-export const SecurityAnalysisOutputSchema = z.object({
+const SecurityAnalysisOutputSchema = z.object({
     overallScore: z.number().int().min(0).max(100).describe("A score from 0-100 representing the user's security posture. 100 is the best score."),
     recommendations: z.array(RecommendationSchema).describe("A list of security recommendations for the user."),
 });
