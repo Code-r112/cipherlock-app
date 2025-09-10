@@ -108,32 +108,39 @@ export default function Home() {
         </section>
 
         <section id="security-process" className="mb-24 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-            <h2 className="text-7xl font-bold text-center mb-16">How We Keep You Safe</h2>
-            <Card className="p-8 lg:p-12 bg-secondary border-none">
-                <div className="grid md:grid-cols-3 gap-8 text-center">
+            <h2 className="text-7xl font-bold text-center mb-16">Your Security is Our Priority</h2>
+            <div className="relative">
+                <div className="hidden lg:block absolute top-1/2 left-0 w-full h-0.5 bg-border -translate-y-1/2"></div>
+                <div className="relative grid md:grid-cols-3 gap-12 text-center">
                     <div className="flex flex-col items-center">
-                        <div className="bg-primary/10 text-primary p-4 rounded-full mb-4">
-                            <MonitorSmartphone className="h-10 w-10" />
+                        <div className="relative bg-background p-2">
+                           <div className="bg-primary/10 text-primary p-6 rounded-full mb-6 ring-8 ring-background">
+                                <MonitorSmartphone className="h-16 w-16" />
+                            </div>
                         </div>
-                        <h3 className="text-2xl font-semibold mb-2">1. On Your Device</h3>
-                        <p className="text-muted-foreground">All encryption and decryption happens directly in your browser. Your files are never uploaded to any server.</p>
+                        <h3 className="text-3xl font-semibold mb-4">1. Purely Local</h3>
+                        <p className="text-muted-foreground text-lg">All encryption and decryption happens in your browser. Your private files never leave your machine.</p>
                     </div>
                      <div className="flex flex-col items-center">
-                        <div className="bg-primary/10 text-primary p-4 rounded-full mb-4">
-                            <KeySquare className="h-10 w-10" />
+                        <div className="relative bg-background p-2">
+                            <div className="bg-primary/10 text-primary p-6 rounded-full mb-6 ring-8 ring-background">
+                                <KeySquare className="h-16 w-16" />
+                            </div>
                         </div>
-                        <h3 className="text-2xl font-semibold mb-2">2. You Hold the Key</h3>
-                        <p className="text-muted-foreground">You provide the secret key for every operation. We don't store, transmit, or have any access to your keys.</p>
+                        <h3 className="text-3xl font-semibold mb-4">2. You Hold the Keys</h3>
+                        <p className="text-muted-foreground text-lg">You provide the secret key for every operation. We don't store, transmit, or have any access to it.</p>
                     </div>
                      <div className="flex flex-col items-center">
-                        <div className="bg-primary/10 text-primary p-4 rounded-full mb-4">
-                           <CloudOff className="h-10 w-10" />
+                        <div className="relative bg-background p-2">
+                           <div className="bg-primary/10 text-primary p-6 rounded-full mb-6 ring-8 ring-background">
+                               <CloudOff className="h-16 w-16" />
+                           </div>
                         </div>
-                        <h3 className="text-2xl font-semibold mb-2">3. Zero Data Storage</h3>
-                        <p className="text-muted-foreground">Your original files and their encrypted versions are never stored by us. They are processed in memory and then downloaded by you.</p>
+                        <h3 className="text-3xl font-semibold mb-4">3. Zero Data Storage</h3>
+                        <p className="text-muted-foreground text-lg">Your original files and their encrypted versions are never stored by us. They are processed in memory and then saved back to your device.</p>
                     </div>
                 </div>
-            </Card>
+            </div>
         </section>
 
         <section id="faq" className="w-full max-w-3xl mx-auto animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
