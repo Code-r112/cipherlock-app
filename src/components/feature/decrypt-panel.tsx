@@ -1,18 +1,26 @@
 
 "use client";
 
-import { useState, type ChangeEvent } from 'react';
+import { useState, type ChangeEvent, useEffect } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Unlock, KeyRound, Download, CheckCircle, Files, Sparkles, Copy } from "lucide-react";
+import { Loader2, Unlock, KeyRound, Download, CheckCircle, Files, Sparkles, Copy, Save } from "lucide-react";
 import CryptoJS from 'crypto-js';
 import { Progress } from '@/components/ui/progress';
 import { useAuth } from '@/hooks/use-auth';
 import { db } from '@/lib/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, getDocs, query } from 'firebase/firestore';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+
+interface SavedKey {
+    id: string;
+    name: string;
+    key: string;
+}
 
 function dataUriToBlob(dataURI: string) {
     const byteString = atob(dataURI.split(',')[1]);
@@ -43,7 +51,22 @@ export function DecryptPanel() {
   const [files, setFiles] = useState<File[]>([]);
   const [key, setKey] = useState('');
   const [loading, setLoading] = useState(false);
+  const [savedKeys, setSavedKeys] = useState<SavedKey[]>([]);
+  const [keyName, setKeyName] = useState('');
+  const [isSaveKeyDialogOpen, setSaveKeyDialogOpen] = useState(false);
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (user) {
+        const fetchKeys = async () => {
+            const keysQuery = query(collection(db, 'users', user.uid, 'keys'));
+            const querySnapshot = await getDocs(keysQuery);
+            const keys = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SavedKey));
+            setSavedKeys(keys);
+        };
+        fetchKeys();
+    }
+  }, [user]);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -68,12 +91,32 @@ export function DecryptPanel() {
     });
   };
 
-  const logActivity = async (filename: string) => {
+  const handleSaveKey = async () => {
+      if (!key || !keyName) {
+          toast({ variant: "destructive", title: "Missing Information", description: "Please provide a name for the key." });
+          return;
+      }
+      if (user) {
+          await addDoc(collection(db, 'users', user.uid, 'keys'), { name: keyName, key });
+          toast({ title: "Key Saved", description: `The key "${keyName}" has been saved.` });
+          setKeyName('');
+          setSaveKeyDialogOpen(false);
+          // Refetch keys
+          const keysQuery = query(collection(db, 'users', user.uid, 'keys'));
+          const querySnapshot = await getDocs(keysQuery);
+          const keys = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SavedKey));
+          setSavedKeys(keys);
+      }
+  };
+
+  const logActivity = async (filename: string, keyUsed: string) => {
     if (user) {
+        const keyHash = CryptoJS.SHA256(keyUsed).toString();
         try {
             await addDoc(collection(db, 'users', user.uid, 'activity'), {
                 action: 'decrypt',
                 filename: filename,
+                keyHash: keyHash,
                 timestamp: serverTimestamp()
             });
         } catch (error) {
@@ -121,7 +164,7 @@ export function DecryptPanel() {
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             successCount++;
-            logActivity(file.name);
+            logActivity(file.name, key);
 
           } catch (error) {
             toast({
@@ -164,7 +207,7 @@ export function DecryptPanel() {
     <Card className="border-none shadow-none">
       <CardHeader>
         <CardTitle className="text-2xl">Decrypt File(s)</CardTitle>
-        <CardDescription>Select .ciph files and provide the key to decrypt them.</CardDescription>
+        <CardDescription>Select .ciph files and provide the key to decrypt them. {user && <strong>Use your saved keys!</strong>}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6 pt-6">
         
@@ -191,10 +234,43 @@ export function DecryptPanel() {
             </div>
             <div className={`flex-1 space-y-2 pb-10 transition-opacity ${step1Completed ? 'opacity-100' : 'opacity-60'}`}>
               <Label htmlFor="key-decrypt" className="text-lg font-semibold">Step 2: Enter Secret Key</Label>
+               {user && savedKeys.length > 0 && (
+                <Select onValueChange={(value) => setKey(value)}>
+                    <SelectTrigger className="h-12 text-base">
+                        <SelectValue placeholder="Or select a saved key" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {savedKeys.map(savedKey => (
+                            <SelectItem key={savedKey.id} value={savedKey.key}>{savedKey.name}</SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+               )}
               <div className="flex items-center gap-2">
                 <Input id="key-decrypt" type="password" value={key} onChange={(e) => setKey(e.target.value)} placeholder="Enter your secret key" disabled={!step1Completed} className="h-12 text-base" />
                 <Button variant="outline" size="icon" onClick={handleGenerateKey} disabled={!step1Completed}><Sparkles className="w-5 h-5"/></Button>
                 <Button variant="outline" size="icon" onClick={handleCopyKey} disabled={!key}><Copy className="w-5 h-5"/></Button>
+                 {user && (
+                  <Dialog open={isSaveKeyDialogOpen} onOpenChange={setSaveKeyDialogOpen}>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" size="icon" disabled={!key}><Save className="w-5 h-5"/></Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Save Secret Key</DialogTitle>
+                        <DialogDescription>Give this key a recognizable name to save it for later use.</DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-2">
+                        <Label htmlFor="key-name">Key Name</Label>
+                        <Input id="key-name" value={keyName} onChange={(e) => setKeyName(e.target.value)} placeholder="e.g., 'Work Documents Key'"/>
+                      </div>
+                      <DialogFooter>
+                        <Button variant="secondary" onClick={() => setSaveKeyDialogOpen(false)}>Cancel</Button>
+                        <Button onClick={handleSaveKey}>Save Key</Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                )}
               </div>
               {key && (
                 <div className="pt-2 space-y-1">

@@ -75,11 +75,11 @@ export default function Home() {
         
         <div className="w-full max-w-lg mx-auto mb-24 animate-fade-in-up">
             <Tabs defaultValue="encrypt" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 h-16 gap-2">
-                <TabsTrigger value="encrypt" className="text-xl h-full">
+            <TabsList className="grid w-full grid-cols-2 h-16 gap-2 bg-transparent p-0">
+                <TabsTrigger value="encrypt" className="text-xl h-full rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-muted">
                   <Lock className="mr-2 h-7 w-7" />Encrypt Files
                 </TabsTrigger>
-                <TabsTrigger value="decrypt" className="text-xl h-full">
+                <TabsTrigger value="decrypt" className="text-xl h-full rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-muted">
                   <Unlock className="mr-2 h-7 w-7" />Decrypt Files
                 </TabsTrigger>
             </TabsList>

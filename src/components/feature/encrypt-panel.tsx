@@ -7,13 +7,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Lock, KeyRound, Download, CheckCircle, Files, Bot, Sparkles, Copy } from "lucide-react";
+import { Loader2, Lock, KeyRound, Download, CheckCircle, Files, Bot, Sparkles, Copy, Save } from "lucide-react";
 import CryptoJS from 'crypto-js';
 import { useAuth } from '@/hooks/use-auth';
 import { suggestFilename } from '@/ai/flows/suggest-filename-flow';
 import { Progress } from '@/components/ui/progress';
 import { db } from '@/lib/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, getDocs, query, where, deleteDoc, doc } from 'firebase/firestore';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+
+interface SavedKey {
+    id: string;
+    name: string;
+    key: string;
+}
 
 const checkKeyStrength = (key: string) => {
     let score = 0;
@@ -37,7 +45,22 @@ export function EncryptPanel() {
   const [loadingSuggestion, setLoadingSuggestion] = useState(false);
   const [suggestedName, setSuggestedName] = useState('');
   const [finalFilename, setFinalFilename] = useState('');
+  const [savedKeys, setSavedKeys] = useState<SavedKey[]>([]);
+  const [keyName, setKeyName] = useState('');
+  const [isSaveKeyDialogOpen, setSaveKeyDialogOpen] = useState(false);
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (user) {
+        const fetchKeys = async () => {
+            const keysQuery = query(collection(db, 'users', user.uid, 'keys'));
+            const querySnapshot = await getDocs(keysQuery);
+            const keys = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SavedKey));
+            setSavedKeys(keys);
+        };
+        fetchKeys();
+    }
+  }, [user]);
 
   useEffect(() => {
     if (files.length > 0 && user) {
@@ -56,7 +79,6 @@ export function EncryptPanel() {
           setFinalFilename(newName);
         } catch (error) {
           console.error("AI filename suggestion failed:", error);
-          // Fallback to original name if AI fails
           setFinalFilename(file.name.replace(/\.[^/.]+$/, ""));
         } finally {
           setLoadingSuggestion(false);
@@ -98,13 +120,33 @@ export function EncryptPanel() {
       description: "The secret key has been copied to your clipboard.",
     });
   };
-
-  const logActivity = async (filename: string) => {
+  
+  const handleSaveKey = async () => {
+      if (!key || !keyName) {
+          toast({ variant: "destructive", title: "Missing Information", description: "Please provide a name for the key." });
+          return;
+      }
       if (user) {
+          await addDoc(collection(db, 'users', user.uid, 'keys'), { name: keyName, key });
+          toast({ title: "Key Saved", description: `The key "${keyName}" has been saved.` });
+          setKeyName('');
+          setSaveKeyDialogOpen(false);
+          // Refetch keys
+          const keysQuery = query(collection(db, 'users', user.uid, 'keys'));
+          const querySnapshot = await getDocs(keysQuery);
+          const keys = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SavedKey));
+          setSavedKeys(keys);
+      }
+  };
+
+  const logActivity = async (filename: string, keyUsed: string) => {
+      if (user) {
+          const keyHash = CryptoJS.SHA256(keyUsed).toString();
           try {
               await addDoc(collection(db, 'users', user.uid, 'activity'), {
                   action: 'encrypt',
                   filename: filename,
+                  keyHash: keyHash,
                   timestamp: serverTimestamp()
               });
           } catch (error) {
@@ -147,7 +189,7 @@ export function EncryptPanel() {
           a.click();
           document.body.removeChild(a);
           URL.revokeObjectURL(url);
-          logActivity(encryptedFilename);
+          logActivity(encryptedFilename, key);
 
         } catch (error) {
           toast({
@@ -192,7 +234,7 @@ export function EncryptPanel() {
     <Card className="border-none shadow-none">
       <CardHeader>
         <CardTitle className="text-2xl">Encrypt File(s)</CardTitle>
-        <CardDescription>Select files, set a key, and get encrypted copies. {user && <strong>Logged-in users get AI-powered naming!</strong>}</CardDescription>
+        <CardDescription>Select files, set a key, and get encrypted copies. {user && <strong>Logged-in users get AI-powered naming and key saving!</strong>}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6 pt-6">
 
@@ -242,10 +284,43 @@ export function EncryptPanel() {
           </div>
           <div className={`flex-1 space-y-2 pb-10 transition-opacity ${step1Completed ? 'opacity-100' : 'opacity-60'}`}>
             <Label htmlFor="key-encrypt" className="text-lg font-semibold">Step 2: Set Secret Key</Label>
+            {user && savedKeys.length > 0 && (
+                <Select onValueChange={(value) => setKey(value)}>
+                    <SelectTrigger className="h-12 text-base">
+                        <SelectValue placeholder="Or select a saved key" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {savedKeys.map(savedKey => (
+                            <SelectItem key={savedKey.id} value={savedKey.key}>{savedKey.name}</SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            )}
             <div className="flex items-center gap-2">
                 <Input id="key-encrypt" type="password" value={key} onChange={(e) => setKey(e.target.value)} placeholder="Enter your secret key" disabled={!step1Completed} className="h-12 text-base"/>
                 <Button variant="outline" size="icon" onClick={handleGenerateKey} disabled={!step1Completed}><Sparkles className="w-5 h-5"/></Button>
                 <Button variant="outline" size="icon" onClick={handleCopyKey} disabled={!key}><Copy className="w-5 h-5"/></Button>
+                {user && (
+                  <Dialog open={isSaveKeyDialogOpen} onOpenChange={setSaveKeyDialogOpen}>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" size="icon" disabled={!key}><Save className="w-5 h-5"/></Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Save Secret Key</DialogTitle>
+                        <DialogDescription>Give this key a recognizable name to save it for later use.</DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-2">
+                        <Label htmlFor="key-name">Key Name</Label>
+                        <Input id="key-name" value={keyName} onChange={(e) => setKeyName(e.target.value)} placeholder="e.g., 'Work Documents Key'"/>
+                      </div>
+                      <DialogFooter>
+                        <Button variant="secondary" onClick={() => setSaveKeyDialogOpen(false)}>Cancel</Button>
+                        <Button onClick={handleSaveKey}>Save Key</Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                )}
             </div>
              {key && (
                 <div className="pt-2 space-y-1">

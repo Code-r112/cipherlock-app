@@ -1,7 +1,7 @@
 
 "use client";
 
-import { ShieldCheck, User as UserIcon, LogOut, History } from 'lucide-react';
+import { ShieldCheck, User as UserIcon, LogOut, History, KeyRound, ShieldAlert } from 'lucide-react';
 import React from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
@@ -44,7 +44,7 @@ export function Navbar() {
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuContent className="w-64" align="end" forceMount>
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
                       <p className="text-lg font-medium leading-none">{user.displayName}</p>
@@ -54,7 +54,20 @@ export function Navbar() {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={signOut} className="text-base">
+                  <DropdownMenuItem asChild className="text-base cursor-pointer">
+                    <Link href="/keys">
+                      <KeyRound className="mr-2 h-4 w-4" />
+                      <span>Key Management</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="text-base cursor-pointer">
+                    <Link href="/security-center">
+                      <ShieldAlert className="mr-2 h-4 w-4" />
+                      <span>Security Center</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={signOut} className="text-base cursor-pointer">
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Log out</span>
                   </DropdownMenuItem>
