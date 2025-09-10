@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Unlock, FileUp, KeyRound, Download, CheckCircle, Circle, Files } from "lucide-react";
+import { Loader2, Unlock, KeyRound, Download, CheckCircle, Files } from "lucide-react";
 import CryptoJS from 'crypto-js';
 
 function dataUriToBlob(dataURI: string) {
@@ -110,10 +110,10 @@ export function DecryptPanel() {
   const step2Completed = key.length > 0;
   
   return (
-    <Card className="border-border/60">
+    <Card>
       <CardHeader>
         <CardTitle className="text-2xl">Decrypt File(s)</CardTitle>
-        <CardDescription>Select one or more .ciph files and provide the key to decrypt them.</CardDescription>
+        <CardDescription>Select .ciph files and provide the key to decrypt them.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6 pt-6">
         
