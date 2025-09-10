@@ -115,12 +115,12 @@ export default function KeysPage() {
             <div className="max-w-4xl mx-auto">
                 <header className="flex flex-col sm:flex-row justify-between sm:items-center mb-12 gap-4">
                     <div className="text-center sm:text-left">
-                        <h1 className="text-7xl font-bold tracking-tight">Key Vault</h1>
-                        <p className="mt-4 text-2xl text-muted-foreground">Manage your saved secret keys.</p>
+                        <h1 className="text-5xl sm:text-7xl font-bold tracking-tight">Key Vault</h1>
+                        <p className="mt-4 text-xl sm:text-2xl text-muted-foreground">Manage your saved secret keys.</p>
                     </div>
                      <Dialog open={isAddKeyDialogOpen} onOpenChange={setAddKeyDialogOpen}>
                         <DialogTrigger asChild>
-                           <Button size="lg" className="h-14 text-lg"><PlusCircle className="mr-2"/>Add New Key</Button>
+                           <Button size="lg" className="h-14 text-lg w-full sm:w-auto"><PlusCircle className="mr-2"/>Add New Key</Button>
                         </DialogTrigger>
                         <DialogContent>
                             <DialogHeader>
@@ -150,7 +150,7 @@ export default function KeysPage() {
                 
                 <Card>
                     <CardHeader>
-                        <CardTitle className="flex items-center"><KeyRound className="mr-2"/>Your Saved Keys</CardTitle>
+                        <CardTitle className="flex items-center text-xl sm:text-2xl"><KeyRound className="mr-2"/>Your Saved Keys</CardTitle>
                     </CardHeader>
                     <CardContent>
                         {keys.length === 0 ? (
@@ -161,8 +161,8 @@ export default function KeysPage() {
                         ) : (
                             <ul className="space-y-4">
                                 {keys.map(k => (
-                                    <li key={k.id} className="flex items-center justify-between p-4 bg-secondary rounded-lg">
-                                        <div className="flex-1">
+                                    <li key={k.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-secondary rounded-lg gap-4">
+                                        <div className="flex-1 w-full">
                                             <p className="font-semibold text-lg">{k.name}</p>
                                             <div className="flex items-center gap-2">
                                                 <Input 
@@ -173,7 +173,7 @@ export default function KeysPage() {
                                                 />
                                             </div>
                                         </div>
-                                        <div className="flex items-center gap-2 ml-4">
+                                        <div className="flex items-center gap-2 ml-auto">
                                             <Button variant="ghost" size="icon" onClick={() => toggleKeyVisibility(k.id)}>
                                                 {visibleKeys[k.id] ? <EyeOff className="h-5 w-5"/> : <Eye className="h-5 w-5"/>}
                                             </Button>

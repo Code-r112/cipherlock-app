@@ -16,27 +16,39 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 
 export function Navbar() {
   const { user, signOut } = useAuth();
 
   return (
-    <header className="bg-background border-b border-border">
+    <header className="bg-background border-b border-border sticky top-0 z-50">
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20">
         <Link href="/" className="flex items-center">
             <ShieldCheck className="h-8 w-8 text-black dark:text-white" />
             <span className="ml-2 text-xl font-bold text-black dark:text-white">CipherLock</span>
         </Link>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           {user ? (
             <>
-              <Button asChild variant="outline">
-                  <Link href="/activity"><History className="mr-2" />Activity</Link>
-              </Button>
+              <TooltipProvider>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Button asChild variant="ghost" size="icon">
+                            <Link href="/activity"><History /></Link>
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <p>Activity Log</p>
+                    </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+              <ThemeToggle />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-12 w-12 rounded-full">
-                    <Avatar className="h-12 w-12">
+                  <Button variant="ghost" className="relative h-10 w-10 sm:h-12 sm:w-12 rounded-full">
+                    <Avatar className="h-10 w-10 sm:h-12 sm:w-12">
                       <AvatarImage src={user.photoURL || ''} alt={user.displayName || 'User'} />
                       <AvatarFallback>
                           <UserIcon />
@@ -56,30 +68,38 @@ export function Navbar() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild className="text-base cursor-pointer">
                     <Link href="/keys">
-                      <KeyRound className="mr-2 h-4 w-4" />
+                      <KeyRound className="mr-2 h-5 w-5" />
                       <span>Key Management</span>
+                    </Link>
+                  </DropdownMenuItem>
+                   <DropdownMenuItem asChild className="text-base cursor-pointer">
+                    <Link href="/activity">
+                      <History className="mr-2 h-5 w-5" />
+                      <span>Activity Log</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild className="text-base cursor-pointer">
                     <Link href="/security-center">
-                      <ShieldAlert className="mr-2 h-4 w-4" />
+                      <ShieldAlert className="mr-2 h-5 w-5" />
                       <span>Security Center</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={signOut} className="text-base cursor-pointer">
-                    <LogOut className="mr-2 h-4 w-4" />
+                    <LogOut className="mr-2 h-5 w-5" />
                     <span>Log out</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </>
           ) : (
-            <Button asChild size="lg">
-                <Link href="/auth">Sign In</Link>
-            </Button>
+            <>
+              <ThemeToggle />
+              <Button asChild size="lg">
+                  <Link href="/auth">Sign In</Link>
+              </Button>
+            </>
           )}
-          <ThemeToggle />
         </div>
       </nav>
     </header>

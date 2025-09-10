@@ -55,13 +55,13 @@ export default function ActivityPage() {
         <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
                 <header className="text-center mb-12">
-                    <h1 className="text-7xl font-bold tracking-tight">Activity Log</h1>
-                    <p className="mt-4 text-2xl text-muted-foreground">A record of your recent encryption and decryption actions.</p>
+                    <h1 className="text-5xl sm:text-7xl font-bold tracking-tight">Activity Log</h1>
+                    <p className="mt-4 text-xl sm:text-2xl text-muted-foreground">A record of your recent encryption and decryption actions.</p>
                 </header>
                 
                 <Card>
                     <CardHeader>
-                        <CardTitle className="flex items-center"><History className="mr-2"/>Your Recent Activity</CardTitle>
+                        <CardTitle className="flex items-center text-xl sm:text-2xl"><History className="mr-2"/>Your Recent Activity</CardTitle>
                     </CardHeader>
                     <CardContent>
                         {activities.length === 0 ? (
@@ -72,15 +72,15 @@ export default function ActivityPage() {
                         ) : (
                             <ul className="space-y-4">
                                 {activities.map(activity => (
-                                    <li key={activity.id} className="flex items-center justify-between p-4 bg-secondary rounded-lg">
+                                    <li key={activity.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-secondary rounded-lg gap-4">
                                         <div className="flex items-center">
                                             {activity.action === 'encrypt' ? <Lock className="h-6 w-6 mr-4 text-primary" /> : <Unlock className="h-6 w-6 mr-4 text-primary" />}
                                             <div>
-                                                <p className="font-semibold text-lg capitalize">{activity.action}ed File</p>
-                                                <p className="text-muted-foreground break-all">{activity.filename}</p>
+                                                <p className="font-semibold text-base sm:text-lg capitalize">{activity.action}ed File</p>
+                                                <p className="text-sm sm:text-base text-muted-foreground break-all">{activity.filename}</p>
                                             </div>
                                         </div>
-                                        <p className="text-sm text-muted-foreground text-right">
+                                        <p className="text-xs sm:text-sm text-muted-foreground text-left sm:text-right w-full sm:w-auto">
                                             {activity.timestamp.toDate().toLocaleString()}
                                         </p>
                                     </li>

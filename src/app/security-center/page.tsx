@@ -27,6 +27,7 @@ export default function SecurityCenterPage() {
         
         handleAnalyzeSecurity();
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user, authLoading, router]);
 
     const handleAnalyzeSecurity = async () => {
@@ -70,11 +71,11 @@ export default function SecurityCenterPage() {
 
     const getSeverityIcon = (severity: 'low' | 'medium' | 'high' | 'info') => {
         switch (severity) {
-            case 'high': return <AlertTriangle className="h-6 w-6 text-red-500 mr-4" />;
-            case 'medium': return <AlertTriangle className="h-6 w-6 text-yellow-500 mr-4" />;
-            case 'low': return <Info className="h-6 w-6 text-blue-500 mr-4" />;
-            case 'info': return <Info className="h-6 w-6 text-muted-foreground mr-4" />;
-            default: return <ShieldCheck className="h-6 w-6 text-green-500 mr-4" />;
+            case 'high': return <AlertTriangle className="h-6 w-6 text-red-500 mr-4 flex-shrink-0" />;
+            case 'medium': return <AlertTriangle className="h-6 w-6 text-yellow-500 mr-4 flex-shrink-0" />;
+            case 'low': return <Info className="h-6 w-6 text-blue-500 mr-4 flex-shrink-0" />;
+            case 'info': return <Info className="h-6 w-6 text-muted-foreground mr-4 flex-shrink-0" />;
+            default: return <ShieldCheck className="h-6 w-6 text-green-500 mr-4 flex-shrink-0" />;
         }
     }
     
@@ -88,20 +89,20 @@ export default function SecurityCenterPage() {
         <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
                 <header className="text-center mb-12">
-                    <h1 className="text-7xl font-bold tracking-tight">Security Center</h1>
-                    <p className="mt-4 text-2xl text-muted-foreground">Your AI-powered security analysis and recommendations.</p>
+                    <h1 className="text-5xl sm:text-7xl font-bold tracking-tight">Security Center</h1>
+                    <p className="mt-4 text-xl sm:text-2xl text-muted-foreground">Your AI-powered security analysis and recommendations.</p>
                 </header>
 
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                      <Card>
                         <CardHeader>
-                            <CardTitle>Overall Security Score</CardTitle>
+                            <CardTitle className="text-xl sm:text-2xl">Overall Security Score</CardTitle>
                         </CardHeader>
                         <CardContent className="text-center">
                              {loading ? (
                                 <Loader2 className="h-16 w-16 mx-auto animate-spin text-primary" />
                              ) : analysis && (
-                                <p className={`text-8xl font-bold ${getScoreColor(analysis.overallScore)}`}>
+                                <p className={`text-7xl sm:text-8xl font-bold ${getScoreColor(analysis.overallScore)}`}>
                                     {analysis.overallScore}
                                 </p>
                              )}
@@ -109,7 +110,7 @@ export default function SecurityCenterPage() {
                      </Card>
                      <Card>
                         <CardHeader>
-                            <CardTitle>Actions</CardTitle>
+                            <CardTitle className="text-xl sm:text-2xl">Actions</CardTitle>
                             <CardDescription>Re-run the analysis or manage your security settings.</CardDescription>
                         </CardHeader>
                         <CardContent>
@@ -123,7 +124,7 @@ export default function SecurityCenterPage() {
                 
                 <Card>
                     <CardHeader>
-                        <CardTitle>AI Recommendations</CardTitle>
+                        <CardTitle className="text-xl sm:text-2xl">AI Recommendations</CardTitle>
                         <CardDescription>Based on your recent activity, here are some suggestions to improve your security posture.</CardDescription>
                     </CardHeader>
                     <CardContent>

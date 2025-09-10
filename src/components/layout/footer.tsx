@@ -4,7 +4,7 @@ import React from 'react';
 
 export function Footer() {
   return (
-    <footer className="bg-[#2a3044] text-gray-300">
+    <footer className="bg-gray-900 text-gray-300">
       <div className="border-t-4 border-primary w-full"></div>
       <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
@@ -20,16 +20,16 @@ export function Footer() {
           <div>
             <h3 className="font-semibold text-white mb-4 uppercase tracking-wider">Navigation</h3>
             <ul className="space-y-2">
-              <li><a href="#features" className="hover:text-primary transition-colors">Features</a></li>
-              <li><a href="#faq" className="hover:text-primary transition-colors">FAQ</a></li>
+              <li><a href="/#features" className="hover:text-primary transition-colors">Features</a></li>
+              <li><a href="/#faq" className="hover:text-primary transition-colors">FAQ</a></li>
             </ul>
           </div>
 
           <div>
             <h3 className="font-semibold text-white mb-4 uppercase tracking-wider">Legal</h3>
             <ul className="space-y-2">
-                <li><Link href="#" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
-                <li><Link href="#" className="hover:text-primary transition-colors">Terms of Service</Link></li>
+                <li><Link href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
+                <li><Link href="/terms-of-service" className="hover:text-primary transition-colors">Terms of Service</Link></li>
             </ul>
           </div>
         </div>
