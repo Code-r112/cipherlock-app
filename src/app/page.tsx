@@ -66,13 +66,13 @@ export default function Home() {
     <div className="flex flex-col items-center justify-center bg-background p-4 sm:p-8">
       <div className="w-full max-w-6xl">
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold tracking-wider">CipherLock</h1>
+          <h1 className="text-6xl font-bold tracking-wider">CipherLock</h1>
           <p className="text-muted-foreground mt-2 text-lg">
             A suite of tools for client-side encryption. Simple &amp; Secure.
           </p>
         </div>
         
-        <div className="w-full max-w-4xl mx-auto mb-16">
+        <div className="w-full max-w-3xl mx-auto mb-16">
             <Tabs defaultValue="encrypt" className="w-full">
             <TabsList className="grid w-full grid-cols-2 h-14">
                 <TabsTrigger value="encrypt" className="text-lg">
@@ -92,10 +92,10 @@ export default function Home() {
         </div>
 
         <section id="features" className="mb-16">
-            <h2 className="text-3xl font-bold text-center mb-8">Features</h2>
+            <h2 className="text-4xl font-bold text-center mb-8">Features</h2>
             <div className="grid md:grid-cols-4 gap-8">
                 {features.map((feature, index) => (
-                    <Card key={index} className="bg-card border-border/60 text-center shadow-lg">
+                    <Card key={index} className="bg-card border-border/60 text-center">
                         <CardContent className="p-6 flex flex-col items-center">
                             <div className="mb-4 inline-block ">{feature.icon}</div>
                             <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
@@ -107,7 +107,7 @@ export default function Home() {
         </section>
 
         <section id="faq" className="w-full max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-8">Frequently Asked Questions</h2>
+            <h2 className="text-4xl font-bold text-center mb-8">Frequently Asked Questions</h2>
             <Accordion type="single" collapsible className="w-full">
                 {faqItems.map(item => (
                     <AccordionItem value={item.value} key={item.value}>

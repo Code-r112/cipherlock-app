@@ -9,8 +9,8 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
           <div className="flex flex-col items-center md:items-start">
             <div className="flex items-center mb-4">
-              <ShieldCheck className="h-8 w-8 text-primary" />
-              <span className="ml-2 text-xl font-bold text-primary">CipherLock</span>
+              <ShieldCheck className="h-8 w-8 text-foreground" />
+              <span className="ml-2 text-xl font-bold text-foreground">CipherLock</span>
             </div>
             <p className="text-sm">Secure file encryption powered by AES. Your privacy is our priority.</p>
           </div>

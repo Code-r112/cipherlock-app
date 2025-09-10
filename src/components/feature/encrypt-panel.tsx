@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, type ChangeEvent } from 'react';
@@ -91,7 +92,7 @@ export function EncryptPanel() {
   const step2Completed = key.length > 0;
 
   return (
-    <Card className="border-border/60 shadow-lg">
+    <Card className="border-border/60">
       <CardHeader>
         <CardTitle className="text-2xl">Encrypt File(s)</CardTitle>
         <CardDescription>Select one or more files and provide a key to create encrypted copies.</CardDescription>

@@ -20,7 +20,7 @@ export default function AuthPage() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-background p-4">
-      <Card className="w-full max-w-md shadow-lg">
+      <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-bold">Access All Features</CardTitle>
           <CardDescription className="text-lg">Sign in to unlock the full potential of CipherLock.</CardDescription>

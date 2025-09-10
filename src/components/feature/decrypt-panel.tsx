@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, type ChangeEvent } from 'react';
@@ -109,7 +110,7 @@ export function DecryptPanel() {
   const step2Completed = key.length > 0;
   
   return (
-    <Card className="border-border/60 shadow-lg">
+    <Card className="border-border/60">
       <CardHeader>
         <CardTitle className="text-2xl">Decrypt File(s)</CardTitle>
         <CardDescription>Select one or more .ciph files and provide the key to decrypt them.</CardDescription>
