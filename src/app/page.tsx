@@ -1,4 +1,6 @@
 
+"use client";
+
 import { EncryptPanel } from '@/components/feature/encrypt-panel';
 import { DecryptPanel } from '@/components/feature/decrypt-panel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -10,6 +12,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useAuth } from '@/hooks/use-auth';
+import { WordRotator } from '@/components/ui/word-rotator';
 
 const features = [
     {
@@ -86,11 +90,19 @@ const faqItems = [
 ]
 
 export default function Home() {
+  const { user } = useAuth();
+  const firstName = user?.displayName?.split(' ')[0];
+  
   return (
     <div className="flex flex-col items-center justify-center bg-background p-4 sm:p-8">
       <div className="w-full max-w-5xl">
         <div className="text-center py-16 sm:py-24 animate-fade-in-down">
-          <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-wider">CipherLock</h1>
+          {user && firstName && (
+            <p className="text-2xl sm:text-3xl text-muted-foreground mb-4">Hello, {firstName}!</p>
+          )}
+          <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-wider">
+            <WordRotator words={["Encrypt", "Protect", "Secure", "Cipher"]} />
+          </h1>
           <p className="text-muted-foreground mt-4 text-lg sm:text-2xl">
             A suite of tools for client-side encryption. Simple &amp; Secure.
           </p>
