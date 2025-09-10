@@ -72,12 +72,6 @@ export function Navbar() {
                       <span>Key Management</span>
                     </Link>
                   </DropdownMenuItem>
-                   <DropdownMenuItem asChild className="text-base cursor-pointer">
-                    <Link href="/activity">
-                      <History className="mr-2 h-5 w-5" />
-                      <span>Activity Log</span>
-                    </Link>
-                  </DropdownMenuItem>
                   <DropdownMenuItem asChild className="text-base cursor-pointer">
                     <Link href="/security-center">
                       <ShieldAlert className="mr-2 h-5 w-5" />
