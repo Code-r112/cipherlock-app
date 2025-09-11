@@ -61,7 +61,7 @@ export default function TermsOfServicePage() {
           <CardHeader>
             <CardTitle className="text-2xl">5. Limitation of Liability</CardTitle>
           </Header>
-          <CardContent className="space-y-4 text-lg textmuted-foreground">
+          <CardContent className="space-y-4 text-lg text-muted-foreground">
             <p>
               In no event shall CipherLock or its developers be liable for any direct, indirect, incidental, special, or consequential damages (including, but not limited to, loss of data) resulting from the use or the inability to use the service.
             </p>
