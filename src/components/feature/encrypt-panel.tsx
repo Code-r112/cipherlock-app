@@ -47,6 +47,24 @@ const checkKeyStrength = (key: string) => {
     return { level: "Strong", value: (score / 6) * 100, color: "bg-green-500" };
 };
 
+const SUPPORTED_AI_FILE_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+  'image/gif',
+  'text/plain',
+  'text/html',
+  'text/css',
+  'text/javascript',
+  'application/json',
+  'application/xml',
+  'application/pdf',
+  'video/mp4',
+  'audio/mpeg',
+  'audio/wav',
+];
+
+
 export function EncryptPanel() {
   const { user } = useAuth();
   const [files, setFiles] = useState<File[]>([]);
@@ -81,8 +99,19 @@ export function EncryptPanel() {
     if (files.length > 0 && user) {
       setEncryptedResult(null);
       setShareLink(null);
-      setLoadingAi(true);
       const file = files[0];
+      const isSupported = SUPPORTED_AI_FILE_TYPES.includes(file.type);
+      
+      if (!isSupported) {
+          setFinalFilename(file.name.replace(/\.[^/.]+$/, ""));
+          toast({
+              title: "AI Skipped",
+              description: `AI analysis doesn't support the file type '${file.type}'. Using original filename.`,
+          });
+          return;
+      }
+      
+      setLoadingAi(true);
       const reader = new FileReader();
       reader.onload = async (e) => {
         const dataUrl = e.target?.result as string;
@@ -505,3 +534,5 @@ export function EncryptPanel() {
     </Card>
   );
 }
+
+    
