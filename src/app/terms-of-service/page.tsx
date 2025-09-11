@@ -24,7 +24,7 @@ export default function TermsOfServicePage() {
         <Card className="mt-8">
           <CardHeader>
             <CardTitle className="text-2xl">2. Service Description</CardTitle>
-          </Header>
+          </CardHeader>
           <CardContent className="space-y-4 text-lg text-muted-foreground">
             <p>
               CipherLock is a web-based tool that provides client-side file encryption and decryption. All processing is done locally in your browser. No files are uploaded to our servers.
