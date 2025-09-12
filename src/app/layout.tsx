@@ -3,10 +3,9 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { Navbar } from '@/components/layout/navbar';
 import { Footer } from '@/components/layout/footer';
-import { ThemeProvider } from '@/components/layout/theme-provider';
-import { AuthProvider } from '@/hooks/use-auth';
 import { Suspense } from 'react';
 import Loading from './loading';
+import { Providers } from './providers';
 
 export const metadata: Metadata = {
   title: 'CipherLock',
@@ -26,23 +25,16 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased flex flex-col min-h-screen">
-        <AuthProvider>
-            <ThemeProvider
-                attribute="class"
-                defaultTheme="system"
-                enableSystem
-                disableTransitionOnChange
-            >
-                <Navbar />
-                <main className="flex-grow">
-                  <Suspense fallback={<Loading />}>
-                    {children}
-                  </Suspense>
-                </main>
-                <Footer />
-                <Toaster />
-            </ThemeProvider>
-        </AuthProvider>
+        <Providers>
+            <Navbar />
+            <main className="flex-grow">
+              <Suspense fallback={<Loading />}>
+                {children}
+              </Suspense>
+            </main>
+            <Footer />
+            <Toaster />
+        </Providers>
       </body>
     </html>
   );
