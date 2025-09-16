@@ -60,8 +60,8 @@ export function Navbar() {
               <ThemeToggle />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-10 w-10 sm:h-12 sm:w-12 rounded-full">
-                    <Avatar className="h-10 w-10 sm:h-12 sm:w-12">
+                  <Button variant="ghost" className="relative h-14 w-14 rounded-full">
+                    <Avatar className="h-14 w-14">
                       <AvatarImage src={user.photoURL || ''} alt={user.displayName || 'User'} />
                       <AvatarFallback>
                           <UserIcon />
@@ -102,7 +102,7 @@ export function Navbar() {
           ) : (
             <>
               <ThemeToggle />
-              <Button asChild size="lg" className="h-12 text-base">
+              <Button asChild size="lg" className="h-14 text-lg">
                   <Link href="/auth">Sign In</Link>
               </Button>
             </>
