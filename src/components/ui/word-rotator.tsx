@@ -23,7 +23,7 @@ export function WordRotator({ words, className }: WordRotatorProps) {
 
   return (
     <AnimatePresence mode="wait">
-      <motion.h1
+      <motion.span
         key={words[index]}
         initial={{
           opacity: 0,
@@ -44,7 +44,7 @@ export function WordRotator({ words, className }: WordRotatorProps) {
         )}
       >
         {words[index]}
-      </motion.h1>
+      </motion.span>
     </AnimatePresence>
   );
 }
