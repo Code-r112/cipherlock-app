@@ -39,7 +39,7 @@ export function Navbar() {
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20">
         <Link href="/" className="flex items-center">
             <ShieldCheck className="h-8 w-8 text-primary" />
-            <span className="ml-2 text-xl font-bold">CipherLock</span>
+            <span className="ml-2 text-2xl font-bold">CipherLock</span>
         </Link>
         <div className="flex items-center gap-2 sm:gap-4">
           {user ? (
@@ -47,7 +47,7 @@ export function Navbar() {
               <TooltipProvider>
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <Button asChild variant="outline" size="icon" className="rounded-full">
+                        <Button asChild variant="outline" size="icon" className="rounded-full h-14 w-14">
                             <Link href="/activity"><History /></Link>
                         </Button>
                     </TooltipTrigger>

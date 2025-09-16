@@ -12,7 +12,7 @@ export function Footer() {
           <div className="flex flex-col items-center md:items-start">
             <div className="flex items-center mb-4">
               <ShieldCheck className="h-8 w-8 text-white" />
-              <span className="ml-2 text-xl font-bold text-white">CipherLock</span>
+              <span className="ml-2 text-2xl font-bold text-white">CipherLock</span>
             </div>
             <p className="text-sm">Secure, client-side file encryption.</p>
           </div>
