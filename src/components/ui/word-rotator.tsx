@@ -1,52 +1,50 @@
 
 "use client";
 
-import { useState, useEffect } from 'react';
-import { cn } from '@/lib/utils';
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
-interface TypewriterProps {
+interface WordRotatorProps {
   words: string[];
   className?: string;
 }
 
-export function WordRotator({ words, className }: TypewriterProps) {
-  const [wordIndex, setWordIndex] = useState(0);
-  const [text, setText] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
+export function WordRotator({ words, className }: WordRotatorProps) {
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    const currentWord = words[wordIndex];
-    const typeSpeed = isDeleting ? 75 : 150;
+    const interval = setInterval(() => {
+      setIndex((prevIndex) => (prevIndex + 1) % words.length);
+    }, 3000);
 
-    const handleTyping = () => {
-      if (isDeleting) {
-        if (text.length > 0) {
-          setText((prev) => prev.substring(0, prev.length - 1));
-        } else {
-          setIsDeleting(false);
-          setWordIndex((prev) => (prev + 1) % words.length);
-        }
-      } else {
-        if (text.length < currentWord.length) {
-          setText((prev) => currentWord.substring(0, prev.length + 1));
-        } else {
-          // Pause at end of word
-          setTimeout(() => setIsDeleting(true), 2000);
-        }
-      }
-    };
-
-    const typingTimeout = setTimeout(handleTyping, typeSpeed);
-
-    return () => clearTimeout(typingTimeout);
-  }, [text, isDeleting, wordIndex, words]);
+    return () => clearInterval(interval);
+  }, [words]);
 
   return (
-    <span className={cn("inline-flex items-center", className)}>
-      <span className="min-w-[1ch] min-h-[1em]">{text}</span>
-      <span className="animate-pulse w-[2px] h-[1em] bg-foreground inline-block"></span>
-    </span>
+    <AnimatePresence mode="wait">
+      <motion.h1
+        key={words[index]}
+        initial={{
+          opacity: 0,
+          y: 20,
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+        }}
+        exit={{
+          opacity: 0,
+          y: -20,
+        }}
+        transition={{ ease: "easeInOut", duration: 0.5 }}
+        className={cn(
+          "bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400",
+          className
+        )}
+      >
+        {words[index]}
+      </motion.h1>
+    </AnimatePresence>
   );
 }
-
-    

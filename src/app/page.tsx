@@ -97,12 +97,15 @@ export default function Home() {
   
   return (
     <div className="flex flex-col items-center justify-center bg-background p-4 sm:p-8">
+       <div className="absolute top-0 left-0 -z-10 h-full w-full bg-background">
+        <div className="absolute bottom-auto left-auto right-0 top-0 h-[500px] w-[500px] -translate-x-[30%] translate-y-[20%] rounded-full bg-[rgba(var(--primary-rgb),0.5)] opacity-50 blur-[80px]"></div>
+      </div>
       <div className="w-full max-w-5xl">
         <div className="text-center pt-8 pb-16 sm:pt-12 sm:pb-24 animate-fade-in-down">
           {user && firstName ? (
             <p className="text-2xl sm:text-3xl text-muted-foreground mb-4">Hello, {firstName}!</p>
           ) : !user && (
-            <Button asChild variant="secondary" className="mb-4 rounded-full border-2 border-primary text-base h-auto px-4 py-1">
+            <Button asChild variant="secondary" className="mb-4 rounded-full border-2 border-primary text-base h-auto px-4 py-1 shine-button">
                 <Link href="/auth">Unlock all features by signing in</Link>
             </Button>
           )}
@@ -137,7 +140,7 @@ export default function Home() {
             <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold text-center mb-12 sm:mb-16">Features</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8">
                 {features.map((feature, index) => (
-                    <Card key={index} className="bg-card border-none text-center">
+                    <Card key={index} className="bg-card border-none text-center" style={{ animationDelay: `${index * 100}ms`}}>
                         <CardContent className="p-4 sm:p-6 flex flex-col items-center">
                             {feature.icon}
                             <h3 className="text-lg sm:text-2xl font-semibold mb-2">{feature.title}</h3>
@@ -174,7 +177,7 @@ export default function Home() {
                      <div className="flex flex-col items-center">
                         <div className="relative bg-background p-2">
                            <div className="bg-primary/10 text-primary p-4 sm:p-6 rounded-full mb-4 sm:mb-6 ring-8 ring-background">
-                               <CloudOff className="h-12 w-12 sm:h-16 sm-w-16" />
+                               <CloudOff className="h-12 w-12 sm:h-16 sm:w-16" />
                            </div>
                         </div>
                         <h3 className="text-xl sm:text-3xl font-semibold mb-2 sm:mb-4">3. Zero Data Storage</h3>
@@ -191,7 +194,7 @@ export default function Home() {
             </div>
             <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                 {loggedInFeatures.map((feature, index) => (
-                    <div key={index} className="flex items-start gap-4">
+                    <div key={index} className="flex items-start gap-4" style={{ animationDelay: `${index * 150}ms`}}>
                         <div className="flex-shrink-0 bg-background p-3 rounded-full shadow-md">
                            {feature.icon}
                         </div>
@@ -207,8 +210,8 @@ export default function Home() {
         <section id="faq" className="w-full max-w-3xl mx-auto animate-fade-in-up pb-12" style={{ animationDelay: '0.5s' }}>
             <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold text-center mb-12 sm:mb-16">Frequently Asked Questions</h2>
             <Accordion type="single" collapsible className="w-full">
-                {faqItems.map(item => (
-                    <AccordionItem value={item.value} key={item.value}>
+                {faqItems.map((item, index) => (
+                    <AccordionItem value={item.value} key={item.value} style={{ animationDelay: `${index * 150}ms`}}>
                         <AccordionTrigger className="text-lg sm:text-xl text-left">{item.question}</AccordionTrigger>
                         <AccordionContent className="text-lg text-muted-foreground">
                             {item.answer}
