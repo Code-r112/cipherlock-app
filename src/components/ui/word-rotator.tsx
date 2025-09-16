@@ -38,10 +38,7 @@ export function WordRotator({ words, className }: WordRotatorProps) {
           y: -20,
         }}
         transition={{ ease: "easeInOut", duration: 0.5 }}
-        className={cn(
-          "bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400",
-          className
-        )}
+        className={cn("text-black dark:bg-clip-text dark:text-transparent dark:bg-gradient-to-b dark:from-neutral-50 dark:to-neutral-400", className)}
       >
         {words[index]}
       </motion.span>
