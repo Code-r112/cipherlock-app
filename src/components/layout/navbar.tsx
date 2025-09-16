@@ -38,8 +38,8 @@ export function Navbar() {
     <header className={cn("bg-background sticky top-0 z-50 transition-all", isScrolled && "border-b border-border/40")}>
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20">
         <Link href="/" className="flex items-center">
-            <ShieldCheck className="h-8 w-8 text-black dark:text-white" />
-            <span className="ml-2 text-xl font-bold text-black dark:text-white">CipherLock</span>
+            <ShieldCheck className="h-8 w-8 text-primary" />
+            <span className="ml-2 text-xl font-bold">CipherLock</span>
         </Link>
         <div className="flex items-center gap-2 sm:gap-4">
           {user ? (
@@ -47,7 +47,7 @@ export function Navbar() {
               <TooltipProvider>
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <Button asChild variant="outline" size="icon">
+                        <Button asChild variant="outline" size="icon" className="rounded-full">
                             <Link href="/activity"><History /></Link>
                         </Button>
                     </TooltipTrigger>
@@ -102,7 +102,7 @@ export function Navbar() {
           ) : (
             <>
               <ThemeToggle />
-              <Button asChild size="lg" className="h-14 text-lg">
+              <Button asChild size="lg" className="h-14 text-lg rounded-full">
                   <Link href="/auth">Sign In</Link>
               </Button>
             </>
