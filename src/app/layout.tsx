@@ -6,6 +6,8 @@ import { Footer } from '@/components/layout/footer';
 import { Suspense } from 'react';
 import Loading from './loading';
 import { Providers } from './providers';
+import { Template } from '@/components/layout/template';
+import CustomCursor from '@/components/ui/custom-cursor';
 
 export const metadata: Metadata = {
   title: 'CipherLock',
@@ -26,10 +28,13 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased flex flex-col min-h-screen">
         <Providers>
+          <CustomCursor />
             <Navbar />
             <main className="flex-grow">
               <Suspense fallback={<Loading />}>
-                {children}
+                <Template key={Math.random()}>
+                  {children}
+                </Template>
               </Suspense>
             </main>
             <Footer />
