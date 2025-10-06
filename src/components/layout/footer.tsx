@@ -4,7 +4,7 @@ import React from 'react';
 
 export function Footer() {
   return (
-    <footer className="bg-gray-900 text-gray-300">
+    <footer className="bg-black text-gray-300">
       <div className="border-t-4 border-primary w-full"></div>
       <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
@@ -12,7 +12,7 @@ export function Footer() {
           <div className="flex flex-col items-center md:items-start">
             <div className="flex items-center mb-4">
               <ShieldCheck className="h-8 w-8 text-white" />
-              <span className="ml-2 text-2xl font-bold text-white">CipherLock</span>
+              <span className="ml-2 text-3xl font-bold text-white">CipherLock</span>
             </div>
             <p className="text-sm">Secure, client-side file encryption.</p>
           </div>

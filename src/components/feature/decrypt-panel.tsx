@@ -240,7 +240,7 @@ export function DecryptPanel() {
                )}
               <div className="flex items-center gap-2">
                 <Input id="key-decrypt" type="password" value={key} onChange={(e) => setKey(e.target.value)} placeholder="Enter your secret key" disabled={!step1Completed} className="h-12 text-base" />
-                <Button variant="outline" size="icon" onClick={handleGenerateKey} disabled={!step1Completed}><Sparkles className="w-5 h-5"/></Button>
+                {user && <Button variant="outline" size="icon" onClick={handleGenerateKey} disabled={!step1Completed}><Sparkles className="w-5 h-5"/></Button>}
                 <Button variant="outline" size="icon" onClick={handleCopyKey} disabled={!key}><Copy className="w-5 h-5"/></Button>
                  {user && (
                   <Dialog open={isSaveKeyDialogOpen} onOpenChange={setSaveKeyDialogOpen}>
