@@ -8,6 +8,7 @@ import Loading from './loading';
 import { Providers } from './providers';
 import { Template } from '@/components/layout/template';
 import CustomCursor from '@/components/ui/custom-cursor';
+import { ScrollProgressBar } from '@/components/ui/scroll-progress-bar';
 
 export const metadata: Metadata = {
   title: 'CipherLock',
@@ -29,6 +30,7 @@ export default function RootLayout({
       <body className="font-body antialiased flex flex-col min-h-screen">
         <Providers>
           <CustomCursor />
+            <ScrollProgressBar />
             <Navbar />
             <main className="flex-grow">
               <Suspense fallback={<Loading />}>
