@@ -31,18 +31,16 @@ const CustomCursor = () => {
         if (interactiveTarget) {
             cursorWrapper.classList.add('pointer');
             const computedStyle = window.getComputedStyle(interactiveTarget);
-            const color = computedStyle.getPropertyValue('color');
+            const textColor = computedStyle.getPropertyValue('color');
             const bgColor = computedStyle.getPropertyValue('background-color');
 
-            // Prefer background color if it's not transparent, otherwise use text color.
-            // This logic can be refined for better contrast.
-            const primaryColor = (bgColor && !bgColor.includes('rgba(0, 0, 0, 0)')) ? bgColor : color;
-
+            // Use the button's text color for the dot to ensure contrast.
             if(cursorDot) {
-                cursorDot.style.backgroundColor = primaryColor;
+                cursorDot.style.backgroundColor = textColor;
             }
+            // Use the button's background color for the outline.
             if(cursorOutline) {
-                cursorOutline.style.borderColor = primaryColor;
+                cursorOutline.style.borderColor = (bgColor && !bgColor.includes('rgba(0, 0, 0, 0)')) ? bgColor : textColor;
             }
 
         }
