@@ -6,6 +6,10 @@ body {
   font-family: 'Inter', sans-serif;
 }
 
+button, a, [role="button"] {
+  cursor: none;
+}
+
 .custom-cursor .cursor-dot {
   width: 8px;
   height: 8px;
