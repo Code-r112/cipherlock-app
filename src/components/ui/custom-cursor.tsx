@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useRef } from 'react';
@@ -5,11 +6,12 @@ import { useEffect, useRef } from 'react';
 const CustomCursor = () => {
   const cursorDotRef = useRef<HTMLDivElement>(null);
   const cursorOutlineRef = useRef<HTMLDivElement>(null);
+  const cursorWrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const cursorDot = cursorDotRef.current;
     const cursorOutline = cursorOutlineRef.current;
-    const cursorWrapper = document.getElementById('cursor-wrapper');
+    const cursorWrapper = cursorWrapperRef.current;
     if (!cursorDot || !cursorOutline || !cursorWrapper) return;
     
     document.body.style.cursor = 'none';
@@ -24,15 +26,40 @@ const CustomCursor = () => {
 
     const handleMouseOver = (e: MouseEvent) => {
         const target = e.target as HTMLElement;
-        if (target.closest('a, button, input[type="submit"], [role="button"]')) {
+        const interactiveTarget = target.closest('a, button, input[type="submit"], [role="button"]');
+        
+        if (interactiveTarget) {
             cursorWrapper.classList.add('pointer');
+            const computedStyle = window.getComputedStyle(interactiveTarget);
+            const color = computedStyle.getPropertyValue('color');
+            const bgColor = computedStyle.getPropertyValue('background-color');
+
+            // Prefer background color if it's not transparent, otherwise use text color.
+            // This logic can be refined for better contrast.
+            const primaryColor = (bgColor && !bgColor.includes('rgba(0, 0, 0, 0)')) ? bgColor : color;
+
+            if(cursorDot) {
+                cursorDot.style.backgroundColor = primaryColor;
+            }
+            if(cursorOutline) {
+                cursorOutline.style.borderColor = primaryColor;
+            }
+
         }
     };
 
     const handleMouseOut = (e: MouseEvent) => {
         const target = e.target as HTMLElement;
-        if (target.closest('a, button, input[type="submit"], [role="button"]')) {
+        const interactiveTarget = target.closest('a, button, input[type="submit"], [role="button"]');
+
+        if (interactiveTarget) {
             cursorWrapper.classList.remove('pointer');
+             if(cursorDot) {
+                cursorDot.style.backgroundColor = ''; // Revert to CSS default
+            }
+            if(cursorOutline) {
+                cursorOutline.style.borderColor = ''; // Revert to CSS default
+            }
         }
     };
 
@@ -49,7 +76,7 @@ const CustomCursor = () => {
   }, []);
 
   return (
-    <div id="cursor-wrapper" className="custom-cursor">
+    <div id="cursor-wrapper" ref={cursorWrapperRef} className="custom-cursor">
       <div ref={cursorDotRef} className="cursor-dot"></div>
       <div ref={cursorOutlineRef} className="cursor-outline"></div>
     </div>
