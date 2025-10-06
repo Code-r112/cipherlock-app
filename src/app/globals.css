@@ -28,7 +28,6 @@ button, a, [role="button"] {
   height: 48px;
   background-color: hsl(var(--foreground) / 0.1);
   border-color: hsl(var(--primary));
-  box-shadow: 0 0 10px hsl(var(--primary) / 0.5);
 }
 
 
