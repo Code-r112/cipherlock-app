@@ -16,6 +16,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { WordRotator } from '@/components/ui/word-rotator';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { AnimatedLockIcon } from '@/components/ui/animated-lock-icon';
 
 const features = [
     {
@@ -103,7 +104,10 @@ export default function Home() {
       <div className="w-full max-w-5xl">
         <div className="text-center pt-8 pb-16 sm:pt-12 sm:pb-24 animate-fade-in-down">
           {user && firstName ? (
-            <p className="text-2xl sm:text-3xl text-muted-foreground mb-4">Hello, {firstName}!</p>
+            <div className="flex items-center justify-center gap-2 text-2xl sm:text-3xl text-muted-foreground mb-4">
+              <AnimatedLockIcon />
+              <p>Hello, {firstName}!</p>
+            </div>
           ) : !user && (
             <Button asChild variant="secondary" className="mb-4 rounded-full border-2 border-primary text-base h-auto px-4 py-1 shine-button">
                 <Link href="/auth">Unlock all features by signing in</Link>
