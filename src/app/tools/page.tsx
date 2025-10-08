@@ -73,6 +73,18 @@ export default function ToolsPage() {
 
     // Fetch security score
     const fetchSecurityScore = async () => {
+        const cachedData = localStorage.getItem('securityScoreData');
+        const now = new Date().getTime();
+
+        if (cachedData) {
+            const { score, timestamp } = JSON.parse(cachedData);
+            const oneHour = 60 * 60 * 1000;
+            if (now - timestamp < oneHour) {
+                setSecurityScore(score);
+                return;
+            }
+        }
+
         const activityLogsQuery = query(collection(db, 'users', user.uid, 'activity'));
         const querySnapshot = await getDocs(activityLogsQuery);
         const activitiesFromFirestore = querySnapshot.docs.map(doc => doc.data() as ActivityLogFromFirestore);
@@ -84,8 +96,10 @@ export default function ToolsPage() {
             }));
             const result = await analyzeSecurity({ activityLogs: activities });
             setSecurityScore(result.overallScore);
+            localStorage.setItem('securityScoreData', JSON.stringify({ score: result.overallScore, timestamp: now }));
         } else {
             setSecurityScore(100);
+            localStorage.setItem('securityScoreData', JSON.stringify({ score: 100, timestamp: now }));
         }
     };
     fetchSecurityScore();
