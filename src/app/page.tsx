@@ -161,7 +161,7 @@ function LiveEncryptionDemo() {
     }, [text]);
 
     return (
-        <section id="live-demo" className="mb-24 sm:mb-32 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+        <section id="live-demo" className="mb-32 sm:mb-40 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
             <div className="text-center max-w-3xl mx-auto">
                 <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">See It in Action</h2>
                 <p className="text-lg sm:text-xl text-muted-foreground mb-12">The animation below demonstrates how your data is instantly transformed into an unreadable, encrypted format. Your data never leaves your browser.</p>
@@ -240,7 +240,7 @@ export default function Home() {
 
         <LiveEncryptionDemo />
 
-        <section id="how-it-works" className="my-24 sm:my-32 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+        <section id="how-it-works" className="my-32 sm:my-40 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
             <div className="text-center max-w-3xl mx-auto">
                 <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">Inside AES-256 Encryption</h2>
                 <p className="text-lg sm:text-xl text-muted-foreground mb-12">CipherLock uses AES-256, the same encryption standard trusted by governments and security experts worldwide. Here’s a simplified look at how it masterfully turns your readable data into a secure, unreadable block.</p>
@@ -319,7 +319,7 @@ export default function Home() {
             </div>
         </section>
 
-        <section id="features" className="mb-24 sm:mb-32 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+        <section id="features" className="mb-32 sm:mb-40 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
             <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold text-center mb-12 sm:mb-16">Features</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8">
                 {features.map((feature, index) => (
@@ -334,7 +334,7 @@ export default function Home() {
             </div>
         </section>
 
-        <section id="premium-features" className="mb-24 sm:mb-32 animate-fade-in-up bg-secondary rounded-2xl py-12 sm:py-16 px-6" style={{ animationDelay: '0.4s' }}>
+        <section id="premium-features" className="mb-32 sm:mb-40 animate-fade-in-up bg-secondary rounded-2xl py-12 sm:py-16 px-6" style={{ animationDelay: '0.4s' }}>
             <div className="text-center max-w-3xl mx-auto">
                  <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">Unlock More with an Account</h2>
                  <p className="text-lg sm:text-xl text-muted-foreground mb-12">Signing up is free and gives you access to a powerful suite of features designed for convenience and enhanced security.</p>
