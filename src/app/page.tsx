@@ -114,15 +114,19 @@ function FileUploader() {
   return (
     <div
       {...getRootProps()}
-      className={`mt-8 mb-16 sm:mb-24 w-full max-w-lg mx-auto border-4 border-dashed rounded-3xl p-8 text-center cursor-pointer transition-colors duration-300 ${
-        isDragActive ? 'bg-primary/10' : ''
-      } border-primary`}
+      className={`relative mt-8 mb-16 sm:mb-24 w-full max-w-lg mx-auto border-4 border-dashed rounded-3xl p-8 text-center cursor-pointer transition-all duration-300 overflow-hidden group
+        ${isDragActive ? 'border-solid animate-pulse-border' : 'border-primary'}
+        bg-radial-gradient from-primary/5 to-transparent`}
     >
+        <div className="absolute inset-0 bg-dot-pattern opacity-10 -z-10"></div>
+        <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
+        <div className="absolute top-0 left-[-100%] w-full h-full bg-shine-gradient transition-all duration-700 group-hover:left-[100%] -z-10"></div>
+        
       <input {...getInputProps()} />
-      <div className="flex flex-col items-center justify-center gap-4 text-muted-foreground">
-        <UploadCloud className="h-12 w-12 text-foreground" />
+      <div className="flex flex-col items-center justify-center gap-4">
+        <UploadCloud className="h-12 w-12 text-foreground transition-transform duration-300 group-hover:scale-110" />
         <p className="text-2xl font-semibold text-foreground">Drag & drop your files here</p>
-        <p>to start encrypting or decrypting</p>
+        <p className="text-muted-foreground">to start encrypting or decrypting</p>
       </div>
     </div>
   );

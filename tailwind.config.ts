@@ -1,3 +1,4 @@
+
 import type {Config} from 'tailwindcss';
 
 export default {
@@ -71,6 +72,9 @@ export default {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      backgroundImage: {
+        'radial-gradient': 'radial-gradient(var(--tw-gradient-stops))',
+      },
       keyframes: {
         'accordion-down': {
           from: {
@@ -108,12 +112,17 @@ export default {
             transform: 'translateY(0)',
           },
         },
+        'pulse-border': {
+            '0%, 100%': { borderColor: 'hsl(var(--primary))', boxShadow: '0 0 10px hsl(var(--primary) / 0.5)' },
+            '50%': { borderColor: 'hsl(var(--primary) / 0.7)', boxShadow: '0 0 20px hsl(var(--primary) / 0.8)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'fade-in-up': 'fade-in-up 0.5s ease-out forwards',
         'fade-in-down': 'fade-in-down 0.5s ease-out forwards',
+        'pulse-border': 'pulse-border 2s infinite',
       },
     },
   },
