@@ -139,12 +139,12 @@ export default function Home() {
   const firstName = user?.displayName?.split(' ')[0];
   
   const TreeNode = ({ icon, title, description, children }: { icon: React.ReactNode, title: string, description: string, children?: React.ReactNode }) => (
-      <div className="flex flex-col items-center text-center relative group">
+      <div className="flex flex-col items-center text-center relative group/treenode">
           <div className="relative z-10">
-              <div className="transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl bg-background border-2 border-border p-6 rounded-2xl w-64 h-full flex flex-col items-center">
-                  <div className="mb-4 text-primary transition-colors duration-300 group-hover:text-accent-foreground">{icon}</div>
-                  <h3 className="font-bold text-lg mb-2 transition-colors duration-300 group-hover:text-accent-foreground">{title}</h3>
-                  <p className="text-sm text-muted-foreground">{description}</p>
+              <div className="transition-all duration-300 group-hover/treenode:scale-105 group-hover/treenode:shadow-2xl bg-background border-2 border-border p-6 rounded-2xl w-64 h-full flex flex-col items-center">
+                  <div className="mb-4 text-primary transition-colors duration-300 group-hover/treenode:text-accent-foreground">{icon}</div>
+                  <h3 className="font-bold text-xl mb-2 transition-colors duration-300 group-hover/treenode:text-accent-foreground">{title}</h3>
+                  <p className="text-base text-muted-foreground">{description}</p>
               </div>
           </div>
           {children && (
@@ -199,7 +199,7 @@ export default function Home() {
         
         {user ? (
             <div className="mt-8 mb-16 sm:mb-24 w-full max-w-lg mx-auto">
-                <Button asChild size="lg" className="w-full h-24 text-2xl rounded-2xl shine-button">
+                <Button asChild size="lg" className="w-full h-20 text-xl rounded-full shine-button">
                     <Link href="/tools">
                         <Lock className="mr-4 h-8 w-8" />
                         Go to Encryption Tools
@@ -328,4 +328,5 @@ export default function Home() {
     
 
     
+
 
