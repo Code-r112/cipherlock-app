@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Lock, KeyRound, Download, CheckCircle, Files, Bot, Sparkles, Copy, Save, Lightbulb, Share2, ClipboardCopy } from "lucide-react";
+import { Loader2, Lock, KeyRound, Download, CheckCircle, Files, Bot, Sparkles, Copy, Save, Lightbulb, Share2, ClipboardCopy, BrainCircuit } from "lucide-react";
 import CryptoJS from 'crypto-js';
 import { useAuth } from '@/hooks/use-auth';
 import { suggestFilename } from '@/ai/flows/suggest-filename-flow';
@@ -32,6 +32,11 @@ interface EncryptedResult {
     blob: Blob;
     content: string;
 }
+
+interface EncryptPanelProps {
+    onActiveStepChange: (step: string | null) => void;
+}
+
 
 const checkKeyStrength = (key: string) => {
     let score = 0;
@@ -65,7 +70,7 @@ const SUPPORTED_AI_FILE_TYPES = [
 ];
 
 
-export function EncryptPanel() {
+export function EncryptPanel({ onActiveStepChange }: EncryptPanelProps) {
   const { user } = useAuth();
   const [files, setFiles] = useState<File[]>([]);
   const [key, setKey] = useState('');
@@ -84,6 +89,18 @@ export function EncryptPanel() {
   const { toast } = useToast();
 
   useEffect(() => {
+    if (key) {
+        onActiveStepChange('key');
+    } else if (files.length > 0) {
+        onActiveStepChange('file');
+    } else {
+        onActiveStepChange(null);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [files, key]);
+
+
+  useEffect(() => {
     if (user) {
         const fetchKeys = async () => {
             const keysQuery = query(collection(db, 'users', user.uid, 'keys'));
@@ -99,6 +116,7 @@ export function EncryptPanel() {
     if (files.length > 0 && user) {
       setEncryptedResult(null);
       setShareLink(null);
+      onActiveStepChange('browser');
       const file = files[0];
       const isSupported = SUPPORTED_AI_FILE_TYPES.includes(file.type);
       
@@ -146,10 +164,13 @@ export function EncryptPanel() {
       setEncryptedResult(null);
       setShareLink(null);
       setFinalFilename(files[0].name.replace(/\.[^/.]+$/, ""));
+      onActiveStepChange('browser');
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [files, user, savedKeys, toast]);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    onActiveStepChange('file');
     if (e.target.files) {
       const selectedFiles = Array.from(e.target.files);
       if (selectedFiles.some(f => f.size > 1024 * 1024) && user) {
@@ -223,10 +244,12 @@ export function EncryptPanel() {
   }
 
   const handleEncryptAndDownload = () => {
+      onActiveStepChange('download');
       handleEncrypt(true);
   }
 
   const handleEncryptAndShare = () => {
+      onActiveStepChange('download');
       handleEncrypt(false);
   }
 
@@ -268,9 +291,11 @@ export function EncryptPanel() {
         title: "Missing Information",
         description: "Please select one or more files and enter a secret key.",
       });
+      onActiveStepChange(null);
       return;
     }
 
+    onActiveStepChange('encrypt');
     setLoading(true);
     setEncryptedResult(null);
     setShareLink(null);
@@ -327,6 +352,7 @@ export function EncryptPanel() {
                   description: `File encrypted. You can now share it.`,
                 });
             }
+             setTimeout(() => onActiveStepChange(null), 2000);
           }
         }
       };
@@ -340,6 +366,7 @@ export function EncryptPanel() {
           processedCount++;
           if (processedCount === files.length) {
             setLoading(false);
+            onActiveStepChange(null);
           }
       }
 
@@ -429,10 +456,17 @@ export function EncryptPanel() {
                 </Select>
             )}
             {suggestedKeyName && !loadingAi && (
-                <div className="flex items-center gap-2 p-2 bg-primary/10 text-primary-foreground rounded-md text-sm">
-                    <Lightbulb className="h-5 w-5 text-primary flex-shrink-0" />
-                    <p className="text-primary">AI Suggestion: Use key <span className="font-bold">{suggestedKeyName}</span> for this file.</p>
-                </div>
+                <Card className="bg-primary/10 border-primary/20 my-2">
+                    <CardHeader className="flex flex-row items-center gap-4 space-y-0 p-4">
+                        <BrainCircuit className="w-8 h-8 text-primary flex-shrink-0" />
+                        <div>
+                             <CardTitle className="text-base text-primary">AI Suggestion</CardTitle>
+                             <CardDescription className="text-primary/90">
+                                Based on the file content, we recommend using your key: <span className="font-semibold">{suggestedKeyName}</span>
+                            </CardDescription>
+                        </div>
+                    </CardHeader>
+                </Card>
             )}
             <div className="flex items-center gap-2">
                 <Input id="key-encrypt" type="password" value={key} onChange={(e) => setKey(e.target.value)} placeholder="Enter your secret key" disabled={!step1Completed} className="h-12 text-base"/>
@@ -534,5 +568,3 @@ export function EncryptPanel() {
     </Card>
   );
 }
-
-    
