@@ -1,7 +1,7 @@
 
 "use client";
 
-import { ShieldCheck, User as UserIcon, LogOut, History, KeyRound, ShieldAlert, Settings, Moon, Sun } from 'lucide-react';
+import { ShieldCheck, User as UserIcon, LogOut, History, KeyRound, ShieldAlert, Settings, Moon, Sun, LayoutGrid, Code, Bot, FileText } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
@@ -23,6 +23,13 @@ import { useTheme } from 'next-themes';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from './theme-toggle';
 
+
+const suiteApps = [
+    { name: 'Code Formatter', icon: <Code className="h-10 w-10" />, href: '#' },
+    { name: 'AI Assistant', icon: <Bot className="h-10 w-10" />, href: '#' },
+    { name: 'Doc Scanner', icon: <FileText className="h-10 w-10" />, href: '#' },
+    { name: 'CipherLock', icon: <ShieldCheck className="h-10 w-10" />, href: '/' },
+];
 
 export function Navbar() {
   const { user, signOut } = useAuth();
@@ -55,13 +62,13 @@ export function Navbar() {
             <>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-14 w-14 rounded-full">
-                    <Avatar className="h-14 w-14">
-                      <AvatarImage src={user.photoURL || ''} alt={user.displayName || 'User'} />
-                      <AvatarFallback>
-                          <UserIcon />
-                      </AvatarFallback>
-                    </Avatar>
+                  <Button variant="ghost" size="icon" className="rounded-full h-14 w-14">
+                      <Avatar className="h-14 w-14">
+                        <AvatarImage src={user.photoURL || ''} alt={user.displayName || 'User'} />
+                        <AvatarFallback>
+                            <UserIcon />
+                        </AvatarFallback>
+                      </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-64" align="end" forceMount>
@@ -120,6 +127,25 @@ export function Navbar() {
                     <LogOut className="mr-2 h-5 w-5" />
                     <span>Log out</span>
                   </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="rounded-full h-14 w-14">
+                        <LayoutGrid className="h-7 w-7" />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-80" align="end">
+                    <DropdownMenuLabel>Our Suite of Apps</DropdownMenuLabel>
+                    <div className="grid grid-cols-3 gap-2 p-2">
+                        {suiteApps.map((app) => (
+                            <Link href={app.href} key={app.name} className="flex flex-col items-center justify-center p-2 rounded-lg hover:bg-accent text-center">
+                                <div className="text-primary">{app.icon}</div>
+                                <span className="text-sm mt-2">{app.name}</span>
+                            </Link>
+                        ))}
+                    </div>
                 </DropdownMenuContent>
               </DropdownMenu>
             </>
