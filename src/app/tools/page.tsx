@@ -120,8 +120,7 @@ export default function ToolsPage() {
   return (
     <div className="flex flex-col items-center justify-center bg-background p-4 sm:p-8">
       <div className="w-full max-w-5xl">
-        <div className="pb-12 sm:pb-16 animate-fade-in-down">
-        </div>
+        
 
         {user && (
             <section className="mb-12 animate-fade-in-up">
@@ -171,11 +170,11 @@ export default function ToolsPage() {
         )}
         
         <Tabs defaultValue="encryption" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 h-16 gap-2 bg-transparent p-0 mb-8">
-                <TabsTrigger value="encryption" className="text-xl h-full rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-muted">
+            <TabsList className="w-full h-16 gap-2 bg-transparent p-0 mb-8 flex justify-center">
+                <TabsTrigger value="encryption" className="text-xl h-full rounded-lg data-[state=active]:text-foreground text-muted-foreground bg-transparent data-[state=active]:shadow-none data-[state=active]:underline underline-offset-4">
                     <Lock className="mr-2 h-6 w-6" />File Encryption
                 </TabsTrigger>
-                <TabsTrigger value="signature" className="text-xl h-full rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-muted">
+                <TabsTrigger value="signature" className="text-xl h-full rounded-lg data-[state=active]:text-foreground text-muted-foreground bg-transparent data-[state=active]:shadow-none data-[state=active]:underline underline-offset-4">
                     <Fingerprint className="mr-2 h-6 w-6" />Digital Signature
                 </TabsTrigger>
             </TabsList>
