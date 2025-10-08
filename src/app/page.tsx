@@ -138,6 +138,37 @@ export default function Home() {
   const { user } = useAuth();
   const firstName = user?.displayName?.split(' ')[0];
   
+  const TreeNode = ({ title, description, children }: { title: string, description: string, children?: React.ReactNode }) => (
+      <div className="relative flex flex-col items-center">
+          {/* Connector line from parent */}
+          <div className="absolute bottom-full h-8 w-px bg-border"></div>
+          {/* Node */}
+          <div className="bg-background border-2 border-primary rounded-lg p-4 w-52 text-center z-10 shadow-lg">
+              <h3 className="font-semibold text-base">{title}</h3>
+              <p className="text-xs text-muted-foreground">{description}</p>
+          </div>
+          {/* Render children if they exist */}
+          {children && <div className="flex w-full justify-center">{children}</div>}
+      </div>
+  );
+
+  const TreeContainer = ({ children }: { children: React.ReactNode }) => (
+      <div className="flex flex-col items-center">
+          {children}
+      </div>
+  );
+
+  const SubTree = ({ children }: { children: React.ReactNode }) => (
+    <div className="relative mt-8 flex justify-center w-full">
+        {/* Horizontal connecting line */}
+        <div className="absolute top-0 h-px w-1/2 bg-border"></div>
+        {/* Branch down to children */}
+        <div className="absolute top-0 h-8 w-px bg-border"></div>
+        {children}
+    </div>
+);
+
+
   return (
     <div className="flex flex-col items-center justify-center bg-background p-4 sm:p-8">
        <div className="absolute top-0 left-0 -z-10 h-full w-full bg-background">
@@ -170,67 +201,29 @@ export default function Home() {
                 <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">How It Works</h2>
                 <p className="text-lg sm:text-xl text-muted-foreground mb-12">CipherLock ensures your privacy by performing all encryption and decryption locally on your device. Your files are never uploaded to any server.</p>
             </div>
-            <div className="max-w-4xl mx-auto">
-                <Card className="bg-background/50">
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-3 text-2xl sm:text-3xl">
-                            <FileType className="text-primary w-8 h-8" />
-                            The Encryption Process
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-lg">
-                    <ul className="space-y-4">
-                      <li className="relative pl-8">
-                        <div className="absolute left-0 top-2 h-full w-px bg-border"></div>
-                        <div className="absolute left-[-0.5rem] top-2 h-4 w-4 rounded-full bg-primary ring-4 ring-secondary"></div>
-                        <h3 className="font-semibold text-xl">1. Your Device</h3>
-                        <p className="text-muted-foreground">The process begins on your computer.</p>
-                        <ul className="mt-4 space-y-4 pl-6">
-                          <li className="relative">
-                            <div className="absolute left-[-1.5rem] top-3 h-px w-6 bg-border"></div>
-                            <div className="absolute left-[-1.7rem] top-2.5 h-2 w-2 rounded-full bg-border"></div>
-                            <h4 className="font-semibold text-lg">File Selection</h4>
-                            <p className="text-muted-foreground text-base">You select one or more files from your local storage.</p>
-                          </li>
-                          <li className="relative">
-                            <div className="absolute left-[-1.5rem] top-3 h-px w-6 bg-border"></div>
-                            <div className="absolute left-[-1.7rem] top-2.5 h-2 w-2 rounded-full bg-border"></div>
-                            <h4 className="font-semibold text-lg">Secret Key</h4>
-                            <p className="text-muted-foreground text-base">You provide a secret key for encryption.</p>
-                          </li>
-                        </ul>
-                      </li>
-                      <li className="relative pl-8">
-                        <div className="absolute left-0 bottom-full h-8 w-px bg-border"></div>
-                        <div className="absolute left-[-0.5rem] top-2 h-4 w-4 rounded-full bg-primary ring-4 ring-secondary"></div>
-                        <h3 className="font-semibold text-xl">2. In-Browser Processing</h3>
-                        <p className="text-muted-foreground">The file is read into your browser's memory. It never leaves your machine.</p>
-                          <ul className="mt-4 space-y-4 pl-6">
-                          <li className="relative">
-                            <div className="absolute left-[-1.5rem] top-3 h-px w-6 bg-border"></div>
-                            <div className="absolute left-[-1.7rem] top-2.5 h-2 w-2 rounded-full bg-border"></div>
-                            <h4 className="font-semibold text-lg">AES-256 Encryption</h4>
-                            <p className="text-muted-foreground text-base">The file content is encrypted using your key and the military-grade AES-256 algorithm.</p>
-                          </li>
-                        </ul>
-                      </li>
-                      <li className="relative pl-8">
-                       <div className="absolute left-0 bottom-full h-8 w-px bg-border"></div>
-                        <div className="absolute left-[-0.5rem] top-2 h-4 w-4 rounded-full bg-primary ring-4 ring-secondary"></div>
-                        <h3 className="font-semibold text-xl">3. Encrypted Download</h3>
-                         <p className="text-muted-foreground">The encrypted content is packaged and downloaded back to you.</p>
-                          <ul className="mt-4 space-y-4 pl-6">
-                          <li className="relative">
-                           <div className="absolute left-[-1.5rem] top-3 h-px w-6 bg-border"></div>
-                            <div className="absolute left-[-1.7rem] top-2.5 h-2 w-2 rounded-full bg-border"></div>
-                            <h4 className="font-semibold text-lg">New `.ciph` File</h4>
-                            <p className="text-muted-foreground text-base">A new file with the `.ciph` extension is created on your device.</p>
-                          </li>
-                        </ul>
-                      </li>
-                    </ul>
-                    </CardContent>
-                </Card>
+            <div className="max-w-4xl mx-auto overflow-x-auto p-4">
+                <TreeContainer>
+                    <TreeNode title="Your File" description="The process begins with your file on your computer.">
+                        <SubTree>
+                            <div className="flex justify-around w-full gap-4">
+                                <TreeNode title="In-Browser Processing" description="File is read into browser memory, never leaving your machine.">
+                                    <SubTree>
+                                        <div className="flex justify-around w-full">
+                                            <TreeNode title="AES-256 Encryption" description="Content is encrypted with your key using a military-grade algorithm." />
+                                        </div>
+                                    </SubTree>
+                                </TreeNode>
+                                <TreeNode title="Your Secret Key" description="You provide a unique key that only you know.">
+                                     <SubTree>
+                                        <div className="flex justify-around w-full">
+                                            <TreeNode title="Encrypted Download" description="The encrypted result is securely packaged and downloaded to you as a '.ciph' file." />
+                                        </div>
+                                    </SubTree>
+                                </TreeNode>
+                            </div>
+                        </SubTree>
+                    </TreeNode>
+                </TreeContainer>
             </div>
         </section>
 
@@ -327,3 +320,4 @@ export default function Home() {
     
 
     
+
