@@ -334,42 +334,6 @@ export default function Home() {
             </div>
         </section>
 
-        <section id="security-process" className="my-16 sm:my-24 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-            <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold text-center mb-12 sm:mb-16">Your Security is Our Priority</h2>
-            <div className="relative">
-                <div className="hidden lg:block absolute top-1/2 left-0 w-full h-0.5 bg-border -translate-y-1/2"></div>
-                <div className="relative grid md:grid-cols-3 gap-8 md:gap-12 text-center">
-                    <div className="flex flex-col items-center">
-                        <div className="relative bg-background p-2">
-                           <div className="bg-primary/10 text-primary p-4 sm:p-6 rounded-full mb-4 sm:mb-6 ring-8 ring-background">
-                                <MonitorSmartphone className="h-12 w-12 sm:h-16 sm:w-16" />
-                            </div>
-                        </div>
-                        <h3 className="text-xl sm:text-3xl font-semibold mb-2 sm:mb-4">1. Purely Local</h3>
-                        <p className="text-muted-foreground text-base sm:text-lg">All encryption and decryption happens in your browser. Your private files never leave your machine.</p>
-                    </div>
-                     <div className="flex flex-col items-center">
-                        <div className="relative bg-background p-2">
-                            <div className="bg-primary/10 text-primary p-4 sm:p-6 rounded-full mb-4 sm:mb-6 ring-8 ring-background">
-                                <KeySquare className="h-12 w-12 sm:h-16 sm:w-16" />
-                            </div>
-                        </div>
-                        <h3 className="text-xl sm:text-3xl font-semibold mb-2 sm:mb-4">2. You Hold the Keys</h3>
-                        <p className="text-muted-foreground text-base sm:text-lg">You provide the secret key for every operation. We don't store, transmit, or have any access to it.</p>
-                    </div>
-                     <div className="flex flex-col items-center">
-                        <div className="relative bg-background p-2">
-                           <div className="bg-primary/10 text-primary p-4 sm:p-6 rounded-full mb-4 sm:mb-6 ring-8 ring-background">
-                               <CloudOff className="h-12 w-12 sm:h-16 sm:w-16" />
-                           </div>
-                        </div>
-                        <h3 className="text-xl sm:text-3xl font-semibold mb-2 sm:mb-4">3. Zero Data Storage</h3>
-                        <p className="text-muted-foreground text-base sm:text-lg">Your original files and their encrypted versions are never stored by us. They are processed in memory and then saved back to your device.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <section id="premium-features" className="mb-16 sm:mb-24 animate-fade-in-up bg-secondary rounded-2xl py-12 sm:py-16 px-6" style={{ animationDelay: '0.4s' }}>
             <div className="text-center max-w-3xl mx-auto">
                  <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">Unlock More with an Account</h2>
