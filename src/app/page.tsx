@@ -252,7 +252,7 @@ export default function Home() {
                             <CardTitle>1. Input & State</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <Box className="w-16 h-16 mx-auto mb-4 text-primary"/>
+                            <Box className="w-16 h-16 mx-auto mb-4 text-foreground"/>
                             <p>Your data is divided into 128-bit blocks and arranged into a 4x4 grid of bytes, called the "State".</p>
                         </CardContent>
                     </Card>
@@ -261,13 +261,13 @@ export default function Home() {
                             <CardTitle>2. Key Expansion</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <Key className="w-16 h-16 mx-auto mb-4 text-primary"/>
+                            <Key className="w-16 h-16 mx-auto mb-4 text-foreground"/>
                             <p>Your secret key is expanded into a series of "Round Keys"—one for each encryption round.</p>
                         </CardContent>
                     </Card>
                 </div>
                 <div className="text-center">
-                    <Repeat className="w-12 h-12 mx-auto text-primary animate-spin" style={{ animationDuration: '10s' }}/>
+                    <Repeat className="w-12 h-12 mx-auto text-foreground animate-spin" style={{ animationDuration: '10s' }}/>
                     <p className="mt-2 text-lg font-semibold">Main Rounds (14 for AES-256)</p>
                     <p className="text-muted-foreground">The State is transformed in a series of identical rounds.</p>
                 </div>
@@ -275,28 +275,28 @@ export default function Home() {
                     <Card>
                         <CardHeader><CardTitle>SubBytes</CardTitle></CardHeader>
                         <CardContent>
-                            <Shuffle className="w-10 h-10 mx-auto mb-2 text-primary"/>
+                            <Shuffle className="w-10 h-10 mx-auto mb-2 text-foreground"/>
                             <p className="text-sm text-muted-foreground">Each byte is swapped for another using a fixed substitution table (S-Box).</p>
                         </CardContent>
                     </Card>
                     <Card>
                         <CardHeader><CardTitle>ShiftRows</CardTitle></CardHeader>
                         <CardContent>
-                            <Layers className="w-10 h-10 mx-auto mb-2 text-primary"/>
+                            <Layers className="w-10 h-10 mx-auto mb-2 text-foreground"/>
                             <p className="text-sm text-muted-foreground">The rows of the State grid are shifted cyclically to shuffle the data.</p>
                         </CardContent>
                     </Card>
                     <Card>
                         <CardHeader><CardTitle>MixColumns</CardTitle></CardHeader>
                         <CardContent>
-                            <Box className="w-10 h-10 mx-auto mb-2 text-primary"/>
+                            <Box className="w-10 h-10 mx-auto mb-2 text-foreground"/>
                             <p className="text-sm text-muted-foreground">Each column is mixed using a mathematical transformation to further diffuse data.</p>
                         </CardContent>
                     </Card>
                      <Card>
                         <CardHeader><CardTitle>AddRoundKey</CardTitle></CardHeader>
                         <CardContent>
-                            <KeyRound className="w-10 h-10 mx-auto mb-2 text-primary"/>
+                            <KeyRound className="w-10 h-10 mx-auto mb-2 text-foreground"/>
                             <p className="text-sm text-muted-foreground">The current Round Key is combined with the State using an XOR operation.</p>
                         </CardContent>
                     </Card>
@@ -311,7 +311,7 @@ export default function Home() {
                             <CardTitle>3. Output</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <ShieldCheck className="w-16 h-16 mx-auto mb-4 text-primary"/>
+                            <ShieldCheck className="w-16 h-16 mx-auto mb-4 text-foreground"/>
                             <p>The final, fully scrambled State is the encrypted ciphertext.</p>
                         </CardContent>
                     </Card>
@@ -421,5 +421,7 @@ export default function Home() {
 
 
 
+
+    
 
     
