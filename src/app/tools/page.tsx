@@ -41,7 +41,6 @@ interface ActivityLogFromFirestore {
 
 export default function ToolsPage() {
   const { user } = useAuth();
-  const firstName = user?.displayName?.split(' ')[0];
   
   const [recentActivities, setRecentActivities] = useState<ActivityLog[]>([]);
   const [keyCount, setKeyCount] = useState(0);
@@ -120,14 +119,6 @@ export default function ToolsPage() {
   return (
     <div className="flex flex-col items-center justify-center bg-background p-4 sm:p-8">
       <div className="w-full max-w-5xl">
-        
-
-        {user && (
-             <div className="flex items-center justify-start gap-2 text-2xl sm:text-3xl text-muted-foreground mb-4">
-                <AnimatedLockIcon />
-                <p>Hello, {firstName}!</p>
-            </div>
-        )}
         
         <Tabs defaultValue="encryption" className="w-full">
             <TabsList className="w-full h-16 gap-2 bg-transparent p-0 mb-8 flex justify-center">

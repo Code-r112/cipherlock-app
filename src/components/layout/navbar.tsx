@@ -19,6 +19,7 @@ import { UserNavSheet } from './user-nav-sheet';
 export function Navbar() {
   const { user } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
+  const firstName = user?.displayName?.split(' ')[0];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,6 +45,7 @@ export function Navbar() {
         <div className="flex items-center gap-2 sm:gap-4">
           {user ? (
             <>
+              <p className="hidden sm:block text-muted-foreground">Hello, {firstName}!</p>
               <Sheet>
                 <SheetTrigger asChild>
                   <Button variant="ghost" size="icon" className="rounded-full h-14 w-14">
