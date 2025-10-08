@@ -94,9 +94,14 @@ export default function ToolsPage() {
                 ...log,
                 timestamp: log.timestamp.toDate().toISOString(),
             }));
-            const result = await analyzeSecurity({ activityLogs: activities });
-            setSecurityScore(result.overallScore);
-            localStorage.setItem('securityScoreData', JSON.stringify({ score: result.overallScore, timestamp: now }));
+            try {
+                const result = await analyzeSecurity({ activityLogs: activities });
+                setSecurityScore(result.overallScore);
+                localStorage.setItem('securityScoreData', JSON.stringify({ score: result.overallScore, timestamp: now }));
+            } catch (e) {
+                console.error("Could not analyze security", e)
+                setSecurityScore(null);
+            }
         } else {
             setSecurityScore(100);
             localStorage.setItem('securityScoreData', JSON.stringify({ score: 100, timestamp: now }));
@@ -169,7 +174,7 @@ export default function ToolsPage() {
             </section>
         )}
         
-        <div className="w-full max-w-lg mx-auto mb-16 sm:mb-24 animate-fade-in-up">
+        <div className="w-full max-w-lg mx-auto my-16 sm:my-24 animate-fade-in-up">
             <Tabs defaultValue="encrypt" className="w-full">
             <TabsList className="grid w-full grid-cols-2 h-14 sm:h-16 gap-2 bg-transparent p-0">
                 <TabsTrigger value="encrypt" className="text-lg sm:text-xl h-full rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-muted">
