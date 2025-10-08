@@ -114,16 +114,16 @@ function FileUploader() {
   return (
     <div
       {...getRootProps()}
-      className={`mt-8 mb-16 sm:mb-24 w-full max-w-lg mx-auto border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-colors duration-300 ${
+      className={`mt-4 mb-16 sm:mb-24 w-full max-w-lg mx-auto border-2 border-dashed rounded-3xl p-8 text-center cursor-pointer transition-colors duration-300 ${
         isDragActive ? 'bg-primary/10' : ''
       } border-primary`}
     >
       <input {...getInputProps()} />
       <div className="flex flex-col items-center justify-center gap-4 text-muted-foreground">
-        <UploadCloud className="h-12 w-12" />
-        <p className="text-xl font-semibold">Drag & drop your files here</p>
+        <UploadCloud className="h-12 w-12 text-primary" />
+        <p className="text-xl font-semibold text-primary">Drag & drop your files here</p>
         <p>to start encrypting or decrypting</p>
-        <Button onClick={() => document.getElementById('file-upload-input')?.click()} variant="outline" className="mt-4">
+        <Button onClick={() => document.getElementById('file-upload-input')?.click()} variant="outline" className="mt-4 border-primary">
           Or Select Files
         </Button>
         <input id="file-upload-input" type="file" multiple onChange={(e) => onDrop(Array.from(e.target.files || []))} className="hidden" />
