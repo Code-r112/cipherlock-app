@@ -16,7 +16,7 @@ export function Footer() {
       <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center md:text-left">
           
-          <div className="flex flex-col items-center md:items-start md:col-span-2">
+          <div className="flex flex-col items-center md:items-start">
             <div className="flex items-center mb-4">
               <ShieldCheck className="h-10 w-10 text-white dark:text-black" />
               <div className="ml-2 flex flex-col">
@@ -49,13 +49,19 @@ export function Footer() {
                 ))}
             </ul>
           </div>
+
+          <div>
+            <h3 className="font-semibold text-white dark:text-black mb-4 uppercase tracking-wider">Legal</h3>
+            <ul className="space-y-2">
+              <li><Link href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
+              <li><Link href="#" className="hover:text-primary transition-colors">Terms of Use</Link></li>
+            </ul>
+          </div>
+
         </div>
 
         <div className="border-t border-gray-700 dark:border-gray-200 mt-12 pt-8 text-center text-sm">
           <p>&copy; {new Date().getFullYear()} CipherLock by InstantDone. All Rights Reserved.</p>
-           <div className="mt-2">
-                <Link href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link>
-           </div>
         </div>
       </div>
     </footer>
