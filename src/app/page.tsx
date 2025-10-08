@@ -245,36 +245,76 @@ export default function Home() {
                 <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">Inside AES-256 Encryption</h2>
                 <p className="text-lg sm:text-xl text-muted-foreground mb-12">CipherLock uses AES-256, the same encryption standard trusted by governments and security experts worldwide. Here’s a simplified look at how it masterfully turns your readable data into a secure, unreadable block.</p>
             </div>
-            <div className="relative">
-                <div className="hidden lg:block absolute top-1/2 left-0 w-full h-0.5 bg-border -translate-y-1/2"></div>
-                <div className="relative grid md:grid-cols-3 gap-8 md:gap-12 text-center">
-                    <div className="flex flex-col items-center">
-                        <div className="relative bg-background p-2">
-                           <div className="bg-primary/10 text-primary p-4 sm:p-6 rounded-full mb-4 sm:mb-6 ring-8 ring-background">
-                                <MonitorSmartphone className="h-12 w-12 sm:h-16 sm:w-16" />
-                            </div>
-                        </div>
-                        <h3 className="text-xl sm:text-3xl font-semibold mb-2 sm:mb-4">1. Purely Local</h3>
-                        <p className="text-muted-foreground text-base sm:text-lg">All encryption and decryption happens in your browser. Your private files never leave your machine.</p>
-                    </div>
-                     <div className="flex flex-col items-center">
-                        <div className="relative bg-background p-2">
-                            <div className="bg-primary/10 text-primary p-4 sm:p-6 rounded-full mb-4 sm:mb-6 ring-8 ring-background">
-                                <KeySquare className="h-12 w-12 sm:h-16 sm:w-16" />
-                            </div>
-                        </div>
-                        <h3 className="text-xl sm:text-3xl font-semibold mb-2 sm:mb-4">2. You Hold the Keys</h3>
-                        <p className="text-muted-foreground text-base sm:text-lg">You provide the secret key for every operation. We don't store, transmit, or have any access to it.</p>
-                    </div>
-                     <div className="flex flex-col items-center">
-                        <div className="relative bg-background p-2">
-                           <div className="bg-primary/10 text-primary p-4 sm:p-6 rounded-full mb-4 sm:mb-6 ring-8 ring-background">
-                               <CloudOff className="h-12 w-12 sm:h-16 sm:w-16" />
-                           </div>
-                        </div>
-                        <h3 className="text-xl sm:text-3xl font-semibold mb-2 sm:mb-4">3. Zero Data Storage</h3>
-                        <p className="text-muted-foreground text-base sm:text-lg">Your original files and their encrypted versions are never stored by us. They are processed in memory and then saved back to your device.</p>
-                    </div>
+            <div className="space-y-8">
+                <div className="flex flex-col lg:flex-row items-center justify-center gap-8">
+                    <Card className="w-full lg:w-1/3 text-center">
+                        <CardHeader>
+                            <CardTitle>1. Input & State</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <Box className="w-16 h-16 mx-auto mb-4 text-primary"/>
+                            <p>Your data is divided into 128-bit blocks and arranged into a 4x4 grid of bytes, called the "State".</p>
+                        </CardContent>
+                    </Card>
+                    <Card className="w-full lg:w-1/3 text-center">
+                         <CardHeader>
+                            <CardTitle>2. Key Expansion</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <Key className="w-16 h-16 mx-auto mb-4 text-primary"/>
+                            <p>Your secret key is expanded into a series of "Round Keys"—one for each encryption round.</p>
+                        </CardContent>
+                    </Card>
+                </div>
+                <div className="text-center">
+                    <Repeat className="w-12 h-12 mx-auto text-primary animate-spin" style={{ animationDuration: '10s' }}/>
+                    <p className="mt-2 text-lg font-semibold">Main Rounds (14 for AES-256)</p>
+                    <p className="text-muted-foreground">The State is transformed in a series of identical rounds.</p>
+                </div>
+                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+                    <Card>
+                        <CardHeader><CardTitle>SubBytes</CardTitle></CardHeader>
+                        <CardContent>
+                            <Shuffle className="w-10 h-10 mx-auto mb-2 text-primary"/>
+                            <p className="text-sm text-muted-foreground">Each byte is swapped for another using a fixed substitution table (S-Box).</p>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader><CardTitle>ShiftRows</CardTitle></CardHeader>
+                        <CardContent>
+                            <Layers className="w-10 h-10 mx-auto mb-2 text-primary"/>
+                            <p className="text-sm text-muted-foreground">The rows of the State grid are shifted cyclically to shuffle the data.</p>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader><CardTitle>MixColumns</CardTitle></CardHeader>
+                        <CardContent>
+                            <Box className="w-10 h-10 mx-auto mb-2 text-primary"/>
+                            <p className="text-sm text-muted-foreground">Each column is mixed using a mathematical transformation to further diffuse data.</p>
+                        </CardContent>
+                    </Card>
+                     <Card>
+                        <CardHeader><CardTitle>AddRoundKey</CardTitle></CardHeader>
+                        <CardContent>
+                            <KeyRound className="w-10 h-10 mx-auto mb-2 text-primary"/>
+                            <p className="text-sm text-muted-foreground">The current Round Key is combined with the State using an XOR operation.</p>
+                        </CardContent>
+                    </Card>
+                </div>
+                <div className="text-center">
+                    <p className="mt-2 text-lg font-semibold">Final Round</p>
+                    <p className="text-muted-foreground">A final, slightly different round (without MixColumns) is performed.</p>
+                </div>
+                 <div className="flex justify-center">
+                    <Card className="w-full lg:w-1/3 text-center">
+                        <CardHeader>
+                            <CardTitle>3. Output</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <ShieldCheck className="w-16 h-16 mx-auto mb-4 text-primary"/>
+                            <p>The final, fully scrambled State is the encrypted ciphertext.</p>
+                        </CardContent>
+                    </Card>
                 </div>
             </div>
         </section>
@@ -294,7 +334,7 @@ export default function Home() {
             </div>
         </section>
 
-        <section id="security-process" className="mb-16 sm:mb-24 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+        <section id="security-process" className="my-16 sm:my-24 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
             <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold text-center mb-12 sm:mb-16">Your Security is Our Priority</h2>
             <div className="relative">
                 <div className="hidden lg:block absolute top-1/2 left-0 w-full h-0.5 bg-border -translate-y-1/2"></div>
