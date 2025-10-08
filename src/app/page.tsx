@@ -137,9 +137,22 @@ function FileUploader() {
 
 
 function LiveEncryptionDemo() {
-    const [text, setText] = useState('Hello World! Try typing here.');
+    const demoTexts = ["Your secret passwords", "Confidential business documents", "Private medical records", "Top secret project files", "Personal family photos"];
+    const [text, setText] = useState(demoTexts[0]);
     const [encryptedText, setEncryptedText] = useState('');
+    const [index, setIndex] = useState(0);
     const key = 'demo-key-123'; // Simple key for demonstration
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setIndex(prevIndex => (prevIndex + 1) % demoTexts.length);
+        }, 3000);
+        return () => clearInterval(interval);
+    }, [demoTexts.length]);
+
+    useEffect(() => {
+        setText(demoTexts[index]);
+    }, [index, demoTexts]);
 
     useEffect(() => {
         const encrypted = CryptoJS.AES.encrypt(text, key).toString();
@@ -150,15 +163,15 @@ function LiveEncryptionDemo() {
         <section id="live-demo" className="mb-16 sm:mb-24 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
             <div className="text-center max-w-3xl mx-auto">
                 <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">See It in Action</h2>
-                <p className="text-lg sm:text-xl text-muted-foreground mb-12">Type anything in the box below to see how your text is instantly transformed into an unreadable, encrypted format. Your data never leaves your browser.</p>
+                <p className="text-lg sm:text-xl text-muted-foreground mb-12">The animation below demonstrates how your data is instantly transformed into an unreadable, encrypted format. Your data never leaves your browser.</p>
             </div>
             <div className="grid md:grid-cols-[1fr_auto_1fr] items-center gap-8 max-w-5xl mx-auto">
                 <div className="space-y-2">
                     <h3 className="text-2xl font-semibold text-center">Your Message</h3>
                     <Textarea 
                         value={text} 
-                        onChange={(e) => setText(e.target.value)} 
-                        className="h-48 text-lg"
+                        readOnly
+                        className="h-48 text-lg resize-none"
                         aria-label="Your Message"
                     />
                 </div>
@@ -173,7 +186,7 @@ function LiveEncryptionDemo() {
                     <Textarea 
                         value={encryptedText} 
                         readOnly 
-                        className="h-48 text-lg bg-secondary font-code"
+                        className="h-48 text-lg bg-secondary font-code resize-none"
                         aria-label="Encrypted Output"
                     />
                 </div>
@@ -378,6 +391,7 @@ export default function Home() {
     
 
     
+
 
 
 
