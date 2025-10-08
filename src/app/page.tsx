@@ -5,7 +5,7 @@
 import { EncryptPanel } from '@/components/feature/encrypt-panel';
 import { DecryptPanel } from '@/components/feature/decrypt-panel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Lock, Unlock, Files, ShieldCheck, KeyRound, ServerOff, MonitorSmartphone, KeySquare, CloudOff, Bot, Activity, UploadCloud, FileType, Download, Box, Key, Repeat, Layers, Shuffle, ALargeSmall } from 'lucide-react';
+import { Lock, Unlock, Files, ShieldCheck, KeyRound, ServerOff, MonitorSmartphone, KeySquare, CloudOff, Bot, Activity, UploadCloud, FileType, Download, Box, Key, Repeat, Layers, Shuffle, ALargeSmall, Cpu } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
@@ -115,45 +115,50 @@ function FileUploader() {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, noClick: false, noKeyboard: true });
 
+  const CircuitTrace = ({ className }: { className?: string }) => (
+    <div className={cn(
+        "absolute bg-primary/20 transition-all duration-500",
+        isDragActive ? "bg-primary shadow-[0_0_10px_theme(colors.primary)]" : "group-hover:bg-primary/50",
+        className
+    )} />
+  );
+
   return (
     <div
       {...getRootProps()}
       className={cn(
-        'relative mt-4 mb-32 sm:mb-40 w-full max-w-3xl h-48 mx-auto rounded-2xl p-8 text-center transition-all duration-500 overflow-hidden group',
+        'relative mt-4 mb-32 sm:mb-40 w-full max-w-3xl h-64 mx-auto rounded-2xl p-8 text-center transition-all duration-500 overflow-hidden group',
         'flex flex-col items-center justify-center',
-        'border border-border bg-background',
-        isDragActive ? 'border-primary shadow-[0_0_30px] shadow-primary/50' : 'border-border/50',
-        'hover:border-primary/80'
+        'border border-primary/20 bg-secondary/30 backdrop-blur-sm',
+        isDragActive ? 'border-primary shadow-[0_0_40px] shadow-primary/30' : 'hover:border-primary/50',
       )}
     >
-      <div className={cn(
-        "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] h-2 bg-primary/20 rounded-full transition-all duration-300",
-        "before:content-[''] before:absolute before:inset-0 before:bg-primary/80 before:rounded-full before:animate-pulse",
-        isDragActive ? "h-6 w-full" : "group-hover:h-3 group-hover:w-full",
-        "after:content-[''] after:absolute after:top-0 after:left-0 after:h-full after:w-full",
-        "after:bg-shine-gradient after:animate-[shine_3s_linear_infinite]",
-        "after:filter after:blur-xl"
-      )} style={{ animationDelay: '1s' }} />
+        {/* --- Circuit Board VFX --- */}
+        <CircuitTrace className="h-1/2 w-px top-1/4 left-1/4" />
+        <CircuitTrace className="h-px w-1/4 top-1/4 left-1/4" />
+        <CircuitTrace className="h-1/4 w-px top-0 left-1/2" />
+        <CircuitTrace className="h-px w-1/4 top-1/2 right-0" />
+        <CircuitTrace className="h-1/4 w-px bottom-0 left-1/3" />
+        <CircuitTrace className="h-px w-1/3 bottom-1/4 right-1/3" />
+        <CircuitTrace className="h-1/3 w-px top-0 right-1/4" />
+        {/* --- End VFX --- */}
 
       <input {...getInputProps()} />
-
-      <div className="z-10 transition-transform duration-300 group-hover:scale-105">
-        <ALargeSmall className={cn("h-16 w-16 text-muted-foreground transition-all duration-300", isDragActive ? "text-primary" : "group-hover:text-foreground")} />
+      
+      <div className={cn(
+          "relative z-10 flex flex-col items-center justify-center w-32 h-32 rounded-full border-2 border-primary/30 transition-all duration-300",
+          isDragActive ? 'border-primary bg-primary/20 shadow-[0_0_20px_theme(colors.primary)]' : 'bg-background group-hover:border-primary/70'
+      )}>
+        <Cpu className={cn("h-16 w-16 text-primary/50 transition-all duration-300", isDragActive ? "text-primary" : "group-hover:text-primary/80")} />
       </div>
+
       <p className={cn(
-        "text-3xl font-semibold text-muted-foreground transition-colors duration-300 mt-4",
+        "text-3xl font-semibold text-muted-foreground transition-colors duration-300 mt-6 z-10",
         isDragActive ? 'text-foreground' : 'group-hover:text-foreground'
       )}>
-        {isDragActive ? "Prepare for Disintegration" : "Drop File to Encrypt"}
+        {isDragActive ? "Route to Encryption Core" : "Drop File to Encrypt"}
       </p>
-      <p className="text-muted-foreground mt-1">or click to select a file</p>
-      
-       <style jsx>{`
-        @keyframes shine {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
-        }
-      `}</style>
+      <p className="text-muted-foreground mt-1 z-10">or click to select a file</p>
     </div>
   );
 }
@@ -396,4 +401,5 @@ export default function Home() {
 }
 
 
+    
     
