@@ -5,7 +5,7 @@
 import { EncryptPanel } from '@/components/feature/encrypt-panel';
 import { DecryptPanel } from '@/components/feature/decrypt-panel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Lock, Unlock, Files, ShieldCheck, KeyRound, ServerOff, MonitorSmartphone, KeySquare, CloudOff, Bot, Activity, UploadCloud, FileType, Download } from 'lucide-react';
+import { Lock, Unlock, Files, ShieldCheck, KeyRound, ServerOff, MonitorSmartphone, KeySquare, CloudOff, Bot, Activity, UploadCloud, FileType, Download, Box, Key, Repeat, Layers, Shuffle } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
@@ -171,7 +171,7 @@ function LiveEncryptionDemo() {
                     <Textarea 
                         value={text} 
                         readOnly
-                        className="h-48 text-lg resize-none"
+                        className="h-48 text-lg resize-none focus-visible:ring-0 pointer-events-none"
                         aria-label="Your Message"
                     />
                 </div>
@@ -186,7 +186,7 @@ function LiveEncryptionDemo() {
                     <Textarea 
                         value={encryptedText} 
                         readOnly 
-                        className="h-48 text-lg bg-secondary font-code resize-none"
+                        className="h-48 text-lg bg-secondary font-code resize-none focus-visible:ring-0 pointer-events-none"
                         aria-label="Encrypted Output"
                     />
                 </div>
@@ -199,23 +199,21 @@ export default function Home() {
   const { user } = useAuth();
   const firstName = user?.displayName?.split(' ')[0];
   
-  const TreeNode = ({ icon, title, description, children }: { icon: React.ReactNode, title: string, description: string, children?: React.ReactNode }) => (
+  const TreeNode = ({ icon, title, description, children, className }: { icon: React.ReactNode, title: string, description: string, children?: React.ReactNode, className?: string }) => (
       <div className="flex flex-col items-center text-center relative group/treenode">
           <div className="relative z-10">
-              <div className="transition-all duration-300 group-hover/treenode:scale-105 group-hover/treenode:shadow-2xl bg-background border-2 border-border p-6 rounded-2xl w-64 h-full flex flex-col items-center">
-                  <div className="mb-4 text-primary transition-colors duration-300 group-hover/treenode:text-accent-foreground">{icon}</div>
-                  <h3 className="font-bold text-xl mb-2 transition-colors duration-300 group-hover/treenode:text-accent-foreground">{title}</h3>
-                  <p className="text-base text-muted-foreground">{description}</p>
+              <div className="transition-all duration-300 group-hover/treenode:scale-105 group-hover/treenode:shadow-2xl bg-background border-2 border-border p-4 rounded-2xl w-56 h-full flex flex-col items-center">
+                  <div className="mb-3 text-primary transition-colors duration-300 group-hover/treenode:text-accent-foreground">{icon}</div>
+                  <h3 className="font-bold text-lg mb-1 transition-colors duration-300 group-hover/treenode:text-accent-foreground">{title}</h3>
+                  <p className="text-sm text-muted-foreground">{description}</p>
               </div>
           </div>
           {children && (
-              <>
-                  <div className="mt-8 w-px h-8 bg-border"></div>
-                  <div className="flex justify-center w-full relative">
-                      <div className="absolute top-0 h-px bg-border" style={{ width: `calc(100% - 4rem)` }}></div>
-                      {children}
-                  </div>
-              </>
+              <div className="flex justify-center w-full relative">
+                  <div className="absolute top-0 h-8 w-px bg-border"></div>
+                  <div className="absolute top-8 h-px bg-border" style={{ width: `calc(100% - 2rem)` }}></div>
+                  {children}
+              </div>
           )}
       </div>
   );
@@ -226,8 +224,8 @@ export default function Home() {
       </div>
   );
   
-  const SubTree = ({ children }: { children: React.ReactNode }) => (
-    <div className="flex justify-around w-full gap-8 pt-8">
+  const SubTree = ({ children, className }: { children: React.ReactNode, className?: string }) => (
+    <div className={cn("flex justify-around w-full gap-4 pt-8 mt-8", className)}>
         {children}
     </div>
   );
@@ -275,23 +273,30 @@ export default function Home() {
 
         <section id="how-it-works" className="my-16 sm:my-24 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
             <div className="text-center max-w-3xl mx-auto">
-                <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">How It Works</h2>
-                <p className="text-lg sm:text-xl text-muted-foreground mb-12">CipherLock ensures your privacy by performing all encryption and decryption locally on your device. Your files are never uploaded to any server.</p>
+                <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">Inside AES-256 Encryption</h2>
+                <p className="text-lg sm:text-xl text-muted-foreground mb-12">CipherLock uses AES-256, the same encryption standard trusted by governments and security experts worldwide. Here’s a simplified look at how it masterfully turns your readable data into a secure, unreadable block.</p>
             </div>
             <div className="max-w-5xl mx-auto overflow-x-auto p-4">
                 <TreeContainer>
-                    <TreeNode title="Your File & Key" description="The process begins with your file and a unique key you provide, all on your local machine." icon={<FileType className="w-10 h-10" />}>
+                    <TreeNode title="1. Your Data & Key" description="The process starts with your data (plain text) and your unique secret key." icon={<FileType className="w-10 h-10" />}>
                         <SubTree>
-                            <TreeNode title="In-Browser Reading" description="File is read into the browser's memory, never leaving your computer." icon={<MonitorSmartphone className="w-10 h-10" />}>
+                            <TreeNode title="2. State Array" description="Your data is broken into 128-bit blocks and arranged in a 4x4 matrix called the 'state'." icon={<Box className="w-10 h-10" />}>
                                 <SubTree>
-                                    <TreeNode title="AES-256 Encryption" description="Content is encrypted with your key using a military-grade algorithm." icon={<ShieldCheck className="w-10 h-10" />}>
+                                    <TreeNode title="3. Key Expansion" description="Your single key is expanded into a series of 'round keys' for each encryption round." icon={<Key className="w-10 h-10" />}>
                                         <SubTree>
-                                            <TreeNode title="Encrypted Download" description="The result is securely packaged and downloaded back to you as a '.ciph' file." icon={<Download className="w-10 h-10" />} />
+                                            <TreeNode title="4. Encryption Rounds" description="Each block goes through 14 rounds of complex mathematical transformations." icon={<Repeat className="w-10 h-10" />}>
+                                                <SubTree className="w-[48rem]">
+                                                     <TreeNode title="SubBytes" description="Each byte is substituted with another from a lookup table." icon={<Layers className="w-10 h-10" />} />
+                                                     <TreeNode title="ShiftRows" description="Rows of the 'state' matrix are shifted cyclically." icon={<Layers className="w-10 h-10" />} />
+                                                     <TreeNode title="MixColumns" description="Columns are mixed to diffuse data across the block." icon={<Layers className="w-10 h-10" />} />
+                                                     <TreeNode title="AddRoundKey" description="The state is combined with a unique round key." icon={<Layers className="w-10 h-10" />} />
+                                                </SubTree>
+                                            </TreeNode>
                                         </SubTree>
                                     </TreeNode>
                                 </SubTree>
                             </TreeNode>
-                            <TreeNode title="Key Hashing (Optional)" description="If you're logged in, a hash of the key is stored for security analysis, not the key itself." icon={<KeySquare className="w-10 h-10" />} />
+                             <TreeNode title="5. Final Output" description="After 14 rounds, the result is a fully scrambled, encrypted block (ciphertext)." icon={<ShieldCheck className="w-10 h-10" />} />
                         </SubTree>
                     </TreeNode>
                 </TreeContainer>
@@ -399,3 +404,6 @@ export default function Home() {
 
 
 
+
+
+    
