@@ -5,7 +5,7 @@
 import { EncryptPanel } from '@/components/feature/encrypt-panel';
 import { DecryptPanel } from '@/components/feature/decrypt-panel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Lock, Unlock, Files, ShieldCheck, KeyRound, ServerOff, MonitorSmartphone, KeySquare, CloudOff, Bot, Activity, UploadCloud, FileType, Download, Box, Key, Repeat, Layers, Shuffle, ALargeSmall, Cpu } from 'lucide-react';
+import { Lock, Unlock, Files, ShieldCheck, KeyRound, ServerOff, MonitorSmartphone, KeySquare, CloudOff, Bot, Activity, UploadCloud, FileType, Download, Box, Key, Repeat, Layers, Shuffle, ALargeSmall, Cpu, FileText } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
@@ -24,25 +24,27 @@ import { useDropzone } from 'react-dropzone';
 import { Textarea } from '@/components/ui/textarea';
 import CryptoJS from 'crypto-js';
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
+
 
 const features = [
     {
-      icon: <Files className="h-10 w-10 sm:h-12 sm:w-12 mb-4 sm:mb-6 text-primary" />,
+      icon: <Files className="h-10 w-10 sm:h-12 sm:w-12 mb-4 sm:mb-6 text-foreground" />,
       title: 'Batch Processing',
       description: 'Encrypt or decrypt multiple files at once, streamlining your workflow.',
     },
     {
-      icon: <ShieldCheck className="h-10 w-10 sm:h-12 sm:w-12 mb-4 sm:mb-6 text-primary" />,
+      icon: <ShieldCheck className="h-10 w-10 sm:h-12 sm:w-12 mb-4 sm:mb-6 text-foreground" />,
       title: 'Strong Encryption',
       description: 'Utilizes AES-256 for robust, industry-standard file protection.',
     },
     {
-      icon: <KeyRound className="h-10 w-10 sm:h-12 sm:w-12 mb-4 sm:mb-6 text-primary" />,
+      icon: <KeyRound className="h-10 w-10 sm:h-12 sm:w-12 mb-4 sm:mb-6 text-foreground" />,
       title: 'Secret Key Control',
       description: 'You control the secret key, ensuring only you can access your files.',
     },
     {
-      icon: <ServerOff className="h-10 w-10 sm:h-12 sm:w-12 mb-4 sm:mb-6 text-primary" />,
+      icon: <ServerOff className="h-10 w-10 sm:h-12 sm:w-12 mb-4 sm:mb-6 text-foreground" />,
       title: 'No Server Upload',
       description: 'All operations happen in your browser. Your files never leave your computer.',
     },
@@ -127,7 +129,7 @@ function FileUploader() {
     <div
       {...getRootProps()}
       className={cn(
-        'relative mt-4 mb-32 sm:mb-40 w-full max-w-3xl h-64 mx-auto rounded-2xl p-8 text-center transition-all duration-500 overflow-hidden group',
+        'relative mt-4 mb-40 sm:mb-48 w-full max-w-3xl h-64 mx-auto rounded-2xl p-8 text-center transition-all duration-500 overflow-hidden group',
         'flex flex-col items-center justify-center',
         'border border-primary/20 bg-secondary/30 backdrop-blur-sm',
         isDragActive ? 'border-primary shadow-[0_0_40px] shadow-primary/30' : 'hover:border-primary/50',
@@ -165,59 +167,56 @@ function FileUploader() {
 
 
 function LiveEncryptionDemo() {
-    const demoTexts = ["Your secret passwords", "Confidential business documents", "Private medical records", "Top secret project files", "Personal family photos"];
-    const [text, setText] = useState(demoTexts[0]);
-    const [encryptedText, setEncryptedText] = useState('');
-    const [index, setIndex] = useState(0);
-    const key = 'demo-key-123'; // Simple key for demonstration
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setIndex(prevIndex => (prevIndex + 1) % demoTexts.length);
-        }, 3000);
-        return () => clearInterval(interval);
-    }, [demoTexts.length]);
-
-    useEffect(() => {
-        setText(demoTexts[index]);
-    }, [index, demoTexts]);
-
-    useEffect(() => {
-        const encrypted = CryptoJS.AES.encrypt(text, key).toString();
-        setEncryptedText(encrypted);
-    }, [text]);
+    const particleCount = 50;
 
     return (
-        <section id="live-demo" className="my-32 sm:my-40 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+        <section id="live-demo" className="my-40 sm:my-48 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
             <div className="text-center max-w-3xl mx-auto">
                 <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">See It in Action</h2>
                 <p className="text-lg sm:text-xl text-muted-foreground mb-12">The animation below demonstrates how your data is instantly transformed into an unreadable, encrypted format. Your data never leaves your browser.</p>
             </div>
             <div className="grid md:grid-cols-[1fr_auto_1fr] items-center gap-8 max-w-5xl mx-auto">
-                <div className="space-y-2">
-                    <h3 className="text-2xl font-semibold text-center">Your Message</h3>
-                    <Textarea 
-                        value={text} 
-                        readOnly
-                        className="h-48 text-lg resize-none focus-visible:ring-0 pointer-events-none"
-                        aria-label="Your Message"
-                    />
+                {/* Before */}
+                <Card className="h-48 flex flex-col items-center justify-center text-center p-6">
+                    <FileText className="h-16 w-16 text-muted-foreground mb-4" />
+                    <p className="font-semibold text-lg">Readable File</p>
+                    <p className="text-sm text-muted-foreground">Your original data</p>
+                </Card>
+
+                {/* Animation */}
+                <div className="relative h-24 w-full md:w-32 flex items-center justify-center">
+                    <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute top-0 left-0">
+                        {Array.from({ length: particleCount }).map((_, i) => (
+                            <motion.circle
+                                key={i}
+                                cx="0"
+                                cy={Math.random() * 100}
+                                r={Math.random() * 1.5 + 0.5}
+                                className="text-primary"
+                                fill="currentColor"
+                                initial={{ x: 0, opacity: 0 }}
+                                animate={{
+                                    x: [0, 20 + Math.random() * 60, 100],
+                                    opacity: [0, 1, 0],
+                                    scale: [1, 1.5 + Math.random(), 1],
+                                    transition: {
+                                        duration: 2 + Math.random() * 2,
+                                        repeat: Infinity,
+                                        delay: i * 0.1,
+                                        ease: "easeInOut",
+                                    },
+                                }}
+                            />
+                        ))}
+                    </svg>
                 </div>
-                 <div className="hidden md:flex flex-col items-center justify-center gap-4">
-                    <AnimatedLockIcon />
-                    <div className="w-px h-16 bg-border"></div>
-                    <p className="text-muted-foreground text-sm writing-mode-vertical-rl">AES-256</p>
-                    <div className="w-px h-16 bg-border"></div>
-                </div>
-                <div className="space-y-2">
-                     <h3 className="text-2xl font-semibold text-center">Encrypted Output</h3>
-                    <Textarea 
-                        value={encryptedText} 
-                        readOnly 
-                        className="h-48 text-lg bg-secondary font-code resize-none focus-visible:ring-0 pointer-events-none"
-                        aria-label="Encrypted Output"
-                    />
-                </div>
+                
+                {/* After */}
+                <Card className="h-48 flex flex-col items-center justify-center text-center p-6 bg-secondary">
+                    <ShieldCheck className="h-16 w-16 text-primary mb-4" />
+                    <p className="font-semibold text-lg">Encrypted File</p>
+                    <p className="text-sm text-muted-foreground">Secure & Unreadable</p>
+                </Card>
             </div>
         </section>
     );
@@ -253,7 +252,7 @@ export default function Home() {
         </div>
         
         {user ? (
-            <div className="mt-4 mb-32 sm:mb-40 flex justify-center">
+            <div className="mt-4 mb-40 sm:mb-48 flex justify-center">
                 <Button asChild size="lg" className="h-14 px-8 text-lg rounded-full shine-button">
                     <Link href="/tools">
                         <Lock className="mr-3 h-5 w-5" />
@@ -267,7 +266,7 @@ export default function Home() {
 
         <LiveEncryptionDemo />
 
-        <section id="how-it-works" className="my-32 sm:my-40 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+        <section id="how-it-works" className="my-40 sm:my-48 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
             <div className="text-center max-w-3xl mx-auto">
                 <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">Inside AES-256 Encryption</h2>
                 <p className="text-lg sm:text-xl text-muted-foreground mb-12">CipherLock uses AES-256, the same encryption standard trusted by governments and security experts worldwide. Here’s a simplified look at how it masterfully turns your readable data into a secure, unreadable block.</p>
@@ -346,7 +345,7 @@ export default function Home() {
             </div>
         </section>
 
-        <section id="features" className="my-32 sm:my-40 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+        <section id="features" className="my-40 sm:my-48 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
             <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold text-center mb-12 sm:mb-16">Features</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8">
                 {features.map((feature, index) => (
@@ -361,7 +360,7 @@ export default function Home() {
             </div>
         </section>
 
-        <section id="premium-features" className="my-32 sm:my-40 animate-fade-in-up bg-secondary rounded-2xl py-12 sm:py-16 px-6" style={{ animationDelay: '0.4s' }}>
+        <section id="premium-features" className="my-40 sm:my-48 animate-fade-in-up bg-secondary rounded-2xl py-12 sm:py-16 px-6" style={{ animationDelay: '0.4s' }}>
             <div className="text-center max-w-3xl mx-auto">
                  <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">Unlock More with an Account</h2>
                  <p className="text-lg sm:text-xl text-muted-foreground mb-12">Signing up is free and gives you access to a powerful suite of features designed for convenience and enhanced security.</p>
@@ -381,7 +380,7 @@ export default function Home() {
             </div>
         </section>
 
-        <section id="faq" className="w-full max-w-3xl mx-auto animate-fade-in-up pb-12 my-32 sm:my-40" style={{ animationDelay: '0.5s' }}>
+        <section id="faq" className="w-full max-w-3xl mx-auto animate-fade-in-up pb-12 my-40 sm:my-48" style={{ animationDelay: '0.5s' }}>
             <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold text-center mb-12 sm:mb-16">Frequently Asked Questions</h2>
             <Accordion type="single" collapsible className="w-full">
                 {faqItems.map((item, index) => (
