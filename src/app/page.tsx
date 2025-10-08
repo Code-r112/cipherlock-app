@@ -109,7 +109,7 @@ function FileUploader() {
     }
   }, [user, router]);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, noClick: true });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
     <div
@@ -120,13 +120,9 @@ function FileUploader() {
     >
       <input {...getInputProps()} />
       <div className="flex flex-col items-center justify-center gap-4 text-muted-foreground">
-        <UploadCloud className="h-12 w-12 text-primary" />
+        <UploadCloud className="h-12 w-12 text-foreground" />
         <p className="text-2xl font-semibold text-foreground">Drag & drop your files here</p>
         <p>to start encrypting or decrypting</p>
-        <Button onClick={() => document.getElementById('file-upload-input')?.click()} variant="outline" className="mt-4 border-primary">
-          Or Select Files
-        </Button>
-        <input id="file-upload-input" type="file" multiple onChange={(e) => onDrop(Array.from(e.target.files || []))} className="hidden" />
       </div>
     </div>
   );
