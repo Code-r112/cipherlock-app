@@ -5,7 +5,7 @@
 import { EncryptPanel } from '@/components/feature/encrypt-panel';
 import { DecryptPanel } from '@/components/feature/decrypt-panel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Lock, Unlock, Files, ShieldCheck, KeyRound, ServerOff, MonitorSmartphone, KeySquare, CloudOff, Bot, Activity, UploadCloud, FileType, File, Cpu, Download } from 'lucide-react';
+import { Lock, Unlock, Files, ShieldCheck, KeyRound, ServerOff, MonitorSmartphone, KeySquare, CloudOff, Bot, Activity, UploadCloud, FileType } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
@@ -139,7 +139,7 @@ export default function Home() {
   const firstName = user?.displayName?.split(' ')[0];
   
   const TreeNode = ({ icon, title, description, children }: { icon: React.ReactNode, title: string, description: string, children?: React.ReactNode }) => (
-      <div className="flex flex-col items-center text-center relative">
+      <div className="flex flex-col items-center text-center relative group">
           <div className="relative z-10">
               <div className="transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl bg-background border-2 border-border p-6 rounded-2xl w-64 h-full flex flex-col items-center">
                   <div className="mb-4 text-primary transition-colors duration-300 group-hover:text-accent-foreground">{icon}</div>
@@ -197,7 +197,18 @@ export default function Home() {
           </p>
         </div>
         
-        <FileUploader />
+        {user ? (
+            <div className="mt-8 mb-16 sm:mb-24 w-full max-w-lg mx-auto">
+                <Button asChild size="lg" className="w-full h-24 text-2xl rounded-2xl shine-button">
+                    <Link href="/tools">
+                        <Lock className="mr-4 h-8 w-8" />
+                        Go to Encryption Tools
+                    </Link>
+                </Button>
+            </div>
+        ) : (
+            <FileUploader />
+        )}
 
         <section id="how-it-works" className="mb-16 sm:mb-24 animate-fade-in-up bg-secondary rounded-2xl py-12 sm:py-16 px-6" style={{ animationDelay: '0.4s' }}>
             <div className="text-center max-w-3xl mx-auto">
@@ -206,30 +217,20 @@ export default function Home() {
             </div>
             <div className="max-w-5xl mx-auto overflow-x-auto p-4">
                 <TreeContainer>
-                    <div className="group">
-                        <TreeNode title="Your File & Key" description="The process begins with your file and a unique key you provide, all on your local machine." icon={<File className="w-10 h-10" />}>
-                            <SubTree>
-                                <div className="group">
-                                    <TreeNode title="In-Browser Reading" description="File is read into the browser's memory, never leaving your computer." icon={<MonitorSmartphone className="w-10 h-10" />}>
+                    <TreeNode title="Your File & Key" description="The process begins with your file and a unique key you provide, all on your local machine." icon={<FileType className="w-10 h-10" />}>
+                        <SubTree>
+                            <TreeNode title="In-Browser Reading" description="File is read into the browser's memory, never leaving your computer." icon={<MonitorSmartphone className="w-10 h-10" />}>
+                                <SubTree>
+                                    <TreeNode title="AES-256 Encryption" description="Content is encrypted with your key using a military-grade algorithm." icon={<ShieldCheck className="w-10 h-10" />}>
                                         <SubTree>
-                                             <div className="group">
-                                                <TreeNode title="AES-256 Encryption" description="Content is encrypted with your key using a military-grade algorithm." icon={<Cpu className="w-10 h-10" />}>
-                                                    <SubTree>
-                                                         <div className="group">
-                                                            <TreeNode title="Encrypted Download" description="The result is securely packaged and downloaded back to you as a '.ciph' file." icon={<Download className="w-10 h-10" />} />
-                                                         </div>
-                                                    </SubTree>
-                                                </TreeNode>
-                                             </div>
+                                            <TreeNode title="Encrypted Download" description="The result is securely packaged and downloaded back to you as a '.ciph' file." icon={<Download className="w-10 h-10" />} />
                                         </SubTree>
                                     </TreeNode>
-                                </div>
-                                <div className="group">
-                                    <TreeNode title="Key Hashing (Optional)" description="If you're logged in, a hash of the key is stored for security analysis, not the key itself." icon={<KeySquare className="w-10 h-10" />} />
-                                </div>
-                            </SubTree>
-                        </TreeNode>
-                    </div>
+                                </SubTree>
+                            </TreeNode>
+                            <TreeNode title="Key Hashing (Optional)" description="If you're logged in, a hash of the key is stored for security analysis, not the key itself." icon={<KeySquare className="w-10 h-10" />} />
+                        </SubTree>
+                    </TreeNode>
                 </TreeContainer>
             </div>
         </section>
