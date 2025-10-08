@@ -114,9 +114,9 @@ function FileUploader() {
   return (
     <div
       {...getRootProps()}
-      className={`mt-8 mb-16 sm:mb-24 w-full max-w-lg mx-auto border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-colors duration-300 ${
-        isDragActive ? 'border-primary bg-primary/10' : 'border-border hover:border-primary'
-      }`}
+      className={`mt-8 mb-16 sm:mb-24 w-full max-w-lg mx-auto border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-colors duration-300 ${
+        isDragActive ? 'bg-primary/10' : ''
+      } border-primary`}
     >
       <input {...getInputProps()} />
       <div className="flex flex-col items-center justify-center gap-4 text-muted-foreground">
