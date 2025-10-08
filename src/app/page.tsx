@@ -143,7 +143,7 @@ function FileUploader() {
           "text-3xl font-semibold text-muted-foreground transition-colors duration-300",
           isDragActive ? 'text-foreground' : 'group-hover:text-foreground'
         )}>
-          {isDragActive ? "Release to begin" : "Drop files to encrypt"}
+          {isDragActive ? "Release to Secure" : "Drop Files into the Vault"}
         </p>
         <p className="text-muted-foreground">or click here to select</p>
       </div>
@@ -387,5 +387,7 @@ export default function Home() {
     </div>
   );
 }
+
+    
 
     
