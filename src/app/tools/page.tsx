@@ -5,7 +5,7 @@
 import { EncryptPanel } from '@/components/feature/encrypt-panel';
 import { DecryptPanel } from '@/components/feature/decrypt-panel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Lock, Unlock, MonitorSmartphone, ShieldCheck, Download, KeySquare, FileType, History, BrainCircuit } from 'lucide-react';
+import { Lock, Unlock, MonitorSmartphone, ShieldCheck, Download, KeySquare, FileType, History, BrainCircuit, Fingerprint } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { AnimatedLockIcon } from '@/components/ui/animated-lock-icon';
 import { useEffect, useState } from 'react';
@@ -16,6 +16,8 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { analyzeSecurity, SecurityAnalysisInput } from '@/ai/flows/security-audit-flow';
 import { motion } from 'framer-motion';
+import { SignPanel } from '@/components/feature/sign-panel';
+import { VerifyPanel } from '@/components/feature/verify-panel';
 
 interface ActivityLog {
     id: string;
@@ -45,8 +47,6 @@ export default function ToolsPage() {
   const [keyCount, setKeyCount] = useState(0);
   const [activityCount, setActivityCount] = useState(0);
   const [securityScore, setSecurityScore] = useState<number | null>(null);
-
-  const [activeStep, setActiveStep] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -170,52 +170,84 @@ export default function ToolsPage() {
             </section>
         )}
         
-        <div className="w-full max-w-lg mx-auto my-16 sm:my-24 animate-fade-in-up mt-8">
-            <Tabs defaultValue="encrypt" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 h-14 sm:h-16 gap-2 bg-transparent p-0">
-                <TabsTrigger value="encrypt" className="text-lg sm:text-xl h-full rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-muted">
-                  <Lock className="mr-2 h-6 w-6 sm:h-7 sm:w-7" />Encrypt Files
+        <Tabs defaultValue="encryption" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 h-16 gap-2 bg-transparent p-0 mb-8">
+                <TabsTrigger value="encryption" className="text-xl h-full rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-muted">
+                    <Lock className="mr-2 h-6 w-6" />File Encryption
                 </TabsTrigger>
-                <TabsTrigger value="decrypt" className="text-lg sm:text-xl h-full rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-muted">
-                  <Unlock className="mr-2 h-6 w-6 sm:h-7 sm:w-7" />Decrypt Files
+                <TabsTrigger value="signature" className="text-xl h-full rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-muted">
+                    <Fingerprint className="mr-2 h-6 w-6" />Digital Signature
                 </TabsTrigger>
             </TabsList>
-            <TabsContent value="encrypt" className="mt-6">
-                <EncryptPanel onActiveStepChange={setActiveStep} />
-            </TabsContent>
-            <TabsContent value="decrypt" className="mt-6">
-                <DecryptPanel />
-            </TabsContent>
-            </Tabs>
-        </div>
+            <TabsContent value="encryption">
+                <div className="w-full max-w-lg mx-auto">
+                    <Tabs defaultValue="encrypt" className="w-full">
+                        <TabsList className="grid w-full grid-cols-2 h-14 sm:h-16 gap-2 bg-transparent p-0">
+                            <TabsTrigger value="encrypt" className="text-lg sm:text-xl h-full rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-muted">
+                                <Lock className="mr-2 h-6 w-6 sm:h-7 sm:w-7" />Encrypt Files
+                            </TabsTrigger>
+                            <TabsTrigger value="decrypt" className="text-lg sm:text-xl h-full rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-muted">
+                                <Unlock className="mr-2 h-6 w-6 sm:h-7 sm:w-7" />Decrypt Files
+                            </TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="encrypt" className="mt-6">
+                            <EncryptPanel onActiveStepChange={() => {}} />
+                        </TabsContent>
+                        <TabsContent value="decrypt" className="mt-6">
+                            <DecryptPanel />
+                        </TabsContent>
+                    </Tabs>
+                </div>
 
-        {user && recentActivities.length > 0 && (
-            <section className="mb-16 sm:mb-24 animate-fade-in-up">
-                 <h2 className="text-3xl font-bold text-center mb-8">Recent Activity</h2>
-                 <Card>
-                    <CardContent className="p-6">
-                        <ul className="space-y-4">
-                            {recentActivities.map(activity => (
-                                <li key={activity.id} className="flex items-center justify-between">
-                                    <div className="flex items-center gap-4">
-                                        {activity.action === 'encrypt' ? <Lock className="h-5 w-5 text-primary" /> : <Unlock className="h-5 w-5 text-primary" />}
-                                        <div>
-                                            <p className="font-medium capitalize">{activity.action}ed <span className="font-semibold">{activity.filename}</span></p>
-                                        </div>
-                                    </div>
-                                    <p className="text-sm text-muted-foreground">{activity.timestamp.toDate().toLocaleDateString()}</p>
-                                </li>
-                             ))}
-                        </ul>
-                    </CardContent>
-                 </Card>
-                 <div className="text-center mt-6">
-                    <Button variant="link" asChild>
-                        <Link href="/activity">View All Activity &rarr;</Link>
-                    </Button>
-                 </div>
-            </section>
-        )}
+                {user && recentActivities.length > 0 && (
+                    <section className="mt-16 sm:mt-24 animate-fade-in-up">
+                         <h2 className="text-3xl font-bold text-center mb-8">Recent Activity</h2>
+                         <Card>
+                            <CardContent className="p-6">
+                                <ul className="space-y-4">
+                                    {recentActivities.map(activity => (
+                                        <li key={activity.id} className="flex items-center justify-between">
+                                            <div className="flex items-center gap-4">
+                                                {activity.action === 'encrypt' ? <Lock className="h-5 w-5 text-primary" /> : <Unlock className="h-5 w-5 text-primary" />}
+                                                <div>
+                                                    <p className="font-medium capitalize">{activity.action}ed <span className="font-semibold">{activity.filename}</span></p>
+                                                </div>
+                                            </div>
+                                            <p className="text-sm text-muted-foreground">{activity.timestamp.toDate().toLocaleDateString()}</p>
+                                        </li>
+                                     ))}
+                                </ul>
+                            </CardContent>
+                         </Card>
+                         <div className="text-center mt-6">
+                            <Button variant="link" asChild>
+                                <Link href="/activity">View All Activity &rarr;</Link>
+                            </Button>
+                         </div>
+                    </section>
+                )}
+            </TabsContent>
+            <TabsContent value="signature">
+                <div className="w-full max-w-lg mx-auto">
+                    <Tabs defaultValue="sign" className="w-full">
+                        <TabsList className="grid w-full grid-cols-2 h-14 sm:h-16 gap-2 bg-transparent p-0">
+                            <TabsTrigger value="sign" className="text-lg sm:text-xl h-full rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-muted">
+                                <Lock className="mr-2 h-6 w-6 sm:h-7 sm:w-7" />Sign File
+                            </TabsTrigger>
+                            <TabsTrigger value="verify" className="text-lg sm:text-xl h-full rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-muted">
+                                <Unlock className="mr-2 h-6 w-6 sm:h-7 sm:w-7" />Verify File
+                            </TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="sign" className="mt-6">
+                           <SignPanel />
+                        </TabsContent>
+                        <TabsContent value="verify" className="mt-6">
+                           <VerifyPanel />
+                        </TabsContent>
+                    </Tabs>
+                </div>
+            </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

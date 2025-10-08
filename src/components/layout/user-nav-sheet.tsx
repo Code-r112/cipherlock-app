@@ -16,7 +16,7 @@ import { collection, getDocs, onSnapshot, query, Timestamp } from "firebase/fire
 import { User, UserIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { History, KeyRound, ShieldAlert, Settings, LogOut, LayoutDashboard } from "lucide-react";
+import { History, KeyRound, ShieldAlert, Settings, LogOut, LayoutDashboard, Fingerprint } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { analyzeSecurity, SecurityAnalysisInput } from "@/ai/flows/security-audit-flow";
 
