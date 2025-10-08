@@ -4,7 +4,7 @@
 import { EncryptPanel } from '@/components/feature/encrypt-panel';
 import { DecryptPanel } from '@/components/feature/decrypt-panel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Lock, Unlock, Files, ShieldCheck, KeyRound, ServerOff, MonitorSmartphone, KeySquare, CloudOff, Bot, Activity } from 'lucide-react';
+import { Lock, Unlock, Files, ShieldCheck, KeyRound, ServerOff, MonitorSmartphone, KeySquare, CloudOff, Bot, Activity, UploadCloud } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
@@ -17,6 +17,9 @@ import { WordRotator } from '@/components/ui/word-rotator';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { AnimatedLockIcon } from '@/components/ui/animated-lock-icon';
+import { useRouter } from 'next/navigation';
+import { useCallback, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
 
 const features = [
     {
@@ -92,6 +95,44 @@ const faqItems = [
     }
 ]
 
+function FileUploader() {
+  const { user } = useAuth();
+  const router = useRouter();
+
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    if (acceptedFiles.length > 0) {
+      if (user) {
+        router.push('/tools');
+      } else {
+        router.push('/auth');
+      }
+    }
+  }, [user, router]);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, noClick: true });
+
+  return (
+    <div
+      {...getRootProps()}
+      className={`mt-8 mb-16 sm:mb-24 w-full max-w-lg mx-auto border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-colors duration-300 ${
+        isDragActive ? 'border-primary bg-primary/10' : 'border-border hover:border-primary'
+      }`}
+    >
+      <input {...getInputProps()} />
+      <div className="flex flex-col items-center justify-center gap-4 text-muted-foreground">
+        <UploadCloud className="h-12 w-12" />
+        <p className="text-xl font-semibold">Drag & drop your files here</p>
+        <p>to start encrypting or decrypting</p>
+        <Button onClick={() => document.getElementById('file-upload-input')?.click()} variant="outline" className="mt-4">
+          Or Select Files
+        </Button>
+        <input id="file-upload-input" type="file" multiple onChange={(e) => onDrop(Array.from(e.target.files || []))} className="hidden" />
+      </div>
+    </div>
+  );
+}
+
+
 export default function Home() {
   const { user } = useAuth();
   const firstName = user?.displayName?.split(' ')[0];
@@ -121,24 +162,7 @@ export default function Home() {
           </p>
         </div>
         
-        <div className="w-full max-w-lg mx-auto mb-16 sm:mb-24 animate-fade-in-up">
-            <Tabs defaultValue="encrypt" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 h-14 sm:h-16 gap-2 bg-transparent p-0">
-                <TabsTrigger value="encrypt" className="text-lg sm:text-xl h-full rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-muted">
-                  <Lock className="mr-2 h-6 w-6 sm:h-7 sm:w-7" />Encrypt Files
-                </TabsTrigger>
-                <TabsTrigger value="decrypt" className="text-lg sm:text-xl h-full rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-muted">
-                  <Unlock className="mr-2 h-6 w-6 sm:h-7 sm:w-7" />Decrypt Files
-                </TabsTrigger>
-            </TabsList>
-            <TabsContent value="encrypt" className="mt-6">
-                <EncryptPanel />
-            </TabsContent>
-            <TabsContent value="decrypt" className="mt-6">
-                <DecryptPanel />
-            </TabsContent>
-            </Tabs>
-        </div>
+        <FileUploader />
 
         <section id="features" className="mb-16 sm:mb-24 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
             <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold text-center mb-12 sm:mb-16">Features</h2>
