@@ -198,10 +198,10 @@ export default function Home() {
         </div>
         
         {user ? (
-            <div className="mt-8 mb-16 sm:mb-24 w-full max-w-lg mx-auto">
-                <Button asChild size="lg" className="w-full h-20 text-xl rounded-full shine-button">
+            <div className="mt-4 mb-16 sm:mb-24 w-full flex justify-center">
+                <Button asChild size="lg" className="h-16 px-8 text-lg rounded-full shine-button">
                     <Link href="/tools">
-                        <Lock className="mr-4 h-8 w-8" />
+                        <Lock className="mr-3 h-6 w-6" />
                         Go to Encryption Tools
                     </Link>
                 </Button>
@@ -328,5 +328,6 @@ export default function Home() {
     
 
     
+
 
 
