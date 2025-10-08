@@ -5,9 +5,11 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { ChevronRight, Home } from 'lucide-react';
 import React from 'react';
+import { useAuth } from '@/hooks/use-auth';
 
 export function Breadcrumb() {
     const pathname = usePathname();
+    const { user } = useAuth();
     const segments = pathname.split('/').filter(Boolean);
 
     if (segments.length === 0) {
@@ -21,11 +23,13 @@ export function Breadcrumb() {
         return { name, href, isLast };
     });
 
+    const homeHref = user ? '/tools' : '/';
+
     return (
         <nav aria-label="Breadcrumb" className="mb-6">
             <ol className="flex items-center gap-2 text-sm text-muted-foreground">
                 <li>
-                    <Link href="/" className="flex items-center gap-1 hover:text-foreground">
+                    <Link href={homeHref} className="flex items-center gap-1 hover:text-foreground">
                         <Home className="h-4 w-4" />
                         <span>Home</span>
                     </Link>
