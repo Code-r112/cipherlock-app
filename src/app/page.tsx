@@ -199,9 +199,9 @@ export default function Home() {
         
         {user ? (
             <div className="mt-4 mb-16 sm:mb-24 w-full flex justify-center">
-                <Button asChild size="lg" className="h-16 px-8 text-lg rounded-full shine-button">
+                <Button asChild size="lg" className="h-14 px-6 text-lg rounded-full shine-button">
                     <Link href="/tools">
-                        <Lock className="mr-3 h-6 w-6" />
+                        <Lock className="mr-3 h-5 w-5" />
                         Go to Encryption Tools
                     </Link>
                 </Button>
@@ -210,7 +210,7 @@ export default function Home() {
             <FileUploader />
         )}
 
-        <section id="how-it-works" className="mb-16 sm:mb-24 animate-fade-in-up bg-secondary rounded-2xl py-12 sm:py-16 px-6" style={{ animationDelay: '0.4s' }}>
+        <section id="how-it-works" className="mb-16 sm:mb-24 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
             <div className="text-center max-w-3xl mx-auto">
                 <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">How It Works</h2>
                 <p className="text-lg sm:text-xl text-muted-foreground mb-12">CipherLock ensures your privacy by performing all encryption and decryption locally on your device. Your files are never uploaded to any server.</p>
@@ -328,6 +328,7 @@ export default function Home() {
     
 
     
+
 
 
 
