@@ -47,7 +47,7 @@ export default function AuthPage() {
 
   useEffect(() => {
     if (user) {
-      router.push('/');
+      router.push('/tools');
     }
   }, [user, router]);
 

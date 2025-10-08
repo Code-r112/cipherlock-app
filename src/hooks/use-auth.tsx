@@ -34,7 +34,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(true);
     try {
       await signInWithPopup(auth, googleProvider);
-      router.push('/');
+      router.push('/tools');
     } catch (error) {
       const authError = error as AuthError;
       if (authError.code === 'auth/popup-closed-by-user') {
