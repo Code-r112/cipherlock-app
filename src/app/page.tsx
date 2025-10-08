@@ -5,7 +5,7 @@
 import { EncryptPanel } from '@/components/feature/encrypt-panel';
 import { DecryptPanel } from '@/components/feature/decrypt-panel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Lock, Unlock, Files, ShieldCheck, KeyRound, ServerOff, MonitorSmartphone, KeySquare, CloudOff, Bot, Activity, UploadCloud, FileType } from 'lucide-react';
+import { Lock, Unlock, Files, ShieldCheck, KeyRound, ServerOff, MonitorSmartphone, KeySquare, CloudOff, Bot, Activity, UploadCloud, FileType, File, Cpu, Download } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
@@ -110,14 +110,14 @@ function FileUploader() {
     }
   }, [user, router]);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, noClick: true, noKeyboard: true });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, noClick: false, noKeyboard: true });
 
   return (
     <div
       {...getRootProps()}
       className={`relative mt-8 mb-16 sm:mb-24 w-full max-w-lg mx-auto border-4 border-dashed rounded-3xl p-8 text-center cursor-pointer transition-all duration-300 overflow-hidden group
-        ${isDragActive ? 'border-solid animate-pulse-border' : 'border-primary'}
-        bg-radial-gradient from-primary/5 to-transparent`}
+        ${isDragActive ? 'border-solid animate-pulse-border bg-primary/20' : 'border-primary bg-radial-gradient from-primary/5 to-transparent'}
+        `}
     >
         <div className="absolute inset-0 bg-dot-pattern opacity-10 -z-10"></div>
         <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
@@ -125,7 +125,7 @@ function FileUploader() {
         
       <input {...getInputProps()} />
       <div className="flex flex-col items-center justify-center gap-4">
-        <UploadCloud className="h-16 w-16 text-foreground transition-transform duration-300 group-hover:scale-110" />
+        <UploadCloud className="h-20 w-20 text-foreground transition-transform duration-300 group-hover:scale-110" />
         <p className="text-3xl font-semibold text-foreground">Drag & drop your files here</p>
         <p className="text-muted-foreground">to start encrypting or decrypting</p>
       </div>
@@ -138,35 +138,38 @@ export default function Home() {
   const { user } = useAuth();
   const firstName = user?.displayName?.split(' ')[0];
   
-  const TreeNode = ({ title, description, children }: { title: string, description: string, children?: React.ReactNode }) => (
-      <div className="relative flex flex-col items-center group">
-          {/* Connector line from parent, only if it's not the root */}
-          <div className="absolute bottom-full h-8 w-px bg-border group-first:hidden"></div>
-          {/* Node */}
-          <div className="bg-background border-2 border-primary rounded-lg p-4 w-52 text-center z-10 shadow-lg transition-all duration-300 group-hover:shadow-2xl group-hover:scale-105">
-              <h3 className="font-semibold text-base">{title}</h3>
-              <p className="text-xs text-muted-foreground">{description}</p>
+  const TreeNode = ({ icon, title, description, children }: { icon: React.ReactNode, title: string, description: string, children?: React.ReactNode }) => (
+      <div className="flex flex-col items-center text-center relative">
+          <div className="relative z-10">
+              <div className="transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl bg-background border-2 border-border p-6 rounded-2xl w-64 h-full flex flex-col items-center">
+                  <div className="mb-4 text-primary transition-colors duration-300 group-hover:text-accent-foreground">{icon}</div>
+                  <h3 className="font-bold text-lg mb-2 transition-colors duration-300 group-hover:text-accent-foreground">{title}</h3>
+                  <p className="text-sm text-muted-foreground">{description}</p>
+              </div>
           </div>
-          {/* Render children if they exist */}
-          {children && <div className="flex w-full justify-center pt-8">{children}</div>}
+          {children && (
+              <>
+                  <div className="mt-8 w-px h-8 bg-border"></div>
+                  <div className="flex justify-center w-full relative">
+                      <div className="absolute top-0 h-px bg-border" style={{ width: `calc(100% - 4rem)` }}></div>
+                      {children}
+                  </div>
+              </>
+          )}
       </div>
   );
-
+  
   const TreeContainer = ({ children }: { children: React.ReactNode }) => (
-      <div className="flex flex-col items-center">
+      <div className="flex justify-center">
           {children}
       </div>
   );
-
+  
   const SubTree = ({ children }: { children: React.ReactNode }) => (
-    <div className="relative mt-8 flex justify-center w-full gap-8">
-        {/* Horizontal connecting line */}
-        <div className="absolute top-[-1.5rem] h-px w-full bg-border"></div>
-        {/* Branch down to children */}
-        <div className="absolute top-[-1.5rem] h-8 w-px bg-border"></div>
+    <div className="flex justify-around w-full gap-8 pt-8">
         {children}
     </div>
-);
+  );
 
 
   return (
@@ -203,24 +206,30 @@ export default function Home() {
             </div>
             <div className="max-w-5xl mx-auto overflow-x-auto p-4">
                 <TreeContainer>
-                    <TreeNode title="Your File" description="The process begins with your file on your computer.">
-                        <SubTree>
-                            <TreeNode title="In-Browser Reading" description="File is read into browser memory, never leaving your machine.">
-                                <SubTree>
-                                    <TreeNode title="AES-256 Encryption" description="Content is encrypted with your key using a military-grade algorithm.">
-                                      <SubTree>
-                                        <TreeNode title="Encrypted Download" description="The result is securely packaged and downloaded as a '.ciph' file." />
-                                      </SubTree>
+                    <div className="group">
+                        <TreeNode title="Your File & Key" description="The process begins with your file and a unique key you provide, all on your local machine." icon={<File className="w-10 h-10" />}>
+                            <SubTree>
+                                <div className="group">
+                                    <TreeNode title="In-Browser Reading" description="File is read into the browser's memory, never leaving your computer." icon={<MonitorSmartphone className="w-10 h-10" />}>
+                                        <SubTree>
+                                             <div className="group">
+                                                <TreeNode title="AES-256 Encryption" description="Content is encrypted with your key using a military-grade algorithm." icon={<Cpu className="w-10 h-10" />}>
+                                                    <SubTree>
+                                                         <div className="group">
+                                                            <TreeNode title="Encrypted Download" description="The result is securely packaged and downloaded back to you as a '.ciph' file." icon={<Download className="w-10 h-10" />} />
+                                                         </div>
+                                                    </SubTree>
+                                                </TreeNode>
+                                             </div>
+                                        </SubTree>
                                     </TreeNode>
-                                </SubTree>
-                            </TreeNode>
-                            <TreeNode title="Your Secret Key" description="You provide a unique key that only you know.">
-                                 <SubTree>
-                                     <TreeNode title="Key Hashing (Optional)" description="If you're logged in, a hash of the key is stored for security analysis, not the key itself." />
-                                </SubTree>
-                            </TreeNode>
-                        </SubTree>
-                    </TreeNode>
+                                </div>
+                                <div className="group">
+                                    <TreeNode title="Key Hashing (Optional)" description="If you're logged in, a hash of the key is stored for security analysis, not the key itself." icon={<KeySquare className="w-10 h-10" />} />
+                                </div>
+                            </SubTree>
+                        </TreeNode>
+                    </div>
                 </TreeContainer>
             </div>
         </section>
@@ -314,5 +323,7 @@ export default function Home() {
     </div>
   );
 }
+
+    
 
     
