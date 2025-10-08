@@ -119,14 +119,19 @@ function FileUploader() {
     <div
       {...getRootProps()}
       className={cn(
-        'relative mt-4 mb-32 sm:mb-40 w-full max-w-lg mx-auto border-2 border-dashed rounded-3xl p-8 text-center transition-all duration-300 overflow-hidden group',
+        'relative mt-4 mb-32 sm:mb-40 w-96 h-96 mx-auto rounded-full p-8 text-center transition-all duration-500 overflow-hidden group',
+        'flex items-center justify-center',
         'bg-radial-gradient from-primary/5 to-transparent',
-        isDragActive ? 'border-solid border-primary animate-pulse-border bg-primary/10' : 'border-border',
+        isDragActive ? 'border-2 border-dashed border-primary animate-pulse-border bg-primary/10' : 'border border-border',
         'hover:border-primary hover:bg-primary/5'
       )}
     >
-      <div className="absolute inset-0 bg-dot-pattern opacity-10 -z-10"></div>
       <div className={cn(
+        'absolute inset-0 bg-dot-pattern opacity-20 -z-10 transition-transform duration-500',
+        isDragActive ? 'scale-150 animate-spin' : 'scale-100',
+        'group-hover:scale-110'
+      )} style={{ animationDuration: '30s'}}></div>
+       <div className={cn(
         'absolute inset-0 transition-opacity duration-500 -z-10',
         'bg-radial-gradient from-primary/10 to-transparent',
          isDragActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-50'
@@ -134,18 +139,21 @@ function FileUploader() {
 
       <input {...getInputProps()} />
 
-      <div className="flex flex-col items-center justify-center gap-4 transition-transform duration-300 group-hover:scale-105">
-        <UploadCloud className={cn(
-          "h-20 w-20 text-muted-foreground transition-all duration-300",
-          isDragActive ? 'text-primary' : 'group-hover:text-foreground'
-        )} />
+      <div className="flex flex-col items-center justify-center gap-4 transition-transform duration-300 group-hover:scale-105 z-10">
+        <div className={cn(
+            "h-24 w-24 text-muted-foreground transition-all duration-500 relative flex items-center justify-center",
+            isDragActive ? 'text-primary' : 'group-hover:text-foreground'
+        )}>
+            <div className="absolute h-full w-full bg-current rounded-full opacity-20 animate-ping"/>
+            <UploadCloud className="h-20 w-20" />
+        </div>
         <p className={cn(
           "text-3xl font-semibold text-muted-foreground transition-colors duration-300",
           isDragActive ? 'text-foreground' : 'group-hover:text-foreground'
         )}>
-          {isDragActive ? "Release to Secure" : "Drop Files into the Vault"}
+          {isDragActive ? "Release to Secure" : "Drop into the Vortex"}
         </p>
-        <p className="text-muted-foreground">or click here to select</p>
+        <p className="text-muted-foreground">or click to select files</p>
       </div>
     </div>
   );
@@ -387,6 +395,8 @@ export default function Home() {
     </div>
   );
 }
+
+    
 
     
 
