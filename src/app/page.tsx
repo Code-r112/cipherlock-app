@@ -199,38 +199,6 @@ function LiveEncryptionDemo() {
 export default function Home() {
   const { user } = useAuth();
   const firstName = user?.displayName?.split(' ')[0];
-  
-  const TreeNode = ({ icon, title, description, children, className }: { icon: React.ReactNode, title: string, description: string, children?: React.ReactNode, className?: string }) => (
-      <div className="flex flex-col items-center text-center relative group/treenode">
-          <div className="relative z-10">
-              <div className="transition-all duration-300 group-hover/treenode:scale-105 group-hover/treenode:shadow-2xl bg-background border-2 border-border p-4 rounded-2xl w-56 h-full flex flex-col items-center">
-                  <div className="mb-3 text-primary transition-colors duration-300 group-hover/treenode:text-accent-foreground">{icon}</div>
-                  <h3 className="font-bold text-lg mb-1 transition-colors duration-300 group-hover/treenode:text-accent-foreground">{title}</h3>
-                  <p className="text-sm text-muted-foreground">{description}</p>
-              </div>
-          </div>
-          {children && (
-              <div className="flex justify-center w-full relative">
-                  <div className="absolute top-0 h-8 w-px bg-border"></div>
-                  <div className="absolute top-8 h-px bg-border" style={{ width: `calc(100% - 2rem)` }}></div>
-                  {children}
-              </div>
-          )}
-      </div>
-  );
-  
-  const TreeContainer = ({ children }: { children: React.ReactNode }) => (
-      <div className="flex justify-center">
-          {children}
-      </div>
-  );
-  
-  const SubTree = ({ children, className }: { children: React.ReactNode, className?: string }) => (
-    <div className={cn("flex justify-around w-full gap-4 pt-8 mt-8", className)}>
-        {children}
-    </div>
-  );
-
 
   return (
     <div className="flex flex-col items-center justify-center bg-background p-4 sm:p-8">
@@ -277,30 +245,37 @@ export default function Home() {
                 <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">Inside AES-256 Encryption</h2>
                 <p className="text-lg sm:text-xl text-muted-foreground mb-12">CipherLock uses AES-256, the same encryption standard trusted by governments and security experts worldwide. Here’s a simplified look at how it masterfully turns your readable data into a secure, unreadable block.</p>
             </div>
-            <div className="max-w-5xl mx-auto overflow-x-auto p-4">
-                <TreeContainer>
-                    <TreeNode title="1. Your Data & Key" description="The process starts with your data (plain text) and your unique secret key." icon={<FileType className="w-10 h-10" />}>
-                        <SubTree>
-                            <TreeNode title="2. State Array" description="Your data is broken into 128-bit blocks and arranged in a 4x4 matrix called the 'state'." icon={<Box className="w-10 h-10" />}>
-                                <SubTree>
-                                    <TreeNode title="3. Key Expansion" description="Your single key is expanded into a series of 'round keys' for each encryption round." icon={<Key className="w-10 h-10" />}>
-                                        <SubTree>
-                                            <TreeNode title="4. Encryption Rounds" description="Each block goes through 14 rounds of complex mathematical transformations." icon={<Repeat className="w-10 h-10" />}>
-                                                <SubTree className="w-[48rem]">
-                                                     <TreeNode title="SubBytes" description="Each byte is substituted with another from a lookup table." icon={<Layers className="w-10 h-10" />} />
-                                                     <TreeNode title="ShiftRows" description="Rows of the 'state' matrix are shifted cyclically." icon={<Layers className="w-10 h-10" />} />
-                                                     <TreeNode title="MixColumns" description="Columns are mixed to diffuse data across the block." icon={<Layers className="w-10 h-10" />} />
-                                                     <TreeNode title="AddRoundKey" description="The state is combined with a unique round key." icon={<Layers className="w-10 h-10" />} />
-                                                </SubTree>
-                                            </TreeNode>
-                                        </SubTree>
-                                    </TreeNode>
-                                </SubTree>
-                            </TreeNode>
-                             <TreeNode title="5. Final Output" description="After 14 rounds, the result is a fully scrambled, encrypted block (ciphertext)." icon={<ShieldCheck className="w-10 h-10" />} />
-                        </SubTree>
-                    </TreeNode>
-                </TreeContainer>
+            <div className="relative">
+                <div className="hidden lg:block absolute top-1/2 left-0 w-full h-0.5 bg-border -translate-y-1/2"></div>
+                <div className="relative grid md:grid-cols-3 gap-8 md:gap-12 text-center">
+                    <div className="flex flex-col items-center">
+                        <div className="relative bg-background p-2">
+                           <div className="bg-primary/10 text-primary p-4 sm:p-6 rounded-full mb-4 sm:mb-6 ring-8 ring-background">
+                                <MonitorSmartphone className="h-12 w-12 sm:h-16 sm:w-16" />
+                            </div>
+                        </div>
+                        <h3 className="text-xl sm:text-3xl font-semibold mb-2 sm:mb-4">1. Purely Local</h3>
+                        <p className="text-muted-foreground text-base sm:text-lg">All encryption and decryption happens in your browser. Your private files never leave your machine.</p>
+                    </div>
+                     <div className="flex flex-col items-center">
+                        <div className="relative bg-background p-2">
+                            <div className="bg-primary/10 text-primary p-4 sm:p-6 rounded-full mb-4 sm:mb-6 ring-8 ring-background">
+                                <KeySquare className="h-12 w-12 sm:h-16 sm:w-16" />
+                            </div>
+                        </div>
+                        <h3 className="text-xl sm:text-3xl font-semibold mb-2 sm:mb-4">2. You Hold the Keys</h3>
+                        <p className="text-muted-foreground text-base sm:text-lg">You provide the secret key for every operation. We don't store, transmit, or have any access to it.</p>
+                    </div>
+                     <div className="flex flex-col items-center">
+                        <div className="relative bg-background p-2">
+                           <div className="bg-primary/10 text-primary p-4 sm:p-6 rounded-full mb-4 sm:mb-6 ring-8 ring-background">
+                               <CloudOff className="h-12 w-12 sm:h-16 sm:w-16" />
+                           </div>
+                        </div>
+                        <h3 className="text-xl sm:text-3xl font-semibold mb-2 sm:mb-4">3. Zero Data Storage</h3>
+                        <p className="text-muted-foreground text-base sm:text-lg">Your original files and their encrypted versions are never stored by us. They are processed in memory and then saved back to your device.</p>
+                    </div>
+                </div>
             </div>
         </section>
 
