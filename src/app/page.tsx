@@ -125,8 +125,8 @@ function FileUploader() {
         
       <input {...getInputProps()} />
       <div className="flex flex-col items-center justify-center gap-4">
-        <UploadCloud className="h-12 w-12 text-foreground transition-transform duration-300 group-hover:scale-110" />
-        <p className="text-2xl font-semibold text-foreground">Drag & drop your files here</p>
+        <UploadCloud className="h-16 w-16 text-foreground transition-transform duration-300 group-hover:scale-110" />
+        <p className="text-3xl font-semibold text-foreground">Drag & drop your files here</p>
         <p className="text-muted-foreground">to start encrypting or decrypting</p>
       </div>
     </div>
@@ -179,36 +179,56 @@ export default function Home() {
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="text-lg">
-                        <ul className="space-y-6">
-                            <li className="flex items-start gap-4">
-                                <div className="flex-shrink-0 bg-primary/10 text-primary p-3 rounded-full font-bold">1</div>
-                                <div>
-                                    <h3 className="font-semibold text-xl">File Selection</h3>
-                                    <p className="text-muted-foreground">You select a file from your computer.</p>
-                                </div>
-                            </li>
-                            <li className="flex items-start gap-4">
-                                <div className="flex-shrink-0 bg-primary/10 text-primary p-3 rounded-full font-bold">2</div>
-                                <div>
-                                    <h3 className="font-semibold text-xl">In-Browser Processing</h3>
-                                    <p className="text-muted-foreground">The file is read into your browser's memory. It never leaves your machine.</p>
-                                </div>
-                            </li>
-                            <li className="flex items-start gap-4">
-                                <div className="flex-shrink-0 bg-primary/10 text-primary p-3 rounded-full font-bold">3</div>
-                                <div>
-                                    <h3 className="font-semibold text-xl">AES-256 Encryption</h3>
-                                    <p className="text-muted-foreground">Using your secret key, the file's content is encrypted with the AES-256 algorithm, a military-grade encryption standard.</p>
-                                </div>
-                            </li>
-                            <li className="flex items-start gap-4">
-                                <div className="flex-shrink-0 bg-primary/10 text-primary p-3 rounded-full font-bold">4</div>
-                                <div>
-                                    <h3 className="font-semibold text-xl">Encrypted Download</h3>
-                                    <p className="text-muted-foreground">The encrypted content is packaged into a new `.ciph` file and downloaded directly back to your computer.</p>
-                                </div>
-                            </li>
+                    <ul className="space-y-4">
+                      <li className="relative pl-8">
+                        <div className="absolute left-0 top-2 h-full w-px bg-border"></div>
+                        <div className="absolute left-[-0.5rem] top-2 h-4 w-4 rounded-full bg-primary ring-4 ring-secondary"></div>
+                        <h3 className="font-semibold text-xl">1. Your Device</h3>
+                        <p className="text-muted-foreground">The process begins on your computer.</p>
+                        <ul className="mt-4 space-y-4 pl-6">
+                          <li className="relative">
+                            <div className="absolute left-[-1.5rem] top-3 h-px w-6 bg-border"></div>
+                            <div className="absolute left-[-1.7rem] top-2.5 h-2 w-2 rounded-full bg-border"></div>
+                            <h4 className="font-semibold text-lg">File Selection</h4>
+                            <p className="text-muted-foreground text-base">You select one or more files from your local storage.</p>
+                          </li>
+                          <li className="relative">
+                            <div className="absolute left-[-1.5rem] top-3 h-px w-6 bg-border"></div>
+                            <div className="absolute left-[-1.7rem] top-2.5 h-2 w-2 rounded-full bg-border"></div>
+                            <h4 className="font-semibold text-lg">Secret Key</h4>
+                            <p className="text-muted-foreground text-base">You provide a secret key for encryption.</p>
+                          </li>
                         </ul>
+                      </li>
+                      <li className="relative pl-8">
+                        <div className="absolute left-0 bottom-full h-8 w-px bg-border"></div>
+                        <div className="absolute left-[-0.5rem] top-2 h-4 w-4 rounded-full bg-primary ring-4 ring-secondary"></div>
+                        <h3 className="font-semibold text-xl">2. In-Browser Processing</h3>
+                        <p className="text-muted-foreground">The file is read into your browser's memory. It never leaves your machine.</p>
+                          <ul className="mt-4 space-y-4 pl-6">
+                          <li className="relative">
+                            <div className="absolute left-[-1.5rem] top-3 h-px w-6 bg-border"></div>
+                            <div className="absolute left-[-1.7rem] top-2.5 h-2 w-2 rounded-full bg-border"></div>
+                            <h4 className="font-semibold text-lg">AES-256 Encryption</h4>
+                            <p className="text-muted-foreground text-base">The file content is encrypted using your key and the military-grade AES-256 algorithm.</p>
+                          </li>
+                        </ul>
+                      </li>
+                      <li className="relative pl-8">
+                       <div className="absolute left-0 bottom-full h-8 w-px bg-border"></div>
+                        <div className="absolute left-[-0.5rem] top-2 h-4 w-4 rounded-full bg-primary ring-4 ring-secondary"></div>
+                        <h3 className="font-semibold text-xl">3. Encrypted Download</h3>
+                         <p className="text-muted-foreground">The encrypted content is packaged and downloaded back to you.</p>
+                          <ul className="mt-4 space-y-4 pl-6">
+                          <li className="relative">
+                           <div className="absolute left-[-1.5rem] top-3 h-px w-6 bg-border"></div>
+                            <div className="absolute left-[-1.7rem] top-2.5 h-2 w-2 rounded-full bg-border"></div>
+                            <h4 className="font-semibold text-lg">New `.ciph` File</h4>
+                            <p className="text-muted-foreground text-base">A new file with the `.ciph` extension is created on your device.</p>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
                     </CardContent>
                 </Card>
             </div>
