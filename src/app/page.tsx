@@ -1,10 +1,11 @@
 
+
 "use client";
 
 import { EncryptPanel } from '@/components/feature/encrypt-panel';
 import { DecryptPanel } from '@/components/feature/decrypt-panel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Lock, Unlock, Files, ShieldCheck, KeyRound, ServerOff, MonitorSmartphone, KeySquare, CloudOff, Bot, Activity, UploadCloud } from 'lucide-react';
+import { Lock, Unlock, Files, ShieldCheck, KeyRound, ServerOff, MonitorSmartphone, KeySquare, CloudOff, Bot, Activity, UploadCloud, FileType } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
@@ -164,6 +165,55 @@ export default function Home() {
         
         <FileUploader />
 
+        <section id="how-it-works" className="mb-16 sm:mb-24 animate-fade-in-up bg-secondary rounded-2xl py-12 sm:py-16 px-6" style={{ animationDelay: '0.4s' }}>
+            <div className="text-center max-w-3xl mx-auto">
+                <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">How It Works</h2>
+                <p className="text-lg sm:text-xl text-muted-foreground mb-12">CipherLock ensures your privacy by performing all encryption and decryption locally on your device. Your files are never uploaded to any server.</p>
+            </div>
+            <div className="max-w-4xl mx-auto">
+                <Card className="bg-background/50">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-3 text-2xl sm:text-3xl">
+                            <FileType className="text-primary w-8 h-8" />
+                            The Encryption Process
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-lg">
+                        <ul className="space-y-6">
+                            <li className="flex items-start gap-4">
+                                <div className="flex-shrink-0 bg-primary/10 text-primary p-3 rounded-full font-bold">1</div>
+                                <div>
+                                    <h3 className="font-semibold text-xl">File Selection</h3>
+                                    <p className="text-muted-foreground">You select a file from your computer.</p>
+                                </div>
+                            </li>
+                            <li className="flex items-start gap-4">
+                                <div className="flex-shrink-0 bg-primary/10 text-primary p-3 rounded-full font-bold">2</div>
+                                <div>
+                                    <h3 className="font-semibold text-xl">In-Browser Processing</h3>
+                                    <p className="text-muted-foreground">The file is read into your browser's memory. It never leaves your machine.</p>
+                                </div>
+                            </li>
+                            <li className="flex items-start gap-4">
+                                <div className="flex-shrink-0 bg-primary/10 text-primary p-3 rounded-full font-bold">3</div>
+                                <div>
+                                    <h3 className="font-semibold text-xl">AES-256 Encryption</h3>
+                                    <p className="text-muted-foreground">Using your secret key, the file's content is encrypted with the AES-256 algorithm, a military-grade encryption standard.</p>
+                                </div>
+                            </li>
+                            <li className="flex items-start gap-4">
+                                <div className="flex-shrink-0 bg-primary/10 text-primary p-3 rounded-full font-bold">4</div>
+                                <div>
+                                    <h3 className="font-semibold text-xl">Encrypted Download</h3>
+                                    <p className="text-muted-foreground">The encrypted content is packaged into a new `.ciph` file and downloaded directly back to your computer.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </CardContent>
+                </Card>
+            </div>
+        </section>
+
         <section id="features" className="mb-16 sm:mb-24 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
             <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold text-center mb-12 sm:mb-16">Features</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8">
@@ -253,3 +303,7 @@ export default function Home() {
     </div>
   );
 }
+
+    
+
+    

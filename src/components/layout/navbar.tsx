@@ -1,7 +1,8 @@
 
+
 "use client";
 
-import { ShieldCheck, User as UserIcon, LogOut, History, KeyRound, ShieldAlert } from 'lucide-react';
+import { ShieldCheck, User as UserIcon, LogOut, History, KeyRound, ShieldAlert, Settings } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
@@ -91,6 +92,12 @@ export function Navbar() {
                       <span>Security Center</span>
                     </Link>
                   </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="text-base cursor-pointer">
+                    <Link href="/settings">
+                      <Settings className="mr-2 h-5 w-5" />
+                      <span>Settings</span>
+                    </Link>
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={signOut} className="text-base cursor-pointer">
                     <LogOut className="mr-2 h-5 w-5" />
@@ -112,3 +119,5 @@ export function Navbar() {
     </header>
   );
 }
+
+    
