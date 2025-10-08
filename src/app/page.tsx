@@ -118,19 +118,34 @@ function FileUploader() {
   return (
     <div
       {...getRootProps()}
-      className={`relative mt-4 mb-16 sm:mb-24 w-full max-w-lg mx-auto border-4 border-dashed rounded-3xl p-8 text-center cursor-pointer transition-all duration-300 overflow-hidden group
-        ${isDragActive ? 'border-solid animate-pulse-border bg-primary/20' : 'border-primary bg-radial-gradient from-primary/5 to-transparent'}
-        `}
+      className={cn(
+        'relative mt-4 mb-32 sm:mb-40 w-full max-w-lg mx-auto border-2 border-dashed rounded-3xl p-8 text-center transition-all duration-300 overflow-hidden group',
+        'bg-radial-gradient from-primary/5 to-transparent',
+        isDragActive ? 'border-solid border-primary animate-pulse-border bg-primary/10' : 'border-border',
+        'hover:border-primary hover:bg-primary/5'
+      )}
     >
-        <div className="absolute inset-0 bg-dot-pattern opacity-10 -z-10"></div>
-        <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
-        <div className="absolute top-0 left-[-100%] w-full h-full bg-shine-gradient transition-all duration-700 group-hover:left-[100%] -z-10"></div>
-        
+      <div className="absolute inset-0 bg-dot-pattern opacity-10 -z-10"></div>
+      <div className={cn(
+        'absolute inset-0 transition-opacity duration-500 -z-10',
+        'bg-radial-gradient from-primary/10 to-transparent',
+         isDragActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-50'
+      )}></div>
+
       <input {...getInputProps()} />
-      <div className="flex flex-col items-center justify-center gap-4">
-        <UploadCloud className="h-20 w-20 text-foreground transition-transform duration-300 group-hover:scale-110" />
-        <p className="text-3xl font-semibold text-foreground">Drag & drop your files here</p>
-        <p className="text-muted-foreground">to start encrypting or decrypting</p>
+
+      <div className="flex flex-col items-center justify-center gap-4 transition-transform duration-300 group-hover:scale-105">
+        <UploadCloud className={cn(
+          "h-20 w-20 text-muted-foreground transition-all duration-300",
+          isDragActive ? 'text-primary' : 'group-hover:text-foreground'
+        )} />
+        <p className={cn(
+          "text-3xl font-semibold text-muted-foreground transition-colors duration-300",
+          isDragActive ? 'text-foreground' : 'group-hover:text-foreground'
+        )}>
+          {isDragActive ? "Release to begin" : "Drop files to encrypt"}
+        </p>
+        <p className="text-muted-foreground">or click here to select</p>
       </div>
     </div>
   );
@@ -161,7 +176,7 @@ function LiveEncryptionDemo() {
     }, [text]);
 
     return (
-        <section id="live-demo" className="mb-32 sm:mb-40 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+        <section id="live-demo" className="my-32 sm:my-40 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
             <div className="text-center max-w-3xl mx-auto">
                 <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">See It in Action</h2>
                 <p className="text-lg sm:text-xl text-muted-foreground mb-12">The animation below demonstrates how your data is instantly transformed into an unreadable, encrypted format. Your data never leaves your browser.</p>
@@ -226,7 +241,7 @@ export default function Home() {
         </div>
         
         {user ? (
-            <div className="mt-4 mb-16 sm:mb-24 flex justify-center">
+            <div className="mt-4 mb-32 sm:mb-40 flex justify-center">
                 <Button asChild size="lg" className="h-14 px-8 text-lg rounded-full shine-button">
                     <Link href="/tools">
                         <Lock className="mr-3 h-5 w-5" />
@@ -319,7 +334,7 @@ export default function Home() {
             </div>
         </section>
 
-        <section id="features" className="mb-32 sm:mb-40 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+        <section id="features" className="my-32 sm:my-40 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
             <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold text-center mb-12 sm:mb-16">Features</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8">
                 {features.map((feature, index) => (
@@ -334,7 +349,7 @@ export default function Home() {
             </div>
         </section>
 
-        <section id="premium-features" className="mb-32 sm:mb-40 animate-fade-in-up bg-secondary rounded-2xl py-12 sm:py-16 px-6" style={{ animationDelay: '0.4s' }}>
+        <section id="premium-features" className="my-32 sm:my-40 animate-fade-in-up bg-secondary rounded-2xl py-12 sm:py-16 px-6" style={{ animationDelay: '0.4s' }}>
             <div className="text-center max-w-3xl mx-auto">
                  <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">Unlock More with an Account</h2>
                  <p className="text-lg sm:text-xl text-muted-foreground mb-12">Signing up is free and gives you access to a powerful suite of features designed for convenience and enhanced security.</p>
@@ -354,7 +369,7 @@ export default function Home() {
             </div>
         </section>
 
-        <section id="faq" className="w-full max-w-3xl mx-auto animate-fade-in-up pb-12" style={{ animationDelay: '0.5s' }}>
+        <section id="faq" className="w-full max-w-3xl mx-auto animate-fade-in-up pb-12 my-32 sm:my-40" style={{ animationDelay: '0.5s' }}>
             <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold text-center mb-12 sm:mb-16">Frequently Asked Questions</h2>
             <Accordion type="single" collapsible className="w-full">
                 {faqItems.map((item, index) => (
@@ -372,3 +387,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
