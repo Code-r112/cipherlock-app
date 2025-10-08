@@ -23,8 +23,6 @@ import { useCallback, useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Textarea } from '@/components/ui/textarea';
 import CryptoJS from 'crypto-js';
-import Image from 'next/image';
-import { ImageComparisonSlider } from '@/components/ui/image-comparison-slider';
 
 const features = [
     {
@@ -154,7 +152,7 @@ function LiveEncryptionDemo() {
                 <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">See It in Action</h2>
                 <p className="text-lg sm:text-xl text-muted-foreground mb-12">Type anything in the box below to see how your text is instantly transformed into an unreadable, encrypted format. Your data never leaves your browser.</p>
             </div>
-            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div className="grid md:grid-cols-[1fr_auto_1fr] items-center gap-8 max-w-5xl mx-auto">
                 <div className="space-y-2">
                     <h3 className="text-2xl font-semibold text-center">Your Message</h3>
                     <Textarea 
@@ -163,6 +161,12 @@ function LiveEncryptionDemo() {
                         className="h-48 text-lg"
                         aria-label="Your Message"
                     />
+                </div>
+                 <div className="hidden md:flex flex-col items-center justify-center gap-4">
+                    <AnimatedLockIcon />
+                    <div className="w-px h-16 bg-border"></div>
+                    <p className="text-muted-foreground text-sm writing-mode-vertical-rl">AES-256</p>
+                    <div className="w-px h-16 bg-border"></div>
                 </div>
                 <div className="space-y-2">
                      <h3 className="text-2xl font-semibold text-center">Encrypted Output</h3>
@@ -177,10 +181,6 @@ function LiveEncryptionDemo() {
         </section>
     );
 }
-
-const beforeImageUrl = "https://images.unsplash.com/photo-1593642532400-2682810df593?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
-const afterImageText = "U2FsdGVkX1/aBcDefGHi... (this is what encrypted data looks like)";
-
 
 export default function Home() {
   const { user } = useAuth();
@@ -259,30 +259,6 @@ export default function Home() {
         )}
 
         <LiveEncryptionDemo />
-
-        <section id="visual-demo" className="mb-16 sm:mb-24 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-             <div className="text-center max-w-3xl mx-auto">
-                <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">Before vs. After</h2>
-                <p className="text-lg sm:text-xl text-muted-foreground mb-12">Drag the slider to see the transformation. Your readable file becomes a secure, unreadable block of data that only you can unlock with your secret key.</p>
-            </div>
-            <ImageComparisonSlider
-                beforeImage={
-                    <Image
-                        src={beforeImageUrl}
-                        alt="A laptop on a desk"
-                        layout="fill"
-                        objectFit="cover"
-                        className="rounded-2xl"
-                        unoptimized
-                    />
-                }
-                afterImage={
-                    <div className="w-full h-full bg-secondary p-8 rounded-2xl flex items-center justify-center font-code text-muted-foreground overflow-hidden">
-                        <p className="break-all text-sm">{afterImageText.repeat(100)}</p>
-                    </div>
-                }
-            />
-        </section>
 
         <section id="how-it-works" className="my-16 sm:my-24 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
             <div className="text-center max-w-3xl mx-auto">
@@ -402,6 +378,7 @@ export default function Home() {
     
 
     
+
 
 
 
