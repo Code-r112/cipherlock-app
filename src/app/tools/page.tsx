@@ -120,61 +120,57 @@ export default function ToolsPage() {
   return (
     <div className="flex flex-col items-center justify-center bg-background p-4 sm:p-8">
       <div className="w-full max-w-5xl">
-        <div className="text-center pt-8 pb-12 sm:pt-12 sm:pb-16 animate-fade-in-down">
-          {user && firstName && (
-            <div className="flex items-center justify-center gap-2 text-2xl sm:text-3xl text-muted-foreground mb-4">
-              <AnimatedLockIcon />
-              <p>Hello, {firstName}!</p>
-            </div>
-          )}
-          <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-wider">
-            Encryption Tools
-          </h1>
-          <p className="text-muted-foreground mt-4 text-lg sm:text-2xl">
-            Encrypt and decrypt your files with confidence.
-          </p>
+        <div className="pt-8 pb-12 sm:pt-12 sm:pb-16 animate-fade-in-down">
         </div>
 
         {user && (
-            <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 animate-fade-in-up">
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Files Secured</CardTitle>
-                        <History className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">{activityCount}</div>
-                        <p className="text-xs text-muted-foreground">Total encryptions & decryptions</p>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Keys in Vault</CardTitle>
-                        <KeySquare className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">{keyCount}</div>
-                        <p className="text-xs text-muted-foreground">
-                             <Link href="/keys" className="hover:underline">Manage your keys</Link>
-                        </p>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Security Score</CardTitle>
-                        <BrainCircuit className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">{securityScore ?? '...'}</div>
-                        <p className="text-xs text-muted-foreground">
-                            <Link href="/security-center" className="hover:underline">View recommendations</Link>
-                        </p>
-                    </CardContent>
-                </Card>
+            <section className="mb-12 animate-fade-in-up">
+                 {firstName && (
+                    <div className="flex items-center justify-start gap-2 text-2xl sm:text-3xl text-muted-foreground mb-4">
+                        <AnimatedLockIcon />
+                        <p>Hello, {firstName}!</p>
+                    </div>
+                )}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <Card>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">Files Secured</CardTitle>
+                            <History className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">{activityCount}</div>
+                            <p className="text-xs text-muted-foreground">Total encryptions & decryptions</p>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">Keys in Vault</CardTitle>
+                            <KeySquare className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">{keyCount}</div>
+                            <p className="text-xs text-muted-foreground">
+                                <Link href="/keys" className="hover:underline">Manage your keys</Link>
+                            </p>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">Security Score</CardTitle>
+                            <BrainCircuit className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">{securityScore ?? '...'}</div>
+                            <p className="text-xs text-muted-foreground">
+                                <Link href="/security-center" className="hover:underline">View recommendations</Link>
+                            </p>
+                        </CardContent>
+                    </Card>
+                </div>
             </section>
         )}
         
-        <div className="w-full max-w-lg mx-auto my-16 sm:my-24 animate-fade-in-up">
+        <div className="w-full max-w-lg mx-auto my-16 sm:my-24 animate-fade-in-up mt-8">
             <Tabs defaultValue="encrypt" className="w-full">
             <TabsList className="grid w-full grid-cols-2 h-14 sm:h-16 gap-2 bg-transparent p-0">
                 <TabsTrigger value="encrypt" className="text-lg sm:text-xl h-full rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-muted">
