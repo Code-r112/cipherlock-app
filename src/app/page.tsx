@@ -110,7 +110,7 @@ function FileUploader() {
     }
   }, [user, router]);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, noClick: true, noKeyboard: true });
 
   return (
     <div
@@ -139,16 +139,16 @@ export default function Home() {
   const firstName = user?.displayName?.split(' ')[0];
   
   const TreeNode = ({ title, description, children }: { title: string, description: string, children?: React.ReactNode }) => (
-      <div className="relative flex flex-col items-center">
-          {/* Connector line from parent */}
-          <div className="absolute bottom-full h-8 w-px bg-border"></div>
+      <div className="relative flex flex-col items-center group">
+          {/* Connector line from parent, only if it's not the root */}
+          <div className="absolute bottom-full h-8 w-px bg-border group-first:hidden"></div>
           {/* Node */}
-          <div className="bg-background border-2 border-primary rounded-lg p-4 w-52 text-center z-10 shadow-lg">
+          <div className="bg-background border-2 border-primary rounded-lg p-4 w-52 text-center z-10 shadow-lg transition-all duration-300 group-hover:shadow-2xl group-hover:scale-105">
               <h3 className="font-semibold text-base">{title}</h3>
               <p className="text-xs text-muted-foreground">{description}</p>
           </div>
           {/* Render children if they exist */}
-          {children && <div className="flex w-full justify-center">{children}</div>}
+          {children && <div className="flex w-full justify-center pt-8">{children}</div>}
       </div>
   );
 
@@ -159,11 +159,11 @@ export default function Home() {
   );
 
   const SubTree = ({ children }: { children: React.ReactNode }) => (
-    <div className="relative mt-8 flex justify-center w-full">
+    <div className="relative mt-8 flex justify-center w-full gap-8">
         {/* Horizontal connecting line */}
-        <div className="absolute top-0 h-px w-1/2 bg-border"></div>
+        <div className="absolute top-[-1.5rem] h-px w-full bg-border"></div>
         {/* Branch down to children */}
-        <div className="absolute top-0 h-8 w-px bg-border"></div>
+        <div className="absolute top-[-1.5rem] h-8 w-px bg-border"></div>
         {children}
     </div>
 );
@@ -201,26 +201,24 @@ export default function Home() {
                 <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">How It Works</h2>
                 <p className="text-lg sm:text-xl text-muted-foreground mb-12">CipherLock ensures your privacy by performing all encryption and decryption locally on your device. Your files are never uploaded to any server.</p>
             </div>
-            <div className="max-w-4xl mx-auto overflow-x-auto p-4">
+            <div className="max-w-5xl mx-auto overflow-x-auto p-4">
                 <TreeContainer>
                     <TreeNode title="Your File" description="The process begins with your file on your computer.">
                         <SubTree>
-                            <div className="flex justify-around w-full gap-4">
-                                <TreeNode title="In-Browser Processing" description="File is read into browser memory, never leaving your machine.">
-                                    <SubTree>
-                                        <div className="flex justify-around w-full">
-                                            <TreeNode title="AES-256 Encryption" description="Content is encrypted with your key using a military-grade algorithm." />
-                                        </div>
-                                    </SubTree>
-                                </TreeNode>
-                                <TreeNode title="Your Secret Key" description="You provide a unique key that only you know.">
-                                     <SubTree>
-                                        <div className="flex justify-around w-full">
-                                            <TreeNode title="Encrypted Download" description="The encrypted result is securely packaged and downloaded to you as a '.ciph' file." />
-                                        </div>
-                                    </SubTree>
-                                </TreeNode>
-                            </div>
+                            <TreeNode title="In-Browser Reading" description="File is read into browser memory, never leaving your machine.">
+                                <SubTree>
+                                    <TreeNode title="AES-256 Encryption" description="Content is encrypted with your key using a military-grade algorithm.">
+                                      <SubTree>
+                                        <TreeNode title="Encrypted Download" description="The result is securely packaged and downloaded as a '.ciph' file." />
+                                      </SubTree>
+                                    </TreeNode>
+                                </SubTree>
+                            </TreeNode>
+                            <TreeNode title="Your Secret Key" description="You provide a unique key that only you know.">
+                                 <SubTree>
+                                     <TreeNode title="Key Hashing (Optional)" description="If you're logged in, a hash of the key is stored for security analysis, not the key itself." />
+                                </SubTree>
+                            </TreeNode>
                         </SubTree>
                     </TreeNode>
                 </TreeContainer>
@@ -318,6 +316,3 @@ export default function Home() {
 }
 
     
-
-    
-
