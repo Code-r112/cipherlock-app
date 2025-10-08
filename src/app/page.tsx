@@ -119,7 +119,7 @@ function FileUploader() {
     <div
       {...getRootProps()}
       className={cn(
-        'relative mt-4 mb-32 sm:mb-40 w-96 h-96 mx-auto rounded-full p-8 text-center transition-all duration-500 overflow-hidden group',
+        'relative mt-4 mb-32 sm:mb-40 w-full max-w-3xl h-64 mx-auto rounded-2xl p-8 text-center transition-all duration-500 overflow-hidden group',
         'flex items-center justify-center',
         'bg-radial-gradient from-primary/5 to-transparent',
         isDragActive ? 'border-2 border-dashed border-primary animate-pulse-border bg-primary/10' : 'border border-border',
@@ -395,3 +395,6 @@ export default function Home() {
     </div>
   );
 }
+
+
+    
