@@ -47,13 +47,15 @@ export function Footer() {
                         </a>
                     </li>
                 ))}
-                <li><Link href="/privacy-policy" className="hover:text-primary transition-colors mt-2 inline-block">Privacy Policy</Link></li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-gray-700 dark:border-gray-200 mt-12 pt-8 text-center text-sm">
           <p>&copy; {new Date().getFullYear()} CipherLock by InstantDone. All Rights Reserved.</p>
+           <div className="mt-2">
+                <Link href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link>
+           </div>
         </div>
       </div>
     </footer>

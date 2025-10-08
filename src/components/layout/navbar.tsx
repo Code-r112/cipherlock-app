@@ -25,10 +25,10 @@ import { ThemeToggle } from './theme-toggle';
 
 
 const suiteApps = [
-    { name: 'Code Formatter', icon: <Code className="h-10 w-10" />, href: '#' },
-    { name: 'AI Assistant', icon: <Bot className="h-10 w-10" />, href: '#' },
-    { name: 'Doc Scanner', icon: <FileText className="h-10 w-10" />, href: '#' },
-    { name: 'CipherLock', icon: <ShieldCheck className="h-10 w-10" />, href: '/' },
+    { name: 'Code Formatter', icon: <Code className="h-10 w-10" />, href: '#', color: 'text-blue-500' },
+    { name: 'AI Assistant', icon: <Bot className="h-10 w-10" />, href: '#', color: 'text-purple-500' },
+    { name: 'Doc Scanner', icon: <FileText className="h-10 w-10" />, href: '#', color: 'text-green-500' },
+    { name: 'CipherLock', icon: <ShieldCheck className="h-10 w-10" />, href: '/', color: 'text-primary' },
 ];
 
 export function Navbar() {
@@ -141,7 +141,7 @@ export function Navbar() {
                     <div className="grid grid-cols-3 gap-2 p-2">
                         {suiteApps.map((app) => (
                             <Link href={app.href} key={app.name} className="flex flex-col items-center justify-center p-2 rounded-lg hover:bg-accent text-center">
-                                <div className="text-primary">{app.icon}</div>
+                                <div className={app.color}>{app.icon}</div>
                                 <span className="text-sm mt-2">{app.name}</span>
                             </Link>
                         ))}
