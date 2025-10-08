@@ -5,7 +5,7 @@
 import { EncryptPanel } from '@/components/feature/encrypt-panel';
 import { DecryptPanel } from '@/components/feature/decrypt-panel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Lock, Unlock, Files, ShieldCheck, KeyRound, ServerOff, MonitorSmartphone, KeySquare, CloudOff, Bot, Activity, UploadCloud, FileType, Download, Box, Key, Repeat, Layers, Shuffle } from 'lucide-react';
+import { Lock, Unlock, Files, ShieldCheck, KeyRound, ServerOff, MonitorSmartphone, KeySquare, CloudOff, Bot, Activity, UploadCloud, FileType, Download, Box, Key, Repeat, Layers, Shuffle, ALargeSmall } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
@@ -119,42 +119,41 @@ function FileUploader() {
     <div
       {...getRootProps()}
       className={cn(
-        'relative mt-4 mb-32 sm:mb-40 w-full max-w-3xl h-64 mx-auto rounded-2xl p-8 text-center transition-all duration-500 overflow-hidden group',
-        'flex items-center justify-center',
-        'bg-radial-gradient from-primary/5 to-transparent',
-        isDragActive ? 'border-2 border-dashed border-primary animate-pulse-border bg-primary/10' : 'border border-border',
-        'hover:border-primary hover:bg-primary/5'
+        'relative mt-4 mb-32 sm:mb-40 w-full max-w-3xl h-48 mx-auto rounded-2xl p-8 text-center transition-all duration-500 overflow-hidden group',
+        'flex flex-col items-center justify-center',
+        'border border-border bg-background',
+        isDragActive ? 'border-primary shadow-[0_0_30px] shadow-primary/50' : 'border-border/50',
+        'hover:border-primary/80'
       )}
     >
       <div className={cn(
-        'absolute inset-0 bg-dot-pattern opacity-20 -z-10 transition-transform duration-500',
-        isDragActive ? 'scale-150 animate-spin' : 'scale-100',
-        'group-hover:scale-110'
-      )} style={{ animationDuration: '30s'}}></div>
-       <div className={cn(
-        'absolute inset-0 transition-opacity duration-500 -z-10',
-        'bg-radial-gradient from-primary/10 to-transparent',
-         isDragActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-50'
-      )}></div>
+        "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] h-2 bg-primary/20 rounded-full transition-all duration-300",
+        "before:content-[''] before:absolute before:inset-0 before:bg-primary/80 before:rounded-full before:animate-pulse",
+        isDragActive ? "h-6 w-full" : "group-hover:h-3 group-hover:w-full",
+        "after:content-[''] after:absolute after:top-0 after:left-0 after:h-full after:w-full",
+        "after:bg-shine-gradient after:animate-[shine_3s_linear_infinite]",
+        "after:filter after:blur-xl"
+      )} style={{ animationDelay: '1s' }} />
 
       <input {...getInputProps()} />
 
-      <div className="flex flex-col items-center justify-center gap-4 transition-transform duration-300 group-hover:scale-105 z-10">
-        <div className={cn(
-            "h-24 w-24 text-muted-foreground transition-all duration-500 relative flex items-center justify-center",
-            isDragActive ? 'text-primary' : 'group-hover:text-foreground'
-        )}>
-            <div className="absolute h-full w-full bg-current rounded-full opacity-20 animate-ping"/>
-            <UploadCloud className="h-20 w-20" />
-        </div>
-        <p className={cn(
-          "text-3xl font-semibold text-muted-foreground transition-colors duration-300",
-          isDragActive ? 'text-foreground' : 'group-hover:text-foreground'
-        )}>
-          {isDragActive ? "Release to Secure" : "Drop into the Vortex"}
-        </p>
-        <p className="text-muted-foreground">or click to select files</p>
+      <div className="z-10 transition-transform duration-300 group-hover:scale-105">
+        <ALargeSmall className={cn("h-16 w-16 text-muted-foreground transition-all duration-300", isDragActive ? "text-primary" : "group-hover:text-foreground")} />
       </div>
+      <p className={cn(
+        "text-3xl font-semibold text-muted-foreground transition-colors duration-300 mt-4",
+        isDragActive ? 'text-foreground' : 'group-hover:text-foreground'
+      )}>
+        {isDragActive ? "Prepare for Disintegration" : "Drop File to Encrypt"}
+      </p>
+      <p className="text-muted-foreground mt-1">or click to select a file</p>
+      
+       <style jsx>{`
+        @keyframes shine {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+      `}</style>
     </div>
   );
 }
