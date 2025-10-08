@@ -120,7 +120,7 @@ export default function ToolsPage() {
   return (
     <div className="flex flex-col items-center justify-center bg-background p-4 sm:p-8">
       <div className="w-full max-w-5xl">
-        <div className="pt-8 pb-12 sm:pt-12 sm:pb-16 animate-fade-in-down">
+        <div className="pb-12 sm:pb-16 animate-fade-in-down">
         </div>
 
         {user && (
