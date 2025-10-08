@@ -123,50 +123,10 @@ export default function ToolsPage() {
         
 
         {user && (
-            <section className="mb-12 animate-fade-in-up">
-                 {firstName && (
-                    <div className="flex items-center justify-start gap-2 text-2xl sm:text-3xl text-muted-foreground mb-4">
-                        <AnimatedLockIcon />
-                        <p>Hello, {firstName}!</p>
-                    </div>
-                )}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Files Secured</CardTitle>
-                            <History className="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{activityCount}</div>
-                            <p className="text-xs text-muted-foreground">Total encryptions & decryptions</p>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Keys in Vault</CardTitle>
-                            <KeySquare className="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{keyCount}</div>
-                            <p className="text-xs text-muted-foreground">
-                                <Link href="/keys" className="hover:underline">Manage your keys</Link>
-                            </p>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Security Score</CardTitle>
-                            <BrainCircuit className="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{securityScore ?? '...'}</div>
-                            <p className="text-xs text-muted-foreground">
-                                <Link href="/security-center" className="hover:underline">View recommendations</Link>
-                            </p>
-                        </CardContent>
-                    </Card>
-                </div>
-            </section>
+             <div className="flex items-center justify-start gap-2 text-2xl sm:text-3xl text-muted-foreground mb-4">
+                <AnimatedLockIcon />
+                <p>Hello, {firstName}!</p>
+            </div>
         )}
         
         <Tabs defaultValue="encryption" className="w-full">
@@ -178,6 +138,48 @@ export default function ToolsPage() {
                     <Fingerprint className="mr-2 h-6 w-6" />Digital Signature
                 </TabsTrigger>
             </TabsList>
+
+            {user && (
+                <section className="mb-12 animate-fade-in-up">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <Card>
+                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                <CardTitle className="text-sm font-medium">Files Secured</CardTitle>
+                                <History className="h-4 w-4 text-muted-foreground" />
+                            </CardHeader>
+                            <CardContent>
+                                <div className="text-2xl font-bold">{activityCount}</div>
+                                <p className="text-xs text-muted-foreground">Total encryptions & decryptions</p>
+                            </CardContent>
+                        </Card>
+                        <Card>
+                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                <CardTitle className="text-sm font-medium">Keys in Vault</CardTitle>
+                                <KeySquare className="h-4 w-4 text-muted-foreground" />
+                            </CardHeader>
+                            <CardContent>
+                                <div className="text-2xl font-bold">{keyCount}</div>
+                                <p className="text-xs text-muted-foreground">
+                                    <Link href="/keys" className="hover:underline">Manage your keys</Link>
+                                </p>
+                            </CardContent>
+                        </Card>
+                        <Card>
+                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                <CardTitle className="text-sm font-medium">Security Score</CardTitle>
+                                <BrainCircuit className="h-4 w-4 text-muted-foreground" />
+                            </CardHeader>
+                            <CardContent>
+                                <div className="text-2xl font-bold">{securityScore ?? '...'}</div>
+                                <p className="text-xs text-muted-foreground">
+                                    <Link href="/security-center" className="hover:underline">View recommendations</Link>
+                                </p>
+                            </CardContent>
+                        </Card>
+                    </div>
+                </section>
+            )}
+
             <TabsContent value="encryption">
                 <div className="w-full max-w-lg mx-auto">
                     <Tabs defaultValue="encrypt" className="w-full">
