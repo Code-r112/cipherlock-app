@@ -23,14 +23,6 @@ import { useTheme } from 'next-themes';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from './theme-toggle';
 
-
-const suiteApps = [
-    { name: 'Code Formatter', icon: <Code className="h-10 w-10" />, href: '#', color: 'text-blue-500' },
-    { name: 'AI Assistant', icon: <Bot className="h-10 w-10" />, href: '#', color: 'text-purple-500' },
-    { name: 'Doc Scanner', icon: <FileText className="h-10 w-10" />, href: '#', color: 'text-green-500' },
-    { name: 'CipherLock', icon: <ShieldCheck className="h-10 w-10" />, href: '/', color: 'text-primary' },
-];
-
 export function Navbar() {
   const { user, signOut } = useAuth();
   const { setTheme } = useTheme();
@@ -127,25 +119,6 @@ export function Navbar() {
                     <LogOut className="mr-2 h-5 w-5" />
                     <span>Log out</span>
                   </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="rounded-full h-14 w-14">
-                        <LayoutGrid className="h-7 w-7" />
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-80" align="end">
-                    <DropdownMenuLabel>Our Suite of Apps</DropdownMenuLabel>
-                    <div className="grid grid-cols-3 gap-2 p-2">
-                        {suiteApps.map((app) => (
-                            <Link href={app.href} key={app.name} className="flex flex-col items-center justify-center p-2 rounded-lg hover:bg-accent text-center">
-                                <div className={app.color}>{app.icon}</div>
-                                <span className="text-sm mt-2">{app.name}</span>
-                            </Link>
-                        ))}
-                    </div>
                 </DropdownMenuContent>
               </DropdownMenu>
             </>
