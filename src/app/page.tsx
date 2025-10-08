@@ -23,6 +23,7 @@ import { useCallback, useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Textarea } from '@/components/ui/textarea';
 import CryptoJS from 'crypto-js';
+import { cn } from '@/lib/utils';
 
 const features = [
     {
