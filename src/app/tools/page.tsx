@@ -5,12 +5,23 @@ import { EncryptPanel } from '@/components/feature/encrypt-panel';
 import { DecryptPanel } from '@/components/feature/decrypt-panel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Lock, Unlock } from 'lucide-react';
+import { useAuth } from '@/hooks/use-auth';
+import { AnimatedLockIcon } from '@/components/ui/animated-lock-icon';
 
 export default function ToolsPage() {
+  const { user } = useAuth();
+  const firstName = user?.displayName?.split(' ')[0];
+
   return (
     <div className="flex flex-col items-center justify-center bg-background p-4 sm:p-8">
       <div className="w-full max-w-5xl">
         <div className="text-center pt-8 pb-16 sm:pt-12 sm:pb-24 animate-fade-in-down">
+          {user && firstName && (
+            <div className="flex items-center justify-center gap-2 text-2xl sm:text-3xl text-muted-foreground mb-4">
+              <AnimatedLockIcon />
+              <p>Hello, {firstName}!</p>
+            </div>
+          )}
           <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-wider">
             Encryption Tools
           </h1>
