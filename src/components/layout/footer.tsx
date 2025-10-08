@@ -12,8 +12,11 @@ export function Footer() {
           
           <div className="flex flex-col items-center md:items-start">
             <div className="flex items-center mb-4">
-              <ShieldCheck className="h-8 w-8 text-white dark:text-black" />
-              <span className="ml-2 text-3xl font-bold text-white dark:text-black">CipherLock</span>
+              <ShieldCheck className="h-10 w-10 text-white dark:text-black" />
+              <div className="ml-2 flex flex-col">
+                <span className="text-3xl font-bold text-white dark:text-black leading-none">CipherLock</span>
+                <span className="text-sm text-gray-400 dark:text-gray-600">by InstantDone</span>
+              </div>
             </div>
             <p className="text-sm">Secure, client-side file encryption.</p>
           </div>
@@ -35,7 +38,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-gray-700 dark:border-gray-200 mt-12 pt-8 text-center text-sm">
-          <p>&copy; {new Date().getFullYear()} CipherLock. All Rights Reserved.</p>
+          <p>&copy; {new Date().getFullYear()} CipherLock by InstantDone. All Rights Reserved.</p>
         </div>
       </div>
     </footer>

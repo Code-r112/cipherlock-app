@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { ShieldCheck, User as UserIcon, LogOut, History, KeyRound, ShieldAlert, Settings, Moon, Sun } from 'lucide-react';
@@ -45,8 +44,11 @@ export function Navbar() {
     <header className={cn("bg-background sticky top-0 z-50 transition-all", isScrolled && "border-b border-border/40")}>
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20">
         <Link href="/" className="flex items-center">
-            <ShieldCheck className="h-8 w-8 text-primary" />
-            <span className="ml-2 text-2xl font-bold">CipherLock</span>
+            <ShieldCheck className="h-10 w-10 text-primary" />
+            <div className="ml-2 flex flex-col">
+                <span className="text-2xl font-bold leading-none">CipherLock</span>
+                <span className="text-xs text-muted-foreground">by InstantDone</span>
+            </div>
         </Link>
         <div className="flex items-center gap-2 sm:gap-4">
           {user ? (
