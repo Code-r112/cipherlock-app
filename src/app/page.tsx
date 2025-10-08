@@ -5,7 +5,7 @@
 import { EncryptPanel } from '@/components/feature/encrypt-panel';
 import { DecryptPanel } from '@/components/feature/decrypt-panel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Lock, Unlock, Files, ShieldCheck, KeyRound, ServerOff, MonitorSmartphone, KeySquare, CloudOff, Bot, Activity, UploadCloud, FileType, Download, Box, Key, Repeat, Layers, Shuffle, ALargeSmall, Cpu, FileText } from 'lucide-react';
+import { Lock, Unlock, Files, ShieldCheck, KeyRound, ServerOff, MonitorSmartphone, KeySquare, CloudOff, Bot, Activity, UploadCloud, FileType, Download, Box, Key, Repeat, Layers, Shuffle, ALargeSmall, Cpu, FileText, Fingerprint } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
@@ -29,14 +29,14 @@ import { motion } from 'framer-motion';
 
 const features = [
     {
-      icon: <Files className="h-10 w-10 sm:h-12 sm:w-12 mb-4 sm:mb-6 text-foreground" />,
-      title: 'Batch Processing',
-      description: 'Encrypt or decrypt multiple files at once, streamlining your workflow.',
-    },
-    {
       icon: <ShieldCheck className="h-10 w-10 sm:h-12 sm:w-12 mb-4 sm:mb-6 text-foreground" />,
       title: 'Strong Encryption',
       description: 'Utilizes AES-256 for robust, industry-standard file protection.',
+    },
+    {
+      icon: <Fingerprint className="h-10 w-10 sm:h-12 sm:w-12 mb-4 sm:mb-6 text-foreground" />,
+      title: 'Digital Signatures',
+      description: 'Create & verify signatures to ensure file authenticity and integrity.',
     },
     {
       icon: <KeyRound className="h-10 w-10 sm:h-12 sm:w-12 mb-4 sm:mb-6 text-foreground" />,
@@ -77,12 +77,12 @@ const faqItems = [
     {
         value: "item-1",
         question: "What is CipherLock?",
-        answer: "CipherLock is a tool for client-side file encryption. It allows you to securely encrypt and decrypt files directly in your browser."
+        answer: "CipherLock is a tool for client-side file encryption and digital signatures. It allows you to securely encrypt, decrypt, and sign files directly in your browser."
     },
     {
         value: "item-2",
         question: "Is CipherLock secure?",
-        answer: "Yes. CipherLock uses the Advanced Encryption Standard (AES-256), a globally trusted encryption algorithm. All operations happen locally, so your files and keys are never sent to a server."
+        answer: "Yes. CipherLock uses the Advanced Encryption Standard (AES-256) and RSA for digital signatures, both globally trusted algorithms. All operations happen locally, so your files and keys are never sent to a server."
     },
     {
         value: "item-3",
@@ -96,8 +96,8 @@ const faqItems = [
     },
     {
         value: "item-5",
-        question: "How does batch processing work?",
-        answer: "You can select multiple files in the 'Encrypt' or 'Decrypt' panels. Each file will be processed with the same secret key and downloaded individually."
+        question: "How do digital signatures work?",
+        answer: "You can create a unique signature for a file using your private key. Anyone with your public key can then verify that the file is authentic and hasn't been tampered with."
     }
 ]
 
