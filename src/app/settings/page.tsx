@@ -30,6 +30,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { Breadcrumb } from '@/components/ui/breadcrumb';
 
 export default function SettingsPage() {
   const { user, loading: authLoading, signOut } = useAuth();
@@ -54,6 +55,7 @@ export default function SettingsPage() {
 
   return (
     <div className="container mx-auto max-w-4xl py-12 px-4 sm:px-6 lg:px-8">
+      <Breadcrumb />
       <header className="text-center mb-12">
         <h1 className="text-5xl font-bold tracking-tight sm:text-7xl">Settings</h1>
         <p className="mt-4 text-xl text-muted-foreground sm:text-2xl">
@@ -158,5 +160,3 @@ export default function SettingsPage() {
     </div>
   );
 }
-
-    

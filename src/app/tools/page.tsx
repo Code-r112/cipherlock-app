@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Lock, Unlock, MonitorSmartphone, ShieldCheck, Download, KeySquare, FileType } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { AnimatedLockIcon } from '@/components/ui/animated-lock-icon';
+import { Breadcrumb } from '@/components/ui/breadcrumb';
 
 export default function ToolsPage() {
   const { user } = useAuth();
@@ -50,6 +51,7 @@ export default function ToolsPage() {
   return (
     <div className="flex flex-col items-center justify-center bg-background p-4 sm:p-8">
       <div className="w-full max-w-5xl">
+      <Breadcrumb />
         <div className="text-center pt-8 pb-16 sm:pt-12 sm:pb-24 animate-fade-in-down">
           {user && firstName && (
             <div className="flex items-center justify-center gap-2 text-2xl sm:text-3xl text-muted-foreground mb-4">

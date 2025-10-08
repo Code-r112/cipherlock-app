@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Lock, Unlock, History, Loader2, FileText } from 'lucide-react';
+import { Breadcrumb } from '@/components/ui/breadcrumb';
 
 interface ActivityLog {
     id: string;
@@ -54,6 +55,7 @@ export default function ActivityPage() {
     
     return (
         <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <Breadcrumb />
             <div className="max-w-4xl mx-auto">
                 <header className="text-center mb-12">
                     <h1 className="text-5xl sm:text-7xl font-bold tracking-tight">Activity Log</h1>

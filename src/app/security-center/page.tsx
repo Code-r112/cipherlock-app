@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Loader2, ShieldCheck, AlertTriangle, Info } from 'lucide-react';
 import { analyzeSecurity, type SecurityAnalysisInput, type SecurityAnalysisOutput } from '@/ai/flows/security-audit-flow';
+import { Breadcrumb } from '@/components/ui/breadcrumb';
 
 interface ActivityLogFromFirestore {
     action: 'encrypt' | 'decrypt';
@@ -100,6 +101,7 @@ export default function SecurityCenterPage() {
 
     return (
         <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <Breadcrumb />
             <div className="max-w-4xl mx-auto">
                 <header className="text-center mb-12">
                     <h1 className="text-5xl sm:text-7xl font-bold tracking-tight">Security Center</h1>

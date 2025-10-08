@@ -1,9 +1,11 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Breadcrumb } from '@/components/ui/breadcrumb';
 
 export default function PrivacyPolicyPage() {
   return (
     <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      <Breadcrumb />
       <div className="max-w-4xl mx-auto">
         <header className="text-center mb-12">
           <h1 className="text-5xl sm:text-7xl font-bold tracking-tight">Privacy Policy</h1>

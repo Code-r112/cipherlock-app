@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Loader2, Unlock, KeyRound, Download, FileWarning, ShieldX } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import CryptoJS from 'crypto-js';
+import { Breadcrumb } from '@/components/ui/breadcrumb';
 
 function dataUriToBlob(dataURI: string) {
     const byteString = atob(dataURI.split(',')[1]);
@@ -114,6 +115,7 @@ export default function SharePage() {
     
     return (
         <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <Breadcrumb />
             <div className="max-w-xl mx-auto">
                  <header className="text-center mb-12">
                     <h1 className="text-5xl sm:text-7xl font-bold tracking-tight">Secure Download</h1>

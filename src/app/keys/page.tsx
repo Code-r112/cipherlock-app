@@ -21,6 +21,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { Breadcrumb } from '@/components/ui/breadcrumb';
 
 interface SavedKey {
     id: string;
@@ -112,6 +113,7 @@ export default function KeysPage() {
     
     return (
         <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <Breadcrumb />
             <div className="max-w-4xl mx-auto">
                 <header className="flex flex-col sm:flex-row justify-between sm:items-center mb-12 gap-4">
                     <div className="text-center sm:text-left">
