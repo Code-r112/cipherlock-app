@@ -2,11 +2,10 @@
 
 "use client";
 
-import { ShieldCheck, User as UserIcon, LogOut, History, KeyRound, ShieldAlert, Settings } from 'lucide-react';
+import { ShieldCheck, User as UserIcon, LogOut, History, KeyRound, ShieldAlert, Settings, Moon, Sun } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
-import { ThemeToggle } from './theme-toggle';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -16,12 +15,19 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuPortal,
 } from "@/components/ui/dropdown-menu"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
+import { useTheme } from 'next-themes';
 import { cn } from '@/lib/utils';
+import { ThemeToggle } from './theme-toggle';
+
 
 export function Navbar() {
   const { user, signOut } = useAuth();
+  const { setTheme } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -45,20 +51,6 @@ export function Navbar() {
         <div className="flex items-center gap-2 sm:gap-4">
           {user ? (
             <>
-              <TooltipProvider>
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <Button asChild variant="outline" size="icon" className="rounded-full h-14 w-14">
-                            <Link href="/activity"><History /></Link>
-                        </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        <p>Activity Log</p>
-                    </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-
-              <ThemeToggle />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-14 w-14 rounded-full">
@@ -80,6 +72,12 @@ export function Navbar() {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
+                   <DropdownMenuItem asChild className="text-base cursor-pointer">
+                    <Link href="/activity">
+                      <History className="mr-2 h-5 w-5" />
+                      <span>Activity Log</span>
+                    </Link>
+                  </DropdownMenuItem>
                   <DropdownMenuItem asChild className="text-base cursor-pointer">
                     <Link href="/keys">
                       <KeyRound className="mr-2 h-5 w-5" />
@@ -98,6 +96,23 @@ export function Navbar() {
                       <span>Settings</span>
                     </Link>
                   </DropdownMenuItem>
+                  <DropdownMenuSub>
+                    <DropdownMenuSubTrigger className="text-base cursor-pointer">
+                      <Sun className="mr-2 h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                      <Moon className="absolute mr-2 h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                      <span>Toggle Theme</span>
+                    </DropdownMenuSubTrigger>
+                     <DropdownMenuPortal>
+                        <DropdownMenuSubContent>
+                           <DropdownMenuItem onClick={() => setTheme("light")}>
+                                Light
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => setTheme("dark")}>
+                                Dark
+                            </DropdownMenuItem>
+                        </DropdownMenuSubContent>
+                     </DropdownMenuPortal>
+                  </DropdownMenuSub>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={signOut} className="text-base cursor-pointer">
                     <LogOut className="mr-2 h-5 w-5" />
@@ -119,5 +134,3 @@ export function Navbar() {
     </header>
   );
 }
-
-    
