@@ -13,11 +13,8 @@ export type CreateShareableFile = z.infer<typeof CreateShareableFileSchema>;
 
 
 export async function createShareableFile(input: CreateShareableFile): Promise<string> {
-    const docRef = await addDoc(collection(db, 'sharedFiles'), {
-        ...input,
-        createdAt: serverTimestamp(),
-    });
-    return docRef.id;
+    // This feature is disabled for now.
+    throw new Error("Sharing is not enabled.");
 }
 
 
@@ -27,17 +24,8 @@ const GetSharedFileSchema = z.object({
 export type GetSharedFile = z.infer<typeof GetSharedFileSchema>;
 
 export async function getSharedFile(input: GetSharedFile): Promise<{ encryptedContent: string } | null> {
-    const docRef = doc(db, 'sharedFiles', input.fileId);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-        const data = docSnap.data();
-        // For security, delete the file after it has been retrieved once.
-        await deleteDoc(docRef);
-        return {
-            encryptedContent: data.encryptedContent,
-        };
-    } else {
-        return null;
-    }
+    // This feature is disabled for now.
+    return null;
 }
+
+    

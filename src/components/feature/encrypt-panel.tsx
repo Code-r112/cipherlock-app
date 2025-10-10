@@ -173,13 +173,6 @@ export function EncryptPanel({ onActiveStepChange }: EncryptPanelProps) {
     onActiveStepChange('file');
     if (e.target.files) {
       const selectedFiles = Array.from(e.target.files);
-      if (selectedFiles.some(f => f.size > 1024 * 1024) && user) {
-           toast({
-              variant: "destructive",
-              title: "File Too Large for Sharing",
-              description: "Files over 1MB cannot be shared. You can still encrypt and download it.",
-          });
-      }
       setFiles(user ? selectedFiles.slice(0, 1) : selectedFiles);
       if (user && selectedFiles.length > 1) {
           toast({
@@ -246,42 +239,6 @@ export function EncryptPanel({ onActiveStepChange }: EncryptPanelProps) {
   const handleEncryptAndDownload = () => {
       onActiveStepChange('download');
       handleEncrypt(true);
-  }
-
-  const handleEncryptAndShare = () => {
-      onActiveStepChange('download');
-      handleEncrypt(false);
-  }
-
-  const handleCreateShareLink = async () => {
-      if (!encryptedResult || !user) return;
-      
-      setIsSharing(true);
-      try {
-          const fileId = await createShareableFile({
-              encryptedContent: encryptedResult.content,
-              creatorId: user.uid
-          });
-          const link = `${window.location.origin}/share/${fileId}`;
-          setShareLink(link);
-      } catch (error) {
-           toast({
-            variant: "destructive",
-            title: "Sharing Failed",
-            description: "Could not create a shareable link. Please try again.",
-          });
-      } finally {
-          setIsSharing(false);
-      }
-  }
-
-  const handleCopyShareLink = () => {
-    if (!shareLink) return;
-    navigator.clipboard.writeText(shareLink);
-    toast({
-      title: "Link Copied",
-      description: "The shareable link has been copied to your clipboard.",
-    });
   }
 
   const handleEncrypt = (shouldDownload: boolean) => {
@@ -383,17 +340,12 @@ export function EncryptPanel({ onActiveStepChange }: EncryptPanelProps) {
       return savedKeys.find(k => k.id === suggestedKeyId)?.name;
   }, [suggestedKeyId, savedKeys]);
   
-  const canShare = useMemo(() => {
-      if (!user || files.length === 0) return false;
-      return files[0].size <= 1024 * 1024;
-  }, [user, files]);
-
 
   return (
     <Card className="border-none shadow-none">
       <CardHeader>
         <CardTitle className="text-2xl">Encrypt File(s)</CardTitle>
-        <CardDescription>Select files, set a key, and get encrypted copies. {user && <strong>Logged-in users get AI-powered naming and secure sharing!</strong>}</CardDescription>
+        <CardDescription>Select files, set a key, and get encrypted copies. {user && <strong>Logged-in users get AI-powered naming!</strong>}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6 pt-6">
 
@@ -510,61 +462,18 @@ export function EncryptPanel({ onActiveStepChange }: EncryptPanelProps) {
             </div>
           </div>
           <div className={`flex-1 space-y-4 transition-opacity ${step1Completed && step2Completed && step3Completed ? 'opacity-100' : 'opacity-60'}`}>
-            <Label className="text-lg font-semibold">Step 3: Encrypt & Download or Share</Label>
+            <Label className="text-lg font-semibold">Step 3: Encrypt & Download</Label>
             <div className="flex flex-col sm:flex-row gap-4">
                  <Button onClick={handleEncryptAndDownload} disabled={loading || loadingAi || !step1Completed || !step2Completed || !step3Completed} className="w-full h-14 text-lg rounded-full">
                     {loading ? <Loader2 className="mr-2 h-6 w-6 animate-spin" /> : <Lock className="mr-2 h-6 w-6" />}
                     Encrypt & Download
                 </Button>
-                {user && (
-                     <Button onClick={handleEncryptAndShare} disabled={!canShare || loading || loadingAi || !step1Completed || !step2Completed || !step3Completed} className="w-full h-14 text-lg rounded-full" variant="secondary">
-                        <Share2 className="mr-2 h-6 w-6" />
-                        Encrypt for Sharing
-                    </Button>
-                )}
             </div>
-            {!canShare && user && step1Completed && (
-                <p className='text-sm text-muted-foreground'>Sharing is disabled for files larger than 1MB.</p>
-            )}
           </div>
         </div>
-
-        {encryptedResult && !shareLink && (
-            <div className='space-y-4 pt-6 border-t'>
-                <Alert>
-                    <Share2 className="h-4 w-4" />
-                    <AlertTitle>Ready to Share!</AlertTitle>
-                    <AlertDescription>
-                        Your file is encrypted and ready. Click the button below to generate a secure, one-time share link.
-                    </AlertDescription>
-                </Alert>
-                <Button onClick={handleCreateShareLink} disabled={isSharing} className="w-full h-12 text-lg">
-                    {isSharing ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <Share2 className="mr-2 h-5 w-5" />}
-                    Generate Secure Link
-                </Button>
-            </div>
-        )}
-
-        {shareLink && (
-             <div className='space-y-4 pt-6 border-t'>
-                 <Alert variant="default" className="bg-primary/10 border-primary/20">
-                    <CheckCircle className="h-4 w-4 text-primary" />
-                    <AlertTitle className="text-primary">Share Link Generated!</AlertTitle>
-                    <AlertDescription>
-                        Copy the link below and send it to your recipient. <strong>Remember to share the decryption key separately and securely!</strong> This link will be invalid after the first download.
-                    </AlertDescription>
-                </Alert>
-                <div className="flex items-center gap-2">
-                    <Input readOnly value={shareLink} className="h-12 text-base"/>
-                    <Button size="icon" onClick={handleCopyShareLink}>
-                        <ClipboardCopy className="h-6 w-6" />
-                    </Button>
-                </div>
-            </div>
-        )}
-
-
       </CardContent>
     </Card>
   );
 }
+
+    

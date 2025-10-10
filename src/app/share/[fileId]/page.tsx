@@ -3,7 +3,6 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { getSharedFile } from '@/services/share-service';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -37,19 +36,8 @@ export default function SharePage() {
         if (typeof fileId !== 'string') return;
 
         async function fetchFile() {
-            try {
-                const result = await getSharedFile({ fileId });
-                if (result) {
-                    setEncryptedContent(result.encryptedContent);
-                } else {
-                    setError('This file does not exist or has already been downloaded. Links are valid for one-time use only.');
-                }
-            } catch (err) {
-                setError('Failed to retrieve the shared file. Please check the link and try again.');
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
+            setError("Sharing is currently disabled.");
+            setLoading(false);
         }
 
         fetchFile();
@@ -153,3 +141,5 @@ export default function SharePage() {
         </div>
     );
 }
+
+    
