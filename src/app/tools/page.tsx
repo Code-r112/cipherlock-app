@@ -125,7 +125,7 @@ export default function ToolsPage() {
 
 
   return (
-    <div className="flex flex-col items-center justify-center bg-background p-4 sm:p-8">
+    <div className="flex flex-col items-center justify-center bg-background p-4 sm:px-8">
       <div className="w-full max-w-5xl">
         
         <Tabs defaultValue="encryption" className="w-full" onValueChange={setActiveTab} value={activeTab}>
@@ -140,6 +140,7 @@ export default function ToolsPage() {
 
             {user && (
                 <section className="my-12 animate-fade-in-up bg-secondary p-6 rounded-lg">
+                    <h2 className="text-2xl font-bold mb-4">Dashboard</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
