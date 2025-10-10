@@ -139,7 +139,7 @@ export default function ToolsPage() {
             </TabsList>
 
             {user && (
-                <section className="mb-12 animate-fade-in-up">
+                <section className="my-12 animate-fade-in-up bg-secondary p-6 rounded-lg">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
